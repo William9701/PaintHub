@@ -68,7 +68,19 @@ class Basemodels:
         from models.engine.auth import Auth
         self.updated_at = datetime.utcnow()
         auth = Auth()
-        auth.register_user(self.email, self.password)
+        auth.register_user(self.email, self.password, self.first_name, self.last_name)
+
+    def add_painter(self):
+        from models.engine.auth import Auth
+        self.updated_at = datetime.utcnow()
+        auth = Auth()
+        auth.register_painter(self.email, self.password, self.first_name, self.last_name)
+
+    def add_admin(self):
+        from models.engine.auth import Auth
+        self.updated_at = datetime.utcnow()
+        auth = Auth()
+        auth.register_admin(self.email, self.password, self.first_name, self.last_name)
 
     def delete(self):
         """delete the current instance from the storage"""

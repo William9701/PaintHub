@@ -4,11 +4,18 @@ import models
 import shlex
 from models.base_models import Basemodels
 
+from models.painter import Painter
 from models.user import User
+from models.product import Product
+from models.admin import Admin
 
 
 classes = {
-    "User": User
+    "User": User,
+    "Product": Product,
+    "Admin": Admin,
+    "Painter": Painter
+
 }
 
 
@@ -61,7 +68,14 @@ class HBNBCommand(cmd.Cmd):
             instance = classes[args[0]](**new_dict)
 
             if args[0] == 'User':
+                print(instance)
                 instance.add_user()
+            elif args[0] == 'Painter':
+                print(instance)
+                instance.add_painter()
+            elif args[0] == 'Admin':
+                print(instance)
+                instance.add_admin()
             else:
                 print(instance.id)
                 instance.save()

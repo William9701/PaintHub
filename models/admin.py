@@ -5,8 +5,8 @@ from sqlalchemy import Column, DateTime, String, ForeignKey, Integer
 from sqlalchemy.sql import func
 
 
-class User(Basemodels, Base):
-    __tablename__ = 'users'
+class Admin(Basemodels, Base):
+    __tablename__ = 'Admins'
     if models.storage_t == "db":
         id = Column(String(250), primary_key=True)
         email = Column(String(250), nullable=False)
@@ -15,17 +15,7 @@ class User(Basemodels, Base):
         reset_token = Column(String(250), nullable=True)
         first_name = Column(String(100), nullable=False)
         last_name = Column(String(100), nullable=False)
-        billing_address = Column(String(255))
-        shipping_address = Column(String(255))
         phone_number = Column(String(20))
-        payment_info = Column(String(100))
-        purchase_history = Column(String(255))
-        wishlist = Column(String(255))  
-        cart_contents = Column(String(255))
-        preferred_colors = Column(String(100))
-        preferred_brands = Column(String(100))
-        painter_preferences = Column(String(100))
-        notification_preferences = Column(String(100))
         last_login_at = Column(DateTime(timezone=True),
                                server_default=func.now(), onupdate=func.now())
         account_status = Column(String(20))
