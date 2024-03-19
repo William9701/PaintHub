@@ -12,6 +12,7 @@ class Product(Basemodels, Base):
 		QuantityAvailable = Column(Integer)
 		Brand = Column(String(100))
 		Category = Column(String(100))
+		# Material = Column(String(100))
 		Color = Column(String(50))
 		Size = Column(String(50))
 		Weight = Column(DECIMAL(10, 2))

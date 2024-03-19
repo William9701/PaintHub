@@ -146,10 +146,12 @@
 
     <!--Products-->
 
+    
     <div class="products" id="Products">
       <h1>Products</h1>
 
       <div class="box">
+        {% for product in products %}
         <div class="card">
           <div class="small_card">
             <i class="fa-solid fa-heart"></i>
@@ -157,198 +159,17 @@
           </div>
 
           <div class="image">
-            <img src="../static/images/shoes1.png" />
+            <img src="../static/images/Resisto_Enduit_Fibreux_Pour_Toiture_53031_-_Rona-removebg-preview.png" />
           </div>
 
           <div class="products_text">
-            <h2>NIKE</h2>
+            <h2>{{ product.ProductName }}</h2>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
             <h3>$100.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-            </div>
             <a href="" class="btn">Add To Cart</a>
           </div>
         </div>
-
-        <div class="card">
-          <div class="small_card">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-share"></i>
-          </div>
-
-          <div class="image">
-            <img src="../static/images/shoes2.png" />
-          </div>
-
-          <div class="products_text">
-            <h2>NIKE</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$200.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-            </div>
-            <a href="" class="btn">Add To Cart</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="small_card">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-share"></i>
-          </div>
-
-          <div class="image">
-            <img src="../static/images/shoes3.png" />
-          </div>
-
-          <div class="products_text">
-            <h2>NIKE</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$175.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star-half-stroke"></i>
-              <i class="fa-regular fa-star"></i>
-            </div>
-            <a href="" class="btn">Add To Cart</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="small_card">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-share"></i>
-          </div>
-
-          <div class="image">
-            <img src="../static/images/shoes4.png" />
-          </div>
-
-          <div class="products_text">
-            <h2>NIKE</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$120.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-            </div>
-            <a href="#" class="btn">Add To Cart</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="small_card">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-share"></i>
-          </div>
-
-          <div class="image">
-            <img src="../static/images/shoes5.png" />
-          </div>
-
-          <div class="products_text">
-            <h2>NIKE</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$150.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-            </div>
-            <a href="#" class="btn">Add To Cart</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="small_card">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-share"></i>
-          </div>
-
-          <div class="image">
-            <img src="../static/images/shoes6.png" />
-          </div>
-
-          <div class="products_text">
-            <h2>NIKE</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$220.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star-half-stroke"></i>
-            </div>
-            <a href="#" class="btn">Add To Cart</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="small_card">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-share"></i>
-          </div>
-
-          <div class="image">
-            <img src="../static/images/shoes.png" />
-          </div>
-
-          <div class="products_text">
-            <h2>NIKE</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$110.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-              <i class="fa-regular fa-star"></i>
-            </div>
-            <a href="#" class="btn">Add To Cart</a>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="small_card">
-            <i class="fa-solid fa-heart"></i>
-            <i class="fa-solid fa-share"></i>
-          </div>
-
-          <div class="image">
-            <img src="../static/images/shoes7.png" />
-          </div>
-
-          <div class="products_text">
-            <h2>NIKE</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$150.99</h3>
-            <div class="products_star">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star-half-stroke"></i>
-            </div>
-            <a href="#" class="btn">Add To Cart</a>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
 
@@ -675,46 +496,6 @@
             </p>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!--Login Form-->
-
-    <div class="login_form">
-      <div class="left">
-        <img src="../static/images/logshoes.png" />
-      </div>
-
-      <div class="right">
-        <h1>Welcome Back!</h1>
-
-        <form action="#" method="post">
-          <p>User Name</p>
-          <div class="user">
-            <i class="fa-solid fa-user"></i>
-            <input
-              type="text"
-              name="user"
-              placeholder="User Name"
-              class="username"
-            />
-          </div>
-
-          <p class="passworg_tag">Password</p>
-          <div class="password">
-            <i class="fa-solid fa-lock"></i>
-            <input type="text" name="password" placeholder="Password" />
-          </div>
-
-          <p class="forget">Forget Password ?</p>
-
-          <button type="submit">Login</button>
-          <div class="loging_icon">
-            <a href="#"><img src="../static/images/google.png" /></a>
-            <a href="#"><img src="../static/images/facebook.png" /></a>
-            <a href="#"><img src="../static/images/twitter.png" /></a>
-          </div>
-        </form>
       </div>
     </div>
 

@@ -17,10 +17,11 @@ AUTH = Auth()
 def users():
     """reg user"""
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
 
         if not email or not password:
             return jsonify({"message": "Missing email or password"}), 400
@@ -29,7 +30,7 @@ def users():
         return jsonify({"email": email, "message": "user created"})
 
     except ValueError:
-        return jsonify({"message": "email already registered"}), 400
+        return jsonify({"message": "email already registered"}), 460
 
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
@@ -60,15 +61,17 @@ def put_user(user_id):
 def login():
     """login route"""
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
 
         if AUTH.valid_login(email, password):
             session_id = AUTH.create_session(email)
+            user = AUTH.get_user_from_session_id(session_id)
 
             # Set the session ID as a cookie in the response
             response = make_response(
-                jsonify({"email": email, "message": "logged in"}))
+                jsonify({"email": email, "user_id": user.id}))
             response.set_cookie("session_id", session_id)
 
             return response

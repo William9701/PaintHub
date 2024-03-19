@@ -769,13 +769,31 @@ section .main .button:hover i{
 
 /*Login Form*/
 
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+	flex: 1;
+	
+
+}
+.toast-body{
+	font-size: 22px;
+}
+form{
+    border: 3px solid;
+    border-radius: 20px;
+    background: transparent;
+    backdrop-filter: blur(4px) saturate(180%);
+}
 .login_form{
     width: 100%;
     height: 100vh;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-image: url(../images/loging_bg.png);
+    background-image: url(../images/Décoration.jpeg);
     background-size: cover;
     background-position: center;
 }
@@ -837,6 +855,7 @@ section .main .button:hover i{
     width: 350px;
     height: 40px;
     display: flex;
+    margin-bottom: 20px;
 }
 
 .login_form .right .password i{
