@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: 70vh;
+        width: 70%;
+        position: absolute;
+        right: 0;
+      }
+      .company-info {
+        padding: 20px;
+        background-color: #f0f0f0;
+        position: relative;
+        left: 800px;
+        height: 50px;
+      }
+      .customer-info {
+        padding: 20px;
+        background-color: #e0e0e0;
+      }
+      .invoice {
+        flex: 1;
+        background-color: #f0f0f0;
+        padding: 20px;
+      }
+      .table {
+        margin-top: 10px;
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table th,
+      .table td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+      }
+      .table th {
+        background-color: #f2f2f2;
+        text-align: left;
+      }
+      .footer {
+        padding: 20px;
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Company Address, Location, Date, Time -->
+      <div class="company-info">
+        <p>Company Name</p>
+        <p>Company Address</p>
+        <p>Company Location</p>
+        <p>Date: March 21, 2024</p>
+        <p>Time: 10:00 AM</p>
+      </div>
+      <!-- Customer Address, Name, Location, Phone Number -->
+      <div class="customer-info">
+        <p>Customer Name</p>
+        <p>Customer Address</p>
+        <p>Customer Location</p>
+        <p>Phone Number: 123-456-7890</p>
+      </div>
+      <div class="invoice">
+        <!-- Table -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Colour</th>
+              <th>Size</th>
+              <th>Material</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </div>
+      <!-- Footer with Total Value -->
+      <div class="footer">
+        <p>Total: $1000</p>
+      </div>
+    </div>
+  </body>
+</html>

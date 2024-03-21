@@ -19,6 +19,23 @@ def get_products():
         list_products.append(product.to_dict())
     return jsonify(list_products)
 
+
+@app_views.route('/product/<product_info>/<searchValue>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/product_info/get_product.yml', methods=['GET'])
+def get_products_with_info(product_info, searchValue):
+    """
+    Retrieves the list of all product objects
+    """
+    all_products = storage.all(Product).values()
+    list_products = []
+    for product in all_products:
+         if getattr(product, product_info, None) == searchValue:
+            list_products.append(product.to_dict())
+
+    return jsonify(list_products)
+
+
+
 @app_views.route('/products/<product_id>', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/product/get_id_product.yml', methods=['get'])
 def get_product(product_id):
@@ -28,6 +45,7 @@ def get_product(product_id):
         abort(404)
 
     return jsonify(product.to_dict())
+
 
 @app_views.route('/products/<product_id>', methods=['DELETE'],
                  strict_slashes=False)
@@ -46,6 +64,7 @@ def delete_product(product_id):
     storage.save()
 
     return make_response(jsonify({}), 200)
+
 
 @app_views.route('/products', methods=['POST'], strict_slashes=False)
 @swag_from('documentation/product/post_product.yml', methods=['POST'])

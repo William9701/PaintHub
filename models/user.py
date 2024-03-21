@@ -1,7 +1,7 @@
 from models.base_models import Basemodels, Base
 import sqlalchemy
 import models
-from sqlalchemy import Column, DateTime, String, ForeignKey, Integer
+from sqlalchemy import JSON, Column, DateTime, String, ForeignKey, Integer
 from sqlalchemy.sql import func
 
 
@@ -21,8 +21,10 @@ class User(Basemodels, Base):
         payment_info = Column(String(100))
         purchase_history = Column(String(255))
         wishlist = Column(String(255))  
-        cart_contents = Column(String(255))
+        cart_contents = Column(JSON, default=[])
+        cart_contentsQuantity = Column(JSON, default={})
         preferred_colors = Column(String(100))
+
         preferred_brands = Column(String(100))
         painter_preferences = Column(String(100))
         notification_preferences = Column(String(100))

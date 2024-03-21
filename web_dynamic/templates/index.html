@@ -14,6 +14,10 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+    />
   </head>
   <body>
     <section>
@@ -32,11 +36,31 @@
 
         <div class="icons">
           <i class="fa-solid fa-heart"></i>
-          <i class="fa-solid fa-cart-shopping"></i>
+          <i class="fa-solid fa-cart-shopping" onclick="displayCart('{{ user.id }}')"></i>
+
           <span id="cart-count" style="display: none"></span>
-          <div id="cart" style="display: none">
-            <!-- Cart items will go here -->
-          </div>
+          <div id="cart" style="display: none; transform: translateX(0px);">
+            <table>
+                <tbody>
+                    
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td id="total" colspan="2"></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <a href="/payment/{{ user.id }}"><button>Proceed to Payment</button></a>
+            
+        </div>
+        
 
           <i class="fa-solid fa-user"></i>
         </div>
@@ -150,7 +174,26 @@
     <div class="products" id="Products">
       <h1>Products</h1>
 
-      <div class="box">
+<div class="container">
+  <form action="" class="search-bar">
+    <input type="text" placeholder="Search by Color" name="search-bar" />
+    <img src="../static/images/filter.png" alt="Filter" id="filterImage" style="cursor: pointer;" />
+    <select name="filter" id="filterSelect" style="font-size: medium; margin-left: 110px; display: none;">
+      <option value="">--Choose a Search filter--</option>
+      <option value="Search by Color">Search by Color</option>
+      <option value="Search by Brand">Search by Brand</option>
+      <option value="Search by Category">Search by Category</option>
+      <option value="Search by Material">Search by Material</option>
+    </select>
+    <button type="submit">
+      <img src="../static/images/magnifying-glass-search.png" alt="" />
+    </button>
+  </form>
+</div>
+
+
+
+      <div class="box" id="productContainer">
         {% for product in products %}
         <div class="card">
           <div class="small_card">
@@ -159,14 +202,18 @@
           </div>
 
           <div class="image">
-            <img src="../static/images/Resisto_Enduit_Fibreux_Pour_Toiture_53031_-_Rona-removebg-preview.png" />
+            <img src="{{ product.ProductImage }}.png" />
           </div>
 
           <div class="products_text">
-            <h2>{{ product.ProductName }}</h2>
-            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-            <h3>$100.99</h3>
-            <a href="" class="btn">Add To Cart</a>
+            <h2>{{ product.Name }}</h2>
+            <p>Category: {{ product.Category }}</p>
+            <p>Color: {{ product.Color }}</p>
+            <p>Material: {{ product.Material }}</p>
+            <p>Brand: {{ product.Brand }}</p>
+            
+            <h3>${{ product.Price }}</h3>
+            <a href="#" class="btn" onclick="addToCart('{{ product.id }}', '{{ user.id if user else None }}')">Add To Cart</a>
           </div>
         </div>
         {% endfor %}

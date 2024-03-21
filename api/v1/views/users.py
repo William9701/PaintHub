@@ -9,6 +9,7 @@ from api.v1.views import app_views
 from flasgger.utils import swag_from
 from models import storage
 from models.user import User
+from sqlalchemy.orm.attributes import flag_modified
 
 AUTH = Auth()
 
@@ -52,8 +53,54 @@ def put_user(user_id):
     data = request.get_json()
     for key, value in data.items():
         if key not in ignore:
-            setattr(user, key, value)
+            if key == "cart_contents":
+                # Ensure value is a string (product ID)
+                if value not in user.cart_contents:
+                    # Append the product ID to the existing cart_contents
+                    user.cart_contents.append(value)
+                    # Flag the 'cart_contents' attribute as modified
+                    flag_modified(user, 'cart_contents')
+                else:
+                    abort(400, description="Invalid cart_contents value")
+            else:
+                setattr(user, key, value)
+
+    # Save the updated user to the database
     storage.save()
+
+    return make_response(jsonify(user.to_dict()), 200)
+
+
+@app_views.route('/users/<user_id>/<product_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/put_user.yml', methods=['GET'])
+def RemoveFromCart(user_id, product_id):
+    user = storage.get(User, user_id)
+
+    if not user:
+        abort(404)
+
+    if product_id in user.cart_contents:
+        user.cart_contents.remove(product_id)
+        flag_modified(user, 'cart_contents')
+    else:
+        abort(400, description="Invalid cart_contents value")
+
+    storage.save()
+
+    return make_response(jsonify(user.to_dict()), 200)
+
+
+@app_views.route('/users/<user_id>/<product_id>/<quantity>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/put_user.yml', methods=['GET'])
+def addProductQuantity(user_id, product_id, quantity):
+    user = storage.get(User, user_id)
+
+    if not user:
+        abort(404)
+    user.cart_contentsQuantity[product_id] = quantity
+    flag_modified(user, 'cart_contentsQuantity')
+    storage.save()
+
     return make_response(jsonify(user.to_dict()), 200)
 
 

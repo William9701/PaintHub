@@ -68,6 +68,7 @@ class DBStorage:
 
     def save(self):
         """commit all changes of the current database session"""
+        print('i am strorage called')
         self.__session.commit()
 
     def close(self):
@@ -108,7 +109,8 @@ class DBStorage:
     def add_user(self, email: str, hashed_password: str, first_name: str, last_name: str) -> User:
         """This is the add user method"""
 
-        new_user = User(email=email, hashed_password=hashed_password, first_name=first_name, last_name=last_name)
+        new_user = User(email=email, hashed_password=hashed_password,
+                        first_name=first_name, last_name=last_name)
         print(new_user.id)
         self._session.add(new_user)
         self._session.flush()  # flush the changes to the database
@@ -155,7 +157,8 @@ class DBStorage:
     def add_painter(self, email: str, hashed_password: str, first_name: str, last_name: str) -> Painter:
         """This is the add painter method"""
 
-        new_painter = Painter(email=email, hashed_password=hashed_password, first_name=first_name, last_name=last_name)
+        new_painter = Painter(email=email, hashed_password=hashed_password,
+                              first_name=first_name, last_name=last_name)
         print(new_painter.id)
         self._session.add(new_painter)
         self._session.flush()  # flush the changes to the database
@@ -184,7 +187,7 @@ class DBStorage:
         else:
             # If no results are found, raise NoResultFound
             raise NoResultFound
-        
+
     def update_painter(self, painter_id: int, **kwargs) -> None:
         """This is a method that takes as argument a required painter_id
         integer and arbitrary keyword arguments, and returns None"""
@@ -202,14 +205,15 @@ class DBStorage:
     def add_admin(self, email: str, hashed_password: str, first_name: str, last_name: str) -> Admin:
         """This is the add admin method"""
 
-        new_admin = Admin(email=email, hashed_password=hashed_password, first_name=first_name, last_name=last_name)
+        new_admin = Admin(email=email, hashed_password=hashed_password,
+                          first_name=first_name, last_name=last_name)
         print(new_admin.id)
         self._session.add(new_admin)
         self._session.flush()  # flush the changes to the database
         self._session.commit()
         self._session.refresh(new_admin)  # refresh the admin instance
         return new_admin
-    
+
     def find_admin_by(self, **kwargs) -> Admin:
         """This method takes in arbitrary keyword arguments and returns
         the first row found in the admins table as filtered by the
@@ -231,7 +235,7 @@ class DBStorage:
         else:
             # If no results are found, raise NoResultFound
             raise NoResultFound
-        
+
     def update_admin(self, admin_id: int, **kwargs) -> None:
         """This is a method that takes as argument a required admin_id
         integer and arbitrary keyword arguments, and returns None"""
