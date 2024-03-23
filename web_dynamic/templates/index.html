@@ -28,39 +28,42 @@
 
         <ul>
           <li><a href="#Home">Home</a></li>
+          <li><a href="#Servises">Services</a></li>
           <li><a href="#Products">Products</a></li>
-          <li><a href="#painters">Painters</a></li>
+          <li><a href="#design">Design</a></li>
+          <li><a href="#about">Painters</a></li>
           <li><a href="#Review">Review</a></li>
-          <li><a href="#Servises">Servises</a></li>
         </ul>
 
         <div class="icons">
           <i class="fa-solid fa-heart"></i>
-          <i class="fa-solid fa-cart-shopping" onclick="displayCart('{{ user.id }}')"></i>
+          <i
+            class="fa-solid fa-cart-shopping"
+            onclick="displayCart('{{ user.id }}')"
+          ></i>
 
           <span id="cart-count" style="display: none"></span>
-          <div id="cart" style="display: none; transform: translateX(0px);">
+          <div id="cart" style="display: none; transform: translateX(0px)">
             <table>
-                <tbody>
-                    
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td id="total" colspan="2"></td>
-                        <td></td>
-                    </tr>
-                </tfoot>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td id="total" colspan="2"></td>
+                  <td></td>
+                </tr>
+              </tfoot>
             </table>
-            <a href="/payment/{{ user.id }}"><button>Proceed to Payment</button></a>
-            
-        </div>
-        
+            <a href="/payment/{{ user.id }}"
+              ><button>Proceed to Payment</button></a
+            >
+          </div>
 
           <i class="fa-solid fa-user"></i>
         </div>
@@ -96,7 +99,7 @@
           <i class="fa-solid fa-chevron-right"></i>
         </div>
         <div class="button">
-          <a href="#painters">Request a painter</a>
+          <a href="#about">Request a painter</a>
           <i class="fa-solid fa-paint-brush"></i>
         </div>
       </div>
@@ -170,28 +173,35 @@
 
     <!--Products-->
 
-    
     <div class="products" id="Products">
       <h1>Products</h1>
 
-<div class="container">
-  <form action="" class="search-bar">
-    <input type="text" placeholder="Search by Color" name="search-bar" />
-    <img src="../static/images/filter.png" alt="Filter" id="filterImage" style="cursor: pointer;" />
-    <select name="filter" id="filterSelect" style="font-size: medium; margin-left: 110px; display: none;">
-      <option value="">--Choose a Search filter--</option>
-      <option value="Search by Color">Search by Color</option>
-      <option value="Search by Brand">Search by Brand</option>
-      <option value="Search by Category">Search by Category</option>
-      <option value="Search by Material">Search by Material</option>
-    </select>
-    <button type="submit">
-      <img src="../static/images/magnifying-glass-search.png" alt="" />
-    </button>
-  </form>
-</div>
-
-
+      <div class="container">
+        <form action="" class="search-bar">
+          <input type="text" placeholder="Search by Color" name="search-bar" />
+          <img
+            src="../static/images/filter.png"
+            alt="Filter"
+            id="filterImage"
+            style="cursor: pointer"
+          />
+          <select
+            name="filter"
+            id="filterSelect"
+            style="font-size: medium; margin-left: 110px; display: none"
+          >
+            <option value="">--Choose a Search filter--</option>
+            <option value="Search by Location">Search by Location</option>
+            <option value="Search by Rating">Search by Rating</option>
+            <option value="Search by Specialization">
+              Search by Specialization
+            </option>
+          </select>
+          <button type="submit">
+            <img src="../static/images/magnifying-glass-search.png" alt="" />
+          </button>
+        </form>
+      </div>
 
       <div class="box" id="productContainer">
         {% for product in products %}
@@ -211,84 +221,33 @@
             <p>Color: {{ product.Color }}</p>
             <p>Material: {{ product.Material }}</p>
             <p>Brand: {{ product.Brand }}</p>
-            
+
             <h3>${{ product.Price }}</h3>
-            <a href="#" class="btn" onclick="addToCart('{{ product.id }}', '{{ user.id if user else None }}')">Add To Cart</a>
+            <a
+              href="#"
+              class="btn"
+              onclick="addToCart('{{ product.id }}', '{{ user.id if user else None }}')"
+              >Add To Cart</a
+            >
           </div>
         </div>
         {% endfor %}
       </div>
     </div>
 
-    <!--Painters-->
-
-    <div class="about" id="painters">
-      <h1>Our<span>Painters</span></h1>
-
-      <div class="about_main">
-        <!-- <div class="about_image">
-          <div class="about_small_image">
-            <img src="../static/images/red_shoes1.png" onclick="functio(this)" />
-            <img src="../static/images/red_shoes2.png" onclick="functio(this)" />
-            <img src="../static/images/red_shoes3.png" onclick="functio(this)" />
-            <img src="../static/images/red_shoes4.png" onclick="functio(this)" />
-          </div>
-
-          <div class="image_contaner">
-            <img src="../static/images/red_shoes1.png" id="imagebox" />
-            <p class="painter_description">Jane Smith: Crafting elegance one shoe at a time.</p>
-          </div>
-        </div> -->
-
-        <div class="about_text">
-          <div class="about_image">
-            <div class="about_small_image">
-              <img src="../static/images/man_dp1.jpg" onclick="large(this)" />
-              <img src="../static/images/man_dp2.jpg" onclick="large(this)" />
-              <img src="../static/images/man_dp3.jpg" onclick="large(this)" />
-              <img src="../static/images/red_shoes4.png" onclick="large(this)" />
-            </div>
-
-            <div class="image_contaner">
-              <img src="../static/images/man_dp1.jpg" id="imagebox-2" />
-              <p>Name: Yahoo Painter.</p>
-              <p>Specialty: Crafting elegance one shoe at a time.</p>
-              <p>Location: Asaba.</p>
-              <p>Rating: <div class="products_star">
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-solid fa-star"></i>
-                <i class="fa-regular fa-star-half-stroke"></i>
-              </div> </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- <a href="#products" class="about_btn">Shop Now</a> -->
-
-      <script>
-        function functio(small) {
-          var full = document.getElementById("imagebox");
-          full.src = small.src;
-        }
-        function large(small) {
-          var full = document.getElementById("imagebox-2");
-          full.src = small.src;
-        }
-      </script>
-    </div>
-
     <!-- know your paint-->
 
-    <div class="know_box">
+    <div class="know_box" id="design">
       <h1>Know Your<span>Design</span></h1>
       <div class="paint-wall">
         <div class="paint-select">
           <div class="product-select" id="ps">
             <!-- <label for="product">Choose a product:</label> -->
-            <select name="product" id="design-select" style="font-size: medium; margin-left: 110px;">
+            <select
+              name="product"
+              id="design-select"
+              style="font-size: medium; margin-left: 110px"
+            >
               <option value="">--Please choose a design--</option>
               <option value="product1">Product 1</option>
               <option value="product2">Product 2</option>
@@ -316,7 +275,9 @@
         </div>
         <div class="wall-display">
           <div class="measure">
-            <p style="font-weight: bolder; margin-left: 40px;">Get Your Quotaions Right</p>
+            <p style="font-weight: bolder; margin-left: 40px">
+              Get Your Quotaions Right
+            </p>
             <div class="product-select">
               <!-- <label for="product">Choose a product:</label> -->
               <select name="product" id="design-select">
@@ -327,33 +288,144 @@
               </select>
             </div>
             <div class="feet-input">
-              <p style="width: 80px;">Enter wall Height(feet)</p>
-              <input class="form" type="number" placeholder="Height (feet)">
+              <p style="width: 80px">Enter wall Height(feet)</p>
+              <input class="form" type="number" placeholder="Height (feet)" />
             </div>
             <div class="feet-input-width">
-              <p style="width: 80px;">Enter wall Width(feet)</p>
-              <input class="form" type="number" placeholder="Width (feet)">
+              <p style="width: 80px">Enter wall Width(feet)</p>
+              <input class="form" type="number" placeholder="Width (feet)" />
             </div>
             <button class="btn-2" type="submit">Submit</button>
-            <img src="./../static/images/lady-painter-measure-removebg-preview.png" style="width: 200px; margin-left: 120px; margin-top: -10px">
-          <img src="./../static/images/man-painter-measure-removebg-preview.png" style="width: 250px; margin-top: -70px">
+            <img
+              src="./../static/images/lady-painter-measure-removebg-preview.png"
+              style="width: 200px; margin-left: 120px; margin-top: -10px"
+            />
+            <img
+              src="./../static/images/man-painter-measure-removebg-preview.png"
+              style="width: 250px; margin-top: -70px"
+            />
 
-          <p style="font-weight: 750; margin-top: -20px; z-index: 1;">You will need 50 Buckets of paint</p>
-          <div class="paint-desc">
-            <h3 id="paint-name">Paint Name: Ox-Blood</h3>
-            <p id="paint-comapany">Compainies: Dulex, Avim, Crtier, lengto</p>
+            <p style="font-weight: 750; margin-top: -20px; z-index: 1">
+              You will need 50 Buckets of paint
+            </p>
+            <div class="paint-desc">
+              <h3 id="paint-name">Paint Name: Ox-Blood</h3>
+              <p id="paint-comapany">Compainies: Dulex, Avim, Crtier, lengto</p>
+            </div>
           </div>
-          </div>
-          <img src="./../static/images/paint-tools.png" class="paint-tools" alt="">
-          <img src="./../static/images/paint-tools-2.png" class="paint-tools" id="t2">
-          
+          <img
+            src="./../static/images/paint-tools.png"
+            class="paint-tools"
+            alt=""
+          />
+          <img
+            src="./../static/images/paint-tools-2.png"
+            class="paint-tools"
+            id="t2"
+          />
+
           <div>
-            <img id="wall-painter" src="./../static/images/wall_painter.png" alt="">
+            <img
+              id="wall-painter"
+              src="./../static/images/wall_painter.png"
+              alt=""
+            />
           </div>
-          
-          
         </div>
       </div>
+    </div>
+
+    <!--Painters-->
+
+    <div class="workmen" id="about">
+      <h1>Our<span> WorkMen</span></h1>
+
+      <div class="container">
+        <form action="" class="search-bar">
+          <input
+            style="padding: 24px 10px"
+            type="text"
+            placeholder="Search by Location"
+            name="search-bar"
+          />
+          <img
+            src="../static/images/nearby.png"
+            alt="nearby"
+            id="nearby"
+            style="cursor: pointer; width: 40px; margin-right: 15px"
+          />
+          <img
+            src="../static/images/filter.png"
+            alt="Filter"
+            id="filterImage"
+            style="cursor: pointer; width: 40px; margin-right: 15px"
+          />
+          <select
+            name="filter"
+            id="filterSelect"
+            style="font-size: medium; margin-left: 110px; display: none"
+          >
+            <option value="">--Choose a Search filter--</option>
+            <option value="Search by Color">Search by Color</option>
+            <option value="Search by Brand">Search by Brand</option>
+            <option value="Search by Category">Search by Category</option>
+            <option value="Search by Material">Search by Material</option>
+          </select>
+          <button type="submit">
+            <img src="../static/images/magnifying-glass-search.png" alt="" />
+          </button>
+        </form>
+      </div>
+
+      <div class="box" id="productContainer">
+        {% for product in products %}
+        <div class="card">
+          <div class="small_card">
+            <i class="fa-solid fa-heart"></i>
+            <i class="fa-solid fa-share"></i>
+          </div>
+
+          <div class="image">
+            <img src="../static/images/profile-1.jpg" />
+          </div>
+
+          <div class="products_text">
+            <h2>Yahoo Painter</h2>
+            <p>Location: <span>Asaba, Delta State</span></p>
+            <p>
+              Specialties: <span>Painting, Screeding, Stuccos, Wallpaper</span>
+            </p>
+            <p>
+              Current Status:
+              <span
+                >Available
+                <i style="color: green" class="fa-solid fa-check-circle"></i
+              ></span>
+            </p>
+            <p>
+              Customer's Rating: <i class="fa-solid fa-star"></i
+              ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+              ><i class="fa-solid fa-star"></i>
+            </p>
+            <a href="#" class="btn">Hire</a>
+            <a href="/paintersProfile" class="btn">View Profile</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- <a href="#products" class="about_btn">Shop Now</a> -->
+
+      <script>
+        function functio(small) {
+          var full = document.getElementById("imagebox");
+          full.src = small.src;
+        }
+        function large(small) {
+          var full = document.getElementById("imagebox-2");
+          full.src = small.src;
+        }
+      </script>
     </div>
 
     <!--Review-->
@@ -558,11 +630,8 @@
         </div>
 
         <div class="tag">
-          <h1>Get Help</h1>
-          <a href="#" class="center">FAQ</a>
-          <a href="#" class="center">Shipping</a>
-          <a href="#" class="center">Returns</a>
-          <a href="#" class="center">Payment Options</a>
+          <h1>Career</h1>
+          <a href="/paintersLogin" class="center">Work With Us</a>
         </div>
 
         <div class="tag">

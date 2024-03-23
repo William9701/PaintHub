@@ -3,59 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/styles/payment.css" />
     <title>Invoice</title>
-    <style>
-      body,
-      html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      }
-      .container {
-        display: flex;
-        flex-direction: column;
-        height: 70vh;
-        width: 70%;
-        position: absolute;
-        right: 0;
-      }
-      .company-info {
-        padding: 20px;
-        background-color: #f0f0f0;
-        position: relative;
-        left: 800px;
-        height: 50px;
-      }
-      .customer-info {
-        padding: 20px;
-        background-color: #e0e0e0;
-      }
-      .invoice {
-        flex: 1;
-        background-color: #f0f0f0;
-        padding: 20px;
-      }
-      .table {
-        margin-top: 10px;
-        width: 100%;
-        border-collapse: collapse;
-      }
-      .table th,
-      .table td {
-        padding: 8px;
-        border-bottom: 1px solid #ddd;
-      }
-      .table th {
-        background-color: #f2f2f2;
-        text-align: left;
-      }
-      .footer {
-        padding: 20px;
-        background-color: #f0f0f0;
-      }
-    </style>
   </head>
   <body>
+    <div class="form-container">
+      <div class="form">
+        <h1 class="heading">checkout</h1>
+        <p>Delivery Address</p>
+        <input type="text" id="address" placeholder="address" />
+        <input type="text" id="street" placeholder="street" />
+        <input type="text" id="city" placeholder="city" />
+        <input type="text" id="state" placeholder="state" />
+        <input type="text" id="pincode" placeholder="pincode" />
+        <input type="text" id="landmark" placeholder="landmark" />
+      </div>
+    </div>
     <div class="container">
       <!-- Company Address, Location, Date, Time -->
       <div class="company-info">
@@ -97,6 +60,11 @@
       <div class="footer">
         <p>Total: $1000</p>
       </div>
+      <a href="#" id="buy_now_btn" class="btn btn-primary"
+        ><button>Buy Now</button></a
+      >
     </div>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="../static/scripts/payment.js"></script>
   </body>
 </html>

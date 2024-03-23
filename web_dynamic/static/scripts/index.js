@@ -3,42 +3,53 @@ var cart = [];
 
 // Function to handle adding to cart
 function addToCart(product_id, user_id) {
-  event.preventDefault();
+  event.preventDefault(); // Prevent default form submission behavior
+
+  // Check if user_id is provided
   if (user_id) {
     var data = {
       cart_contents: product_id,
     };
-    // Send a PUT request to the users API
+
+    // Send a PUT request to update the user's cart contents
     fetch("http://127.0.0.1:5001/api/v1/users/" + user_id, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }).catch((error) => console.error("Error:", error));
-    fetch(`http://127.0.0.1:5001/api/v1/users/${user_id}`)
-      .then((request) => request.json())
-      .then((user) => {
-        cart = user.cart_contents;
-        document.getElementById("cart-count").style.display = "inline";
-        console.log(cart);
-
-        // Update the cart icon with the number of items in the cart
-        document.getElementById("cart-count").textContent = cart.length;
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to update user cart");
+        }
+        // Fetch updated user data after updating cart contents
+        return fetch(
+          `http://127.0.0.1:5001/api/v1/users/${user_id}/${product_id}/1`
+        );
       })
-      .catch((error) => console.error("Error:", error));
+      .then((response) => response.json())
+      .then((user) => {
+        // Update cart count display
+        document.getElementById("cart-count").style.display = "inline";
+        document.getElementById("cart-count").textContent =
+          user.cart_contents.length;
+        console.log(user); // Optional: log user data
+      })
+      .catch((error) => console.error("Error:", error)); // Log any errors during the process
   } else {
-    // Add the product to the cart
-    cart.push(product);
+    // If user_id is not provided, handle adding the product to cart directly
+    cart.push(product_id); // Assuming 'cart' is a global variable storing cart contents
 
+    // Update cart count display
     document.getElementById("cart-count").style.display = "inline";
-
-    // Update the cart icon with the number of items in the cart
     document.getElementById("cart-count").textContent = cart.length;
   }
 }
+
 function displayCart(user_id) {
   var cart = document.getElementById("cart");
+
   fetch(`http://127.0.0.1:5001/api/v1/users/${user_id}`)
     .then((response) => response.json())
     .then((user) => {
@@ -53,6 +64,7 @@ function displayCart(user_id) {
           .then((response) => response.json())
           .then((product) => {
             createProductCart(product, user_id);
+
             // Fetch the quantity for the product asynchronously
             fetch(`/get_product_quantity/${user_id}/${product.id}`)
               .then((response) => response.json())
@@ -64,7 +76,9 @@ function displayCart(user_id) {
                   quantity;
               })
               .catch((error) => console.error("Error:", error));
-            totalPrice += parseInt(product.Price); // Add product price to total price
+            totalPrice += product.Price;
+            console.log(totalPrice);
+            console.log("i am here in totakl price");
             updateTotal(totalPrice); // Update total display
           });
       });
