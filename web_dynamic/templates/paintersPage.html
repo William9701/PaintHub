@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Touch</title>
+    <link rel="shortcut icon" href="../static/images/logo.png" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/styles/paintersProfile.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+    />
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .comment-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+      .comment-user {
+        font-weight: bold;
+        color: #333;
+      }
+      .comment-date {
+        font-size: 0.8em;
+        color: #777;
+      }
+      .comment-text {
+        margin-top: 10px;
+        color: #555;
+      }
+    </style>
+  </head>
+  <body data-painter-id="{{ painter.id }}">
+    <div class="header__wrapper">
+      <header></header>
+      <div class="cols__container">
+        <div class="left__col">
+          <div class="img__container">
+            <img src="{{ painter.profile_image }}" alt="{{ painter.first_name }} {{ painter.last_name }}" />
+            <span></span>
+          </div>
+          <h2>{{ painter.first_name }} {{ painter.last_name }}</h2>
+          <p>interor Decorator</p>
+          <p>anna@example.com</p>
+
+          <ul class="about">
+            <li><span>4,073</span>Photos</li>
+            <li><span>322</span>Videos</li>
+            <li><span>200,543</span>Jobs</li>
+            <li>
+              <span
+                ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+                ><i class="fa-solid fa-star"></i
+                ><i class="fa-solid fa-star"></i></span
+              >Average Rating
+            </li>
+          </ul>
+
+          <div class="content">
+            <p>
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam
+              erat volutpat. Morbi imperdiet, mauris ac auctor dictum, nisl
+              ligula egestas nulla.
+            </p>
+
+            <ul>
+              <li><i class="fab fa-twitter"></i></li>
+              <i class="fab fa-pinterest"></i>
+              <i class="fab fa-facebook"></i>
+              <i class="fab fa-dribbble"></i>
+            </ul>
+          </div>
+        </div>
+        <div class="right__col">
+          <nav>
+            <ul>
+              <li><a href="#">Photos</a></li>
+              <li><a href="#">Videos</a></li>
+              <li><a href="#">Comments</a></li>
+              <li><a href="#">Profile</a></li>
+            </ul>
+            <button style="display: block" id="add-photo">Add Photos</button>
+            <button style="display: none" id="add-video">Add Videos</button>
+            <input type="file" id="photo-input" style="display: none" />
+            <input type="file" id="video-input" style="display: none" />
+          </nav>
+
+          <div id="photodiv" class="photos">
+            {% for photo in paintersMedia.photos %}
+            <div class="block-box" >
+              <img
+                src="{{ photo }}"
+                alt="Photo"
+                style="width: 320px; height: 200px"
+              />
+              <span
+                id="close-span"
+                style="cursor: pointer; position: relative"
+                class="material-icons-sharp"
+                onclick="deleteMediaP('{{ painter.id }}', '{{ photo }}')"
+                >close</span
+              >
+            </div>
+
+            {% endfor %}
+          </div>
+          <div id="videosdiv" class="videos" style="display: none">
+            {% for video in paintersMedia.video %}
+            <div class="vid-box">
+              <video width="320" height="240" controls>
+                <source src="{{ video }}" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <span
+                id="close-span"
+                style="cursor: pointer; position: relative"
+                class="material-icons-sharp"
+                onclick="deleteMediaV('{{ painter.id }}', '{{ video }}')"
+                >close</span
+              >
+            </div>
+
+            {% endfor %}
+          </div>
+
+          <div id="commentdiv" class="comments" style="display: none">
+            <!-- Your comments -->
+            <div class="comment-box">
+              <div class="comment-user">User Name</div>
+              <div class="comment-date">2024-03-24</div>
+              <div class="comment-text">This is a user comment.</div>
+            </div>
+          </div>
+
+          <div id="profilediv" class="profile" style="display: none">
+            <!-- Your about section -->
+            <div class="container light-style flex-grow-1 container-p-y">
+              <h4 class="font-weight-bold py-3 mb-4">
+                  Account settings
+              </h4>
+              <div class="card overflow-hidden">
+                  <div class="row no-gutters row-bordered row-border-light">
+                      <div class="col-md-3 pt-0">
+                          <!-- <div class="list-group list-group-flush account-settings-links">
+                              <a class="list-group-item list-group-item-action active" data-toggle="list"
+                                  href="#account-general">General</a>
+                              <a class="list-group-item list-group-item-action" data-toggle="list"
+                                  href="#account-change-password">Change password</a>
+                              <a class="list-group-item list-group-item-action" data-toggle="list"
+                                  href="#account-info">Info</a>
+                              <a class="list-group-item list-group-item-action" data-toggle="list"
+                                  href="#account-social-links">Social links</a>
+                              <a class="list-group-item list-group-item-action" data-toggle="list"
+                                  href="#account-connections">Connections</a>
+                              <a class="list-group-item list-group-item-action" data-toggle="list"
+                                  href="#account-notifications">Notifications</a>
+                          </div> -->
+                      </div>
+                      <div class="col-md-9">
+                          <div class="tab-content">
+                              <div class="tab-pane fade active show" id="account-general">
+                                  <div class="card-body media align-items-center">
+                                      <img id="avatar" src="{{ painter.profile_image }}" alt
+                                          class="d-block ui-w-80">
+                                      <div class="media-body ml-4">
+                                          <form action="/upload" method="post" enctype="multipart/form-data"></form>
+                                          <label class="btn btn-outline-primary">
+                                              Upload new photo
+                                              <input id="fileinput" type="file" class="account-settings-fileinput">
+                                          </label> 
+                                          
+                                      </form>&nbsp;
+                                          <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+                                          <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                                      </div>
+                                  </div>
+                                  <hr class="border-light m-0">
+                                  <form id="userForm">
+                                  <div class="card-body">
+                                      <div class="form-group">
+                                          <label class="form-label">Username</label>
+                                          <input id="username" type="text" class="form-control mb-1" value="{{ painter.first_name}}">
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">First Name</label>
+                                          <input id="first_name" type="text" class="form-control" value="{{ painter.first_name }}" >
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Last Name</label>
+                                          <input id="last_name" type="text" class="form-control" value="{{ painter.last_name }}" >
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">E-mail</label>
+                                          <input id="email" type="text" class="form-control mb-1" value="{{ painter.email }}">
+                                          <div class="alert alert-warning mt-3">
+                                              Your email is not confirmed. Please check your inbox.<br>
+                                              <a href="javascript:void(0)">Resend confirmation</a>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Company</label>
+                                          <input type="text" class="form-control" value="Company Ltd.">
+                                      </div>
+                                      
+                                      
+                                  
+                                  
+                                  </div>
+                              </form>
+                                  
+                              </div>
+                              <div class="tab-pane fade" id="account-change-password">
+                                  <div class="card-body pb-2">
+                                      <div class="form-group">
+                                          <label class="form-label">Current password</label>
+                                          <input type="password" class="form-control">
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">New password</label>
+                                          <input type="password" class="form-control">
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Repeat new password</label>
+                                          <input type="password" class="form-control">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="tab-pane fade" id="account-info">
+                                  <div class="card-body pb-2">
+                                      <div class="form-group">
+                                          <label class="form-label">Bio</label>
+                                          <textarea class="form-control"
+                                              rows="5"></textarea>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Birthday</label>
+                                          <input type="text" class="form-control" value="May 3, 1995">
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Country</label>
+                                          <select class="custom-select">
+                                              <option>USA</option>
+                                              <option selected>Canada</option>
+                                              <option>UK</option>
+                                              <option>Germany</option>
+                                              <option>France</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <hr class="border-light m-0">
+                                  <div class="card-body pb-2">
+                                      <h6 class="mb-4">Contacts</h6>
+                                      <div class="form-group">
+                                          <label class="form-label">Phone</label>
+                                          <input type="text" class="form-control" value="+0 (123) 456 7891">
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Website</label>
+                                          <input type="text" class="form-control" value>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="tab-pane fade" id="account-social-links">
+                                  <div class="card-body pb-2">
+                                      <div class="form-group">
+                                          <label class="form-label">Twitter</label>
+                                          <input type="text" class="form-control" value="https://twitter.com/user">
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Facebook</label>
+                                          <input type="text" class="form-control" value="https://www.facebook.com/user">
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Google+</label>
+                                          <input type="text" class="form-control" value>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">LinkedIn</label>
+                                          <input type="text" class="form-control" value>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="form-label">Instagram</label>
+                                          <input type="text" class="form-control" value="https://www.instagram.com/user">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="tab-pane fade" id="account-connections">
+                                  <div class="card-body">
+                                      <button type="button" class="btn btn-twitter">Connect to
+                                          <strong>Twitter</strong></button>
+                                  </div>
+                                  <hr class="border-light m-0">
+                                  <div class="card-body">
+                                      <h5 class="mb-2">
+                                          <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i
+                                                  class="ion ion-md-close"></i> Remove</a>
+                                          <i class="ion ion-logo-google text-google"></i>
+                                          You are connected to Google:
+                                      </h5>
+                                      <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
+                                          data-cfemail="f9979498818e9c9595b994989095d79a9694">[email&#160;protected]</a>
+                                  </div>
+                                  <hr class="border-light m-0">
+                                  <div class="card-body">
+                                      <button type="button" class="btn btn-facebook">Connect to
+                                          <strong>Facebook</strong></button>
+                                  </div>
+                                  <hr class="border-light m-0">
+                                  <div class="card-body">
+                                      <button type="button" class="btn btn-instagram">Connect to
+                                          <strong>Instagram</strong></button>
+                                  </div>
+                              </div>
+                              <div class="tab-pane fade" id="account-notifications">
+                                  <div class="card-body pb-2">
+                                      <h6 class="mb-4">Activity</h6>
+                                      <div class="form-group">
+                                          <label class="switcher">
+                                              <input type="checkbox" class="switcher-input" checked>
+                                              <span class="switcher-indicator">
+                                                  <span class="switcher-yes"></span>
+                                                  <span class="switcher-no"></span>
+                                              </span>
+                                              <span class="switcher-label">Email me when someone comments on my article</span>
+                                          </label>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="switcher">
+                                              <input type="checkbox" class="switcher-input" checked>
+                                              <span class="switcher-indicator">
+                                                  <span class="switcher-yes"></span>
+                                                  <span class="switcher-no"></span>
+                                              </span>
+                                              <span class="switcher-label">Email me when someone answers on my forum
+                                                  thread</span>
+                                          </label>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="switcher">
+                                              <input type="checkbox" class="switcher-input">
+                                              <span class="switcher-indicator">
+                                                  <span class="switcher-yes"></span>
+                                                  <span class="switcher-no"></span>
+                                              </span>
+                                              <span class="switcher-label">Email me when someone follows me</span>
+                                          </label>
+                                      </div>
+                                  </div>
+                                  <hr class="border-light m-0">
+                                  <div class="card-body pb-2">
+                                      <h6 class="mb-4">Application</h6>
+                                      <div class="form-group">
+                                          <label class="switcher">
+                                              <input type="checkbox" class="switcher-input" checked>
+                                              <span class="switcher-indicator">
+                                                  <span class="switcher-yes"></span>
+                                                  <span class="switcher-no"></span>
+                                              </span>
+                                              <span class="switcher-label">News and announcements</span>
+                                          </label>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="switcher">
+                                              <input type="checkbox" class="switcher-input">
+                                              <span class="switcher-indicator">
+                                                  <span class="switcher-yes"></span>
+                                                  <span class="switcher-no"></span>
+                                              </span>
+                                              <span class="switcher-label">Weekly product updates</span>
+                                          </label>
+                                      </div>
+                                      <div class="form-group">
+                                          <label class="switcher">
+                                              <input type="checkbox" class="switcher-input" checked>
+                                              <span class="switcher-indicator">
+                                                  <span class="switcher-yes"></span>
+                                                  <span class="switcher-no"></span>
+                                              </span>
+                                              <span class="switcher-label">Weekly blog digest</span>
+                                          </label>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="text-right mt-3">
+                  <button type="button" class="btn btn-primary" onclick="saveChanges()">Save changes</button>&nbsp;
+                  <button type="button" class="btn btn-default">Cancel</button>
+              </div>
+              </form>
+          </div>
+          
+
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+      
+          </script>
+    <script src="../static/scripts/paintersPage.js"></script>
+  </body>
+</html>

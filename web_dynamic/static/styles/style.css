@@ -622,12 +622,14 @@ section .main .button:hover i{
 #wall-painter{
     position: absolute;
     right: 0;
-    background: red;
     width: 70%;
     border: 2px solid black;
     border-radius: 20px;
+    background-position: center;
     margin-right: 20px;
     margin-top: -405px;
+    background-size: cover;
+    transition: 1s;
 }
 
 .measure{
@@ -928,7 +930,7 @@ form{
 .login_form .right{
     position: relative;
     top: -50px;
-    left: -60px;
+    left: 90px;
     padding: 50px 80px;
 }
 

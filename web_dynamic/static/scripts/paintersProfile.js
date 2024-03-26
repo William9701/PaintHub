@@ -57,6 +57,10 @@ const links = document.querySelectorAll(".right__col ul li a");
 
 // Get all sections
 const sections = document.querySelectorAll(".right__col div");
+var comment_box = document.getElementById("cbox");
+var comment_user = document.getElementById("cbox1");
+var comment_date = document.getElementById("cbox2");
+var comment_text = document.getElementById("cbox3");
 
 // Add a click event listener to each a tag
 links.forEach((link) => {
@@ -75,6 +79,12 @@ links.forEach((link) => {
     // Show the section that corresponds to the clicked a tag
     const section = document.querySelector(".right__col ." + className);
     if (section) {
+      if (section === "comments") {
+        comment_box.style.display = "block";
+        comment_user.style.display = "block";
+        comment_date.style.display = "block";
+        comment_text.style.display = "block";
+      }
       section.style.display = "grid";
     }
   });

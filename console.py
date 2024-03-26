@@ -8,13 +8,15 @@ from models.painter import Painter
 from models.user import User
 from models.product import Product
 from models.admin import Admin
+from models.painterMedia import PaintersMedia
 
 
 classes = {
     "User": User,
     "Product": Product,
     "Admin": Admin,
-    "Painter": Painter
+    "Painter": Painter,
+    "PaintersMedia": PaintersMedia
 
 }
 

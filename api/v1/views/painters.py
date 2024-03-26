@@ -17,15 +17,19 @@ AUTH = Auth()
 def painters():
     """reg painter"""
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
-        first_name = request.form.get('first_name')
-        last_name = request.form.get('last_name')
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        state = data.get('state')
+        city = data.get('city')
 
         if not email or not password:
             return jsonify({"message": "Missing email or password"}), 400
 
-        AUTH.register_painter(email, password, first_name, last_name)
+        AUTH.register_painter(email, password, first_name,
+                              last_name, state, city)
         return jsonify({"email": email, "message": "painter created"})
 
     except ValueError:
@@ -56,22 +60,24 @@ def put_painter(painter_id):
     return make_response(jsonify(painter.to_dict()), 200)
 
 
-@app_views.route('/sessions', methods=['POST'], strict_slashes=False)
+@app_views.route('/painter_sessions', methods=['POST'], strict_slashes=False)
 def login_p():
     """login route"""
     try:
-        email = request.form.get('email')
-        password = request.form.get('password')
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
 
         if AUTH.valid_login_p(email, password):
             session_id = AUTH.create_session_p(email)
+            painter = AUTH.get_painter_from_session_id(session_id)
 
             # Set the session ID as a cookie in the response
             response = make_response(
                 jsonify({"email": email, "message": "logged in"}))
             response.set_cookie("session_id", session_id)
 
-            return response
+            return jsonify(painter.to_dict())
 
         # Incorrect login information
         return abort(401)

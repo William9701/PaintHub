@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Touch</title>
+    <link rel="stylesheet" href="../static/styles/style.css" />
+    <link rel="shortcut icon" href="../static/images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="toast" data-autohide="true" data-delay="5000">
+      <div class="toast-header">
+        <strong class="mr-auto">Message</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+          ×
+        </button>
+      </div>
+      <div class="toast-body">
+        <!-- The message will be inserted here -->
+      </div>
+    </div>
+
+    <div
+      class="login_form"
+      style="
+        background: url(../static/images/pexels-mali-maeder-63238.jpg);
+        background-position: center;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      "
+    >
+      <div class="left">
+        <img
+          style="width: 550px; margin-top: 200px"
+          src="../static/images/generate_a_pic__e5abbe16-dc92-4a03-ac8f-ee4c12c4676d-removebg-preview.png"
+        />
+      </div>
+
+      <div class="right">
+        <h1 style="color: white">Welcome!</h1>
+
+        <form id="LoginForm">
+          <p>Email</p>
+          <div class="user">
+            <i class="fa-solid fa-envelope"></i>
+            <input
+              type="text"
+              name="email"
+              placeholder="email"
+              class="username"
+              required
+            />
+          </div>
+
+          <p class="passworg_tag">Password</p>
+          <div class="password">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              required
+              name="password"
+              placeholder="Password"
+            />
+          </div>
+
+          <button type="submit">Login</button>
+          <div class="loging_icon">
+            <a href="#"><img src="../static/images/google.png" /></a>
+            <a href="#"><img src="../static/images/facebook.png" /></a>
+            <a href="#"><img src="../static/images/twitter.png" /></a>
+          </div>
+        </form>
+        <a href="/painterReg" style="    font-size: 24px;
+		position: absolute;
+		margin-top: 20px;">Sign up <i class="fa-solid fa-user-plus"></i></a>
+      </div>
+    </div>
+    <script src="../static/scripts/painterLogin.js"></script>
+  </body>
+</html>

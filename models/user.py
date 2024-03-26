@@ -19,7 +19,7 @@ class User(Basemodels, Base):
         shipping_address = Column(String(255))
         phone_number = Column(String(20))
         payment_info = Column(String(100))
-        purchase_history = Column(String(255))
+        purchase_history = Column(JSON, default=[])
         wishlist = Column(String(255))  
         cart_contents = Column(JSON, default=[])
         cart_contentsQuantity = Column(JSON, default={})

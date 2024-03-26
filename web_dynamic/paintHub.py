@@ -5,6 +5,7 @@ import uuid
 from flask import flash, abort, redirect, url_for
 import subprocess
 from models import storage
+from models.painterMedia import PaintersMedia
 from models.user import User
 from models.admin import Admin
 from models.painter import Painter
@@ -14,9 +15,12 @@ from jinja2 import Environment, select_autoescape
 from datetime import datetime, timedelta
 from flask import jsonify
 import stripe
-
 import requests
 import pytz
+from builtins import set as built_in_set
+
+
+
 
 app = Flask(__name__)
 app.jinja_env.globals.update(datetime=datetime)
@@ -25,6 +29,8 @@ app.config['STRIPE_SECRET_KEY'] = 'sk_test_51OwhfcRtCndOdsDR5Xvix21H1cW2ilvstT0B
 
 stripe.api_key = app.config['STRIPE_SECRET_KEY']
 
+# Add the built-in set function to the Jinja environment globals
+app.jinja_env.globals.update(set=built_in_set)
 
 @app.route('/stripe_pay')
 def stripe_pay():
@@ -100,6 +106,16 @@ def GenerateStripeId():
     return jsonify({"price_id": price.id})
 
 
+# Custom function to extract unique categories
+def get_unique_categories(products):
+    unique_categories = set(product['category'] for product in products)
+    return unique_categories
+
+
+# Add the custom function to the Jinja environment globals
+app.jinja_env.globals.update(get_unique_categories=get_unique_categories)
+
+
 @app.route('/get_product_quantity/<user_id>/<product_id>', strict_slashes=False)
 def CartProductQuantity(user_id, product_id):
     user = storage.get(User, user_id)
@@ -117,9 +133,13 @@ def CartProductQuantity(user_id, product_id):
 app.jinja_env.globals.update(CartProductQuantity=CartProductQuantity)
 
 
-@app.route('/paintersProfile', strict_slashes=False)
-def paintersProfile():
-    return render_template('paintersProfile.html')
+@app.route('/paintersPage/<painter_id>', strict_slashes=False)
+def paintersPage(painter_id):
+    painter = storage.get(Painter, painter_id)
+    if not painter:
+        abort(404)
+    paintersMedia = storage.getMedia(PaintersMedia, painter_id)
+    return render_template('paintersPage.html', painter=painter, paintersMedia=paintersMedia)
 
 
 @app.route('/payment/<user_id>', strict_slashes=False)
@@ -136,15 +156,63 @@ def close_db(error):
     """ Remove the current SQLAlchemy Session """
     storage.close()
 
-@app.route('/paintersLogin', strict_slashes=False)
+
+@app.route('/painterLogin', strict_slashes=False)
 def paintersLogin():
-	return render_template('paintersLogin.html')
+    return render_template('painterLogin.html')
+
+
+@app.route('/paintersProfile/<painters_id>', strict_slashes=False)
+def paintersProfile(painters_id):
+    painter = storage.get(Painter, painters_id)
+    if not painter:
+        abort(404)
+    paintersMedia = storage.getMedia(PaintersMedia, painters_id)
+    return render_template('paintersProfile.html', painter=painter, paintersMedia=paintersMedia)
+
+
+@app.route('/painterReg', strict_slashes=False)
+def painterReg():
+    return render_template('painterReg.html')
 
 
 @app.route('/', strict_slashes=False)
 def index():
     products = storage.all(Product).values()
-    return render_template('index.html', products=products)
+    painters = storage.all(Painter).values()
+    return render_template('index.html', products=products, painters=painters)
+
+
+@app.route('/upload_video', methods=['POST'], strict_slashes=False)
+def upload_file():
+    file = request.files['file']
+    save_path = os.path.join(os.pardir, 'paintHub', 'web_dynamic',
+                             'static', 'PaintersMedia', 'Videos', file.filename)
+    file.save(save_path)
+    # Construct the relative URL of the saved file
+    file_url = '../static/PaintersMedia/Videos/' + file.filename
+
+    return jsonify({"file_url": file_url}), 200
+
+
+@app.route('/check/<painter_id>', methods=['GET'], strict_slashes=False)
+def checke(painter_id):
+    painter = storage.getMedia(PaintersMedia, painter_id)
+    if painter:
+        return jsonify({"reply": True})
+    return jsonify({"reply": False})
+
+
+@app.route('/upload_photo', methods=['POST'], strict_slashes=False)
+def upload_file_photo():
+    file = request.files['file']
+    save_path = os.path.join(os.pardir, 'paintHub', 'web_dynamic',
+                             'static', 'PaintersMedia', 'Images', file.filename)
+    file.save(save_path)
+    # Construct the relative URL of the saved file
+    file_url = '../static/PaintersMedia/Images/' + file.filename
+
+    return jsonify({"file_url": file_url}), 200
 
 
 @app.route('/admin', strict_slashes=False)
@@ -166,9 +234,10 @@ def login():
 def loginUser(user_id):
     user = storage.get(User, user_id)
     products = storage.all(Product).values()
+    painters = storage.all(Painter).values()
     if not user:
         abort(401)
-    return render_template('index.html', user=user, products=products)
+    return render_template('index.html', user=user, products=products, painters=painters)
 
 
 if __name__ == "__main__":

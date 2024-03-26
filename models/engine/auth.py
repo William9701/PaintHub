@@ -106,7 +106,7 @@ class Auth:
         except NoResultFound:
             raise ValueError('user not found')
         
-    def register_painter(self, email: str, password: str, first_name: str, last_name: str) -> Painter:
+    def register_painter(self, email: str, password: str, first_name: str, last_name: str, state: str, city: str) -> Painter:
         """register a painter"""
         try:
             existing_painter = self._db.find_painter_by(email=email)
@@ -118,7 +118,7 @@ class Auth:
         if isinstance(password, str):
             password = _hash_password(password)
 
-        return self._db.add_painter(email=email, hashed_password=password, first_name=first_name, last_name=last_name)
+        return self._db.add_painter(email=email, hashed_password=password, first_name=first_name, last_name=last_name, state=state, city=city)
     
     def valid_login_p(self, email: str, password: str) -> bool:
         """Validates login details."""

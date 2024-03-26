@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Touch</title>
+    <link rel="stylesheet" href="../static/styles/style.css" />
+    <link rel="shortcut icon" href="../static/images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+  />
+  <style>
+    ::placeholder {
+      color: aliceblue;
+    }
+    input {
+      color: white;
+
+      font-weight: 500;
+    }
+    p {
+      color: honeydew;
+      font-size: 20px;
+    }
+  </style>
+  <body>
+    <div class="toast" data-autohide="true" data-delay="5000">
+      <div class="toast-header">
+        <strong class="mr-auto">Message</strong>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+          ×
+        </button>
+      </div>
+      <div class="toast-body">
+        <!-- The message will be inserted here -->
+      </div>
+    </div>
+    <div
+      class="login_form"
+      style="
+        background: url(../static/images/pexels-mali-maeder-63238.jpg);
+        background-position: center;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      "
+    >
+      <div class="header">
+        <div
+          class="info"
+          style="
+            position: absolute;
+            width: 900px;
+            height: 480px;
+            top: 20px;
+            background: red;
+          "
+        ></div>
+      </div>
+      <div class="left">
+        <form
+          id="LoginForm"
+          style="
+            width: 355px;
+            height: 293px;
+            position: absolute;
+            top: 530px;
+            left: 400px;
+          "
+        >
+          <p style="margin-left: 4px">Email</p>
+          <div
+            class="user"
+            style="
+              border: 2px solid #6c14d0;
+              border-radius: 5px;
+              width: 350px;
+              height: 40px;
+              display: flex;
+            "
+          >
+            <i
+              class="fa-solid fa-envelope"
+              style="position: relative; top: 9px; left: 15px; color: #c72092"
+            ></i>
+            <input
+              type="text"
+              name="email"
+              placeholder="email"
+              class="username"
+              required=""
+              style="
+                position: relative;
+                left: 9%;
+                width: 295px;
+                background: none;
+                outline: none;
+                border: none;
+                display: flex;
+                font-size: 23px;
+              "
+            />
+          </div>
+
+          <p class="passworg_tag">Password</p>
+          <div
+            class="password"
+            style="
+              border: 2px solid #6c14d0;
+              border-radius: 5px;
+              width: 350px;
+              height: 40px;
+              display: flex;
+              margin-bottom: 30px;
+            "
+          >
+            <i
+              class="fa-solid fa-lock"
+              style="position: relative; top: 9px; left: 15px; color: #c72092"
+            ></i>
+            <input
+              type="password"
+              required=""
+              name="password"
+              placeholder="Password"
+              style="
+                position: relative;
+                left: 9%;
+                width: 295px;
+                background: none;
+                outline: none;
+                border: none;
+                display: flex;
+                font-size: 23px;
+              "
+            />
+          </div>
+
+          <button
+            type="submit"
+            style="
+              width: 350px;
+              color: white;
+              padding: 7px 20px;
+              border: none;
+              border-radius: 5px;
+              font-size: 20px;
+              cursor: pointer;
+              background: linear-gradient(to right, #c72092, #6c14d0);
+            "
+          >
+            Login
+          </button>
+          <div
+            class="loging_icon"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin-top: 25px;
+              width: px;
+            "
+          >
+            <a
+              href="#"
+              style="
+                width: 30px;
+                height: 30px;
+                margin: 0 2px;
+                border-radius: 50%;
+                background: #f3f3f3;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+              "
+              ><img
+                src="../static/images/google.png"
+                style="width: 20px; margin: 5px 5px"
+            /></a>
+            <a
+              href="#"
+              style="
+                width: 30px;
+                height: 30px;
+                margin: 0 2px;
+                border-radius: 50%;
+                background: #f3f3f3;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+              "
+              ><img
+                src="../static/images/facebook.png"
+                style="width: 20px; margin: 5px 5px"
+            /></a>
+            <a
+              href="#"
+              style="
+                width: 30px;
+                height: 30px;
+                margin: 0 2px;
+                border-radius: 50%;
+                background: #f3f3f3;
+                box-shadow: 0 0 5px rgba(0, 0, 0, 0.6);
+              "
+              ><img
+                src="../static/images/twitter.png"
+                style="width: 20px; margin: 5px 5px"
+            /></a>
+          </div>
+        </form>
+      </div>
+
+      <div class="right">
+        <h1 style="color: cornsilk">Welcome!</h1>
+
+        <form id="signupForm">
+          <p style="margin-left: 5px">First Name</p>
+          <div class="user">
+            <i class="fa-solid fa-user"></i>
+            <input
+              type="text"
+              name="first_name"
+              placeholder="First Name"
+              class="username"
+              required
+              style="font-size: 23px"
+            />
+          </div>
+
+          <p>Last Name</p>
+          <div class="user">
+            <i class="fa-solid fa-user"></i>
+            <input
+              type="text"
+              name="last_name"
+              placeholder="Last Name"
+              class="username"
+              required
+              style="font-size: 23px"
+            />
+          </div>
+
+          <p>Email</p>
+          <div class="user">
+            <i class="fa-solid fa-envelope"></i>
+            <input
+              type="text"
+              name="email"
+              placeholder="email"
+              class="username"
+              required
+              style="font-size: 23px"
+            />
+          </div>
+
+          <p>State</p>
+          <select
+            style="
+              position: relative;
+              width: 100%;
+              height: 40px;
+              background: none;
+              outline: none;
+              border-radius: 5px;
+              font-size: 20px;
+              background: transparent;
+            "
+            id="stateSelect"
+            class="username"
+            name="state"
+            required
+          >
+            <option value="">Select State</option>
+            <!-- States will be populated dynamically using JavaScript -->
+          </select>
+
+          <p>City</p>
+          <select
+            style="
+              position: relative;
+              width: 100%;
+              height: 40px;
+              background: none;
+              outline: none;
+              border-radius: 5px;
+              font-size: 20px;
+              background: transparent;
+            "
+            id="citySelect"
+            class="username"
+            name="city"
+            required
+          >
+            <option value="">Select City</option>
+            <!-- Cities will be populated dynamically using JavaScript -->
+          </select>
+
+          <p class="passworg_tag">Password</p>
+          <div class="password">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              required
+              name="password"
+              placeholder="Password"
+              style="font-size: 23px"
+            />
+          </div>
+
+          <p class="passworg_tag">Confirm Password</p>
+          <div class="password">
+            <i class="fa-solid fa-lock"></i>
+            <input
+              type="password"
+              name="confirm_password"
+              placeholder="Confirm Password"
+              required
+              style="font-size: 23px"
+            />
+          </div>
+
+          <button type="submit">Sign Up</button>
+          <div class="loging_icon">
+            <a href="#"><img src="../static/images/google.png" /></a>
+            <a href="#"><img src="../static/images/facebook.png" /></a>
+            <a href="#"><img src="../static/images/twitter.png" /></a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="../static/scripts/painterLogin.js"></script>
+    <script src="../static/scripts/painterReg.js"></script>
+  </body>
+</html>

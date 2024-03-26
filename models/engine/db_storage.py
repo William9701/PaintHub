@@ -1,6 +1,7 @@
 from models.admin import Admin
 from models.base_models import Basemodels, Base
 from models.painter import Painter
+from models.painterMedia import PaintersMedia
 from models.product import Product
 from models.user import User
 import models
@@ -18,7 +19,8 @@ classes = {
     "User": User,
     "Product": Product,
     "Admin": Admin,
-    "Painter": Painter
+    "Painter": Painter,
+    "PaintersMedia": PaintersMedia
 }
 
 
@@ -106,6 +108,21 @@ class DBStorage:
 
         return None
 
+    def getMedia(self, cls, id):
+        """
+        Returns the object based on the class name and its ID, or
+        None if not found
+        """
+        if cls not in classes.values():
+            return None
+
+        all_cls = models.storage.all(cls)
+        for value in all_cls.values():
+            if value.painters_id == id:
+                return value
+
+        return None
+
     def add_user(self, email: str, hashed_password: str, first_name: str, last_name: str) -> User:
         """This is the add user method"""
 
@@ -154,11 +171,11 @@ class DBStorage:
         # Commit changes to the database
         self._session.commit()
 
-    def add_painter(self, email: str, hashed_password: str, first_name: str, last_name: str) -> Painter:
+    def add_painter(self, email: str, hashed_password: str, first_name: str, last_name: str, state: str, city: str) -> Painter:
         """This is the add painter method"""
 
         new_painter = Painter(email=email, hashed_password=hashed_password,
-                              first_name=first_name, last_name=last_name)
+                              first_name=first_name, last_name=last_name, state=state, city=city)
         print(new_painter.id)
         self._session.add(new_painter)
         self._session.flush()  # flush the changes to the database

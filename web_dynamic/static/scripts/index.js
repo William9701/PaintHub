@@ -346,3 +346,113 @@ function createProductCards(products) {
     boxDiv.appendChild(cardDiv);
   });
 }
+
+function wallPaint(src, product_id) {
+  document.querySelector("#wall-painter").style.backgroundImage =
+    "url(" + src + ")";
+  fetch(`http://127.0.0.1:5001/api/v1/products/${product_id}`)
+    .then((request) => request.json())
+    .then((product) => {
+      if (product.Category === "Wallpaper") {
+        document
+          .querySelector("#wall-painter")
+          .setAttribute(
+            "src",
+            "./../static/images/blackman-painter-applying-wallpaper.png"
+          );
+      } else {
+        document
+          .querySelector("#wall-painter")
+          .setAttribute("src", "./../static/images/wall_painter.png");
+      }
+      document.querySelector("#p-name").textContent = product.Name;
+      document.querySelector("#p-brands").textContent = product.Brand;
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+window.onload = function () {
+  var src = document
+    .querySelector(".colors img:first-child")
+    .getAttribute("src");
+  document.querySelector("#wall-painter").style.backgroundImage =
+    "url(" + src + ")";
+  var product_id = document
+    .querySelector(".colors img:first-child")
+    .getAttribute("name");
+  fetch(`http://127.0.0.1:5001/api/v1/products/${product_id}`)
+    .then((request) => request.json())
+    .then((product) => {
+      console.log(product);
+      document.querySelector("#p-name").textContent = product.Name;
+      document.querySelector("#p-brands").textContent = product.Brand;
+    })
+    .catch((error) => console.error("Error:", error));
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+  const designSelect = document.getElementById("design-select");
+  designSelect.addEventListener("change", function () {
+    const selectedCategory = designSelect.value;
+    fetch(`http://127.0.0.1:5001/api/v1/products`)
+      .then((response) => response.json())
+      .then((products) => {
+        const filteredProducts = products.filter(
+          (product) => product.Category === selectedCategory
+        );
+        displayFilteredProducts(filteredProducts);
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+  });
+
+  function displayFilteredProducts(filteredProducts) {
+    const paintSelectContainer = document.querySelector(".paint-select");
+    paintSelectContainer.innerHTML = ""; // Clear previous products
+
+    // Create the product select div
+    const productSelectDiv = document.createElement("div");
+    productSelectDiv.classList.add("product-select");
+    productSelectDiv.id = "ps";
+
+    // Create the select element
+    const selectElement = document.createElement("select");
+    selectElement.name = "product";
+    selectElement.id = "design-select";
+    selectElement.style.fontSize = "medium";
+    selectElement.style.marginLeft = "110px";
+
+    // Create the default option
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "--Please choose a design--";
+    selectElement.appendChild(defaultOption);
+
+    // Append the select element to the product select div
+    productSelectDiv.appendChild(selectElement);
+
+    // Append the product select div to the paint select container
+    paintSelectContainer.appendChild(productSelectDiv);
+
+    filteredProducts.forEach((product) => {
+      // Create a new container for each color
+      const colorContainer = document.createElement("div");
+      colorContainer.classList.add("colors");
+
+      // Create the image element
+      const img = document.createElement("img");
+      img.style.width = "100%";
+      img.style.borderRadius = "30px";
+      img.src = product.ColorImage;
+      img.name = product.id;
+      img.onclick = function () {
+        wallPaint(product.ColorImage, product.id);
+      };
+
+      // Append the image to the color container
+      colorContainer.appendChild(img);
+
+      // Append the color container to the paint select container
+      paintSelectContainer.appendChild(colorContainer);
+    });
+  }
+});

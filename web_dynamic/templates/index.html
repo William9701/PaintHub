@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nike - Just Do It</title>
+    <title>Sweet Touch</title>
     <link rel="stylesheet" href="../static/styles/style.css" />
     <link rel="shortcut icon" href="../static/images/logo.png" />
     <link
@@ -212,7 +212,7 @@
           </div>
 
           <div class="image">
-            <img src="{{ product.ProductImage }}.png" />
+            <img src="{{ product.ProductImage }}.png" alt="{{ product.id }}" />
           </div>
 
           <div class="products_text">
@@ -249,29 +249,23 @@
               style="font-size: medium; margin-left: 110px"
             >
               <option value="">--Please choose a design--</option>
-              <option value="product1">Product 1</option>
-              <option value="product2">Product 2</option>
-              <option value="product3">Product 3</option>
+              {% set unique_categories = set() %} {% for product in products %}
+              {% set _ = unique_categories.add(product['Category']) %} {% endfor
+              %} {% for category in unique_categories %}
+              <option value="{{ category }}">{{ category }}</option>
+              {% endfor %}
             </select>
           </div>
-          <div class="colors" id="red"></div>
-          <div class="colors" id="green"></div>
-          <div class="colors" id="black"></div>
-          <div class="colors" id="blue"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
-          <div class="colors" id="brown"></div>
+          {% for product in products %}
+          <div class="colors">
+            <img
+              onclick="wallPaint('{{ product.ColorImage }}', '{{ product.id }}')"
+              style="width: 100%; border-radius: 30px"
+              src="{{ product.ColorImage }}"
+              name="{{ product.id }}"
+            />
+          </div>
+          {% endfor %}
         </div>
         <div class="wall-display">
           <div class="measure">
@@ -309,8 +303,8 @@
               You will need 50 Buckets of paint
             </p>
             <div class="paint-desc">
-              <h3 id="paint-name">Paint Name: Ox-Blood</h3>
-              <p id="paint-comapany">Compainies: Dulex, Avim, Crtier, lengto</p>
+              <h3 id="paint-name">Paint Name: <span id="p-name"></span></h3>
+              <p id="paint-comapany">Compainies: <span id="p-brands"></span></p>
             </div>
           </div>
           <img
@@ -378,7 +372,7 @@
       </div>
 
       <div class="box" id="productContainer">
-        {% for product in products %}
+        {% for painter in painters %}
         <div class="card">
           <div class="small_card">
             <i class="fa-solid fa-heart"></i>
@@ -386,12 +380,14 @@
           </div>
 
           <div class="image">
-            <img src="../static/images/profile-1.jpg" />
+            <img src="{{ painter.profile_image }}" />
           </div>
 
           <div class="products_text">
-            <h2>Yahoo Painter</h2>
-            <p>Location: <span>Asaba, Delta State</span></p>
+            <h2>{{ painter.first_name }} {{ painter.last_name }}</h2>
+            <p>
+              Location: <span>{{ painter.city }}, {{ painter.state }}</span>
+            </p>
             <p>
               Specialties: <span>Painting, Screeding, Stuccos, Wallpaper</span>
             </p>
@@ -408,7 +404,9 @@
               ><i class="fa-solid fa-star"></i>
             </p>
             <a href="#" class="btn">Hire</a>
-            <a href="/paintersProfile" class="btn">View Profile</a>
+            <a href="/paintersProfile/{{ painter.id }}" class="btn"
+              >View Profile</a
+            >
           </div>
         </div>
         {% endfor %}
@@ -631,7 +629,7 @@
 
         <div class="tag">
           <h1>Career</h1>
-          <a href="/paintersLogin" class="center">Work With Us</a>
+          <a href="/painterReg" class="center">Work With Us</a>
         </div>
 
         <div class="tag">
@@ -661,6 +659,7 @@
         </div>
       </div>
     </footer>
+
     <script src="../static/scripts/index.js"></script>
   </body>
 </html>
