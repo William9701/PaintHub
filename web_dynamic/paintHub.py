@@ -18,6 +18,8 @@ import stripe
 import requests
 import pytz
 from builtins import set as built_in_set
+from geopy.geocoders import Nominatim
+from geopy.distance import geodesic
 
 
 app = Flask(__name__)
@@ -120,6 +122,28 @@ def getStripeId(product_id):
         return jsonify({"id": stripeId})
     print('Not found')
     abort(401)
+
+
+@app.route('/update_price/<price_id>/<new_price>', strict_slashes=False)
+def update_price(price_id, new_price):
+    try:
+        # Retrieve the current price
+        price = stripe.Price.retrieve(price_id)
+
+        # Create a new price with the updated amount
+        new_price_obj = stripe.Price.create(
+            unit_amount=int(float(new_price) * 100),  # Convert new_price to cents
+            currency=price.currency,
+            product=price.product,
+            lookup_key=price.lookup_key,  # Preserve the existing lookup key
+        )
+
+        
+
+        return jsonify({'newPrice': new_price_obj.id})
+    except stripe.error.InvalidRequestError as e:
+        return jsonify({'error': str(e)})
+
 
 
 # Custom function to extract unique categories
@@ -265,6 +289,43 @@ def loginUser(user_id):
     if not user:
         abort(401)
     return render_template('index.html', user=user, products=products, painters=painters)
+
+
+def get_coordinates(city):
+    geolocator = Nominatim(user_agent="geo_distance_calculator")
+    location = geolocator.geocode(city)
+    if location:
+        return location.latitude, location.longitude
+    else:
+        return None
+
+
+@app.route('/CalculateDistance/<city>', strict_slashes=False)
+def calculate_distance(city):
+    coordinates1 = get_coordinates(city)
+    coordinates2 = get_coordinates('Asaba')
+
+    if coordinates1 and coordinates2:
+        distance = geodesic(coordinates1, coordinates2).kilometers
+        return calculate_delivery_cost(distance)
+    else:
+        return "Unable to retrieve coordinates for one or both cities."
+
+
+def calculate_delivery_cost(distance):
+    initial_cost = 50  # Initial cost for the first range
+    increment = 10  # Distance increment for each range
+    num_ranges = int(distance) // increment  # Number of ranges
+    delivery_cost = 0
+
+    for i in range(num_ranges + 1):
+        range_start = i * increment
+        if distance <= range_start + increment:  # Adjusted condition
+            delivery_cost = initial_cost
+            break
+        initial_cost += 50  # Assuming a $50 increment for each range
+
+    return jsonify({'delivery_cost': delivery_cost})
 
 
 if __name__ == "__main__":

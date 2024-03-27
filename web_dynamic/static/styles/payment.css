@@ -22,6 +22,7 @@ body, html {
 .customer-info {
 	padding: 20px;
 	background-color: #e0e0e0;
+	height: 170px;
 }
 .invoice {
 	flex: 1;
@@ -107,3 +108,16 @@ body, html {
 	background: burlywood;
 	color: black;
 }
+.highlight {
+	border: 2px solid red;
+}
+.uppercase-bold {
+	text-transform: uppercase;
+	font-weight: bold;
+}
+.capitalize-first-letter {
+	text-transform: capitalize;
+  }
+  
+  
+  
