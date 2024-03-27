@@ -33,8 +33,8 @@ stripe.api_key = app.config['STRIPE_SECRET_KEY']
 app.jinja_env.globals.update(set=built_in_set)
 
 
-@app.route('/stripe_pay', methods=['POST'])
-def stripe_pay():
+@app.route('/stripe_pay/<user_id>', methods=['POST'])
+def stripe_pay(user_id):
     # Assuming payment_cart is passed in the request body as JSON
     payment_cart = request.json
 
@@ -50,7 +50,7 @@ def stripe_pay():
         payment_method_types=['card'],
         line_items=line_items,
         mode='payment',
-        success_url=url_for('index', _external=True) +
+        success_url=url_for('thankyou', user_id=user_id, _external=True) +
         '?session_id={CHECKOUT_SESSION_ID}',
         cancel_url=url_for('index', _external=True),
     )
@@ -132,18 +132,16 @@ def update_price(price_id, new_price):
 
         # Create a new price with the updated amount
         new_price_obj = stripe.Price.create(
-            unit_amount=int(float(new_price) * 100),  # Convert new_price to cents
+            # Convert new_price to cents
+            unit_amount=int(float(new_price) * 100),
             currency=price.currency,
             product=price.product,
             lookup_key=price.lookup_key,  # Preserve the existing lookup key
         )
 
-        
-
         return jsonify({'newPrice': new_price_obj.id})
     except stripe.error.InvalidRequestError as e:
         return jsonify({'error': str(e)})
-
 
 
 # Custom function to extract unique categories
@@ -326,6 +324,15 @@ def calculate_delivery_cost(distance):
         initial_cost += 50  # Assuming a $50 increment for each range
 
     return jsonify({'delivery_cost': delivery_cost})
+
+
+@app.route('/thankyou/<user_id>', strict_slashes=False)
+def thankyou(user_id):
+    user = storage.get(User, user_id)
+    user.cart_contents = []
+    user.cart_contentsQuantity = {}
+    storage.save()
+    return render_template('thankyou.html')
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@ import models
 import shlex
 from models.base_models import Basemodels
 
+from models.invoice import Invoice
 from models.painter import Painter
 from models.user import User
 from models.product import Product
@@ -16,7 +17,8 @@ classes = {
     "Product": Product,
     "Admin": Admin,
     "Painter": Painter,
-    "PaintersMedia": PaintersMedia
+    "PaintersMedia": PaintersMedia,
+    "Invoice": Invoice
 
 }
 

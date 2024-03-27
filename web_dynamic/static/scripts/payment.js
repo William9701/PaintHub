@@ -1,9 +1,10 @@
 const button = document.querySelector("#buy_now_btn");
 var user_id = document.body.getAttribute("data-user-id");
 var payment_cart = [];
+var delivery_cost = 50;
 
 button.addEventListener("click", (event) => {
-  fetch("/stripe_pay", {
+  fetch(`/stripe_pay/${user_id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,11 +20,50 @@ button.addEventListener("click", (event) => {
         .redirectToCheckout({
           sessionId: data.checkout_session_id,
         })
-        .then(function (result) {
-          // If `redirectToCheckout` fails due to a browser or network
-          // error, display the localized error message to your customer
-          // using `result.error.message`.
-        });
+        .then(function (result) {});
+      var data = {
+        user_id: user_id,
+      };
+      fetch(`http://127.0.0.1:5001/api/v1/invoice`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((invoice) => {
+          var payload = {
+            payment_cart: payment_cart,
+          };
+          fetch(`http://127.0.0.1:5001/api/v1/invoice/${invoice.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          })
+            .then((response) => response.json())
+            .then((nuser) => {
+              console.log(nuser);
+            });
+          var data = {
+            delivery_charge: delivery_cost,
+          };
+          fetch(`http://127.0.0.1:5001/api/v1/invoicep/${invoice.id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((nuser) => {
+              console.log(nuser);
+            });
+          
+        })
+        .catch((error) => console.error("Error:", error));
     });
 });
 
@@ -89,7 +129,7 @@ document.getElementById("sub-btn").addEventListener("click", function () {
     var phoneNumberInput = document.getElementById("Phonenumber").value;
 
     var Delivery_id = "price_1OytcwRtCndOdsDRFo96wIc4";
-    var delivery_cost = 50;
+
     document.getElementById(
       "Del_Address"
     ).textContent = `${addressInput}, ${cityInput}, ${stateInput}.`;

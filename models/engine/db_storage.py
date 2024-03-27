@@ -11,6 +11,7 @@ from os import getenv
 from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
+from models.invoice import Invoice
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,7 +21,8 @@ classes = {
     "Product": Product,
     "Admin": Admin,
     "Painter": Painter,
-    "PaintersMedia": PaintersMedia
+    "PaintersMedia": PaintersMedia,
+    "Invoice": Invoice
 }
 
 

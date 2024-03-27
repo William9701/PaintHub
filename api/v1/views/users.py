@@ -62,6 +62,9 @@ def put_user(user_id):
                     flag_modified(user, 'cart_contents')
                 else:
                     abort(400, description="Invalid cart_contents value")
+            elif key == "purchase_history":
+                user.purchase_history.append(value)
+                flag_modified(user, 'purchase_history')
             else:
                 setattr(user, key, value)
 
@@ -226,3 +229,34 @@ def get_user(user_id):
     if not user:
         abort(404)
     return jsonify(user.to_dict())
+
+
+@app_views.route('/usersCC/<user_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/user/put_user.yml', methods=['PUT'])
+def clearCart(user_id):
+    """
+    Updates a user
+    """
+    user = storage.get(User, user_id)
+
+    if not user:
+        abort(404)
+
+    if not request.get_json():
+        abort(400, description="Not a JSON")
+
+    ignore = ['id', 'email', 'created_at', 'updated_at']
+
+    data = request.get_json()
+    for key, value in data.items():
+        if key not in ignore:
+            if key == "cart_contents":
+                user.cart_contents = []
+                user.cart_contentsQuantity = {}
+                flag_modified(user, 'cart_contents')
+                flag_modified(user, 'cart_contentsQuantity')
+
+    # Save the updated user to the database
+    storage.save()
+
+    return make_response(jsonify(user.to_dict()), 200)
