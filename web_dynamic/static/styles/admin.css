@@ -713,3 +713,10 @@ h1 {
 #upload-button:hover {
   background-color: #1e7e34;
 }
+
+#product-list{
+	display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 25px 0;
+    margin-left: 100px;
+}

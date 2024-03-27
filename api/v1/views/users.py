@@ -82,6 +82,8 @@ def RemoveFromCart(user_id, product_id):
     if product_id in user.cart_contents:
         user.cart_contents.remove(product_id)
         flag_modified(user, 'cart_contents')
+        del user.cart_contentsQuantity[product_id]
+        flag_modified(user, 'cart_contentsQuantity')
     else:
         abort(400, description="Invalid cart_contents value")
 

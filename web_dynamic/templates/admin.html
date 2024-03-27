@@ -17,7 +17,7 @@
         <div class="top">
           <div class="logo">
             <img src="../static/images/logo.png" alt="" />
-            <h2>EGA <span class="danger">TOR</span></h2>
+            <h2>Sweet <span class="danger">Touch</span></h2>
           </div>
           <div class="close" id="close-btn">
             <span class="material-icons-sharp">close</span>
@@ -390,12 +390,14 @@
       <!------------------- END OF settings MAIN ----------------->
 
       <main id="add-products" class="content" style="display: none">
-        <h1>Custormers</h1>
+        <h1>Add Products</h1>
         <div class="recent-orders">
           <div id="product-form">
             <input type="file" id="image-upload" />
             <img id="product-image" class="product-image" />
+
             <input type="text" id="product-name" placeholder="Product Name" />
+            <input type="text" id="product-color" placeholder="Product Color" />
             <textarea
               id="product-description"
               placeholder="Product Description"
@@ -423,11 +425,9 @@
             />
             <input type="text" id="product-size" placeholder="Product Size" />
             <input type="file" id="color-upload" />
-            <img
-              id="product-color"
-              class="product-image"
-              aria-placeholder="product color"
-            />
+            <p>This section is for the product color</p>
+            <img id="product-colorImg" class="product-image" />
+
             <button onclick="addProduct()">Add Product</button>
           </div>
           <div id="product-list"></div>

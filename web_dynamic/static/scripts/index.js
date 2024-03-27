@@ -118,7 +118,7 @@ function createProductCart(product, user_id) {
 
       // Set the inner HTML of the new row
       newRow.innerHTML = `
-        <td><img src="${product.ProductImage}.png" style="width: 40px;"></td>
+        <td><img src="${product.ProductImage}" style="width: 40px;"></td>
         <td>${product.Name}</td>
         <td>$<span class="subtotal">${totalPrice}</span></td>
         <td><input style="width: 60px; height: 30px; text-align: center;" type="number" placeholder="Quantity" value="${quantity}" onchange="updateSubtotal(this, '${product.Price}', '${product.id}', '${user_id}')"></td>

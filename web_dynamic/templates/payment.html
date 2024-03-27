@@ -5,19 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../static/styles/payment.css" />
     <title>Invoice</title>
-	<link rel="shortcut icon" href="../static/images/logo.png" />
+    <link rel="shortcut icon" href="../static/images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </head>
-  <body>
+  <body data-user-id="{{ user.id }}">
     <div class="form-container">
       <div class="form">
         <h1 class="heading">checkout</h1>
         <p>Delivery Address</p>
-        <input type="text" id="address" placeholder="address" />
-        <input type="text" id="street" placeholder="street" />
-        <input type="text" id="city" placeholder="city" />
-        <input type="text" id="state" placeholder="state" />
-        <input type="text" id="pincode" placeholder="pincode" />
-        <input type="text" id="landmark" placeholder="landmark" />
+        <div class="user">
+          <i class="fas fa-map-marker-alt"></i>
+          <input type="text" id="address" placeholder="address" />
+        </div>
+
+        <div class="user">
+          <i class="fas fa-road"></i>
+          <input type="text" id="street" placeholder="street" />
+        </div>
+
+        <div class="user">
+          <i class="fas fa-city"></i>
+          <input type="text" id="city" placeholder="city" />
+        </div>
+
+        <div class="user">
+          <i class="fas fa-map"></i>
+          <input type="text" id="state" placeholder="state" />
+        </div>
+
+        <div class="user">
+          <i class="fas fa-thumbtack"></i>
+          <input type="text" id="pincode" placeholder="pincode" />
+        </div>
+
+        <div class="user">
+          <i class="fas fa-landmark"></i>
+          <input type="text" id="landmark" placeholder="landmark" />
+        </div>
+
+        <div class="user">
+          <i class="fas fa-phone"></i>
+          <input type="text" id="Phonenumber" placeholder="Phonenumber" />
+        </div>
+        <button id="sub-btn">Submit</button>
       </div>
     </div>
     <div class="container">
@@ -31,7 +75,7 @@
       </div>
       <!-- Customer Address, Name, Location, Phone Number -->
       <div class="customer-info">
-        <p>Customer Name</p>
+        <p>{{ user.first_name }} {{ user.last_name }}</p>
         <p>Customer Address</p>
         <p>Customer Location</p>
         <p>Phone Number: 123-456-7890</p>
@@ -52,19 +96,71 @@
               <th>Total Price</th>
             </tr>
           </thead>
+
           <tbody>
-            <!-- Table rows will be dynamically added here -->
+            {% for content in cartContent %}
+            <tr>
+              <td>
+                <img
+                  style="width: 50px"
+                  src="{{ content.ProductImage}}"
+                  alt=""
+                />
+              </td>
+
+              <td>{{ content.Name}}</td>
+              <td>{{ content.Category}}</td>
+              <td>{{ content.Color}}</td>
+              <td>{{ content.Size}}</td>
+              <td>{{ content.Material}}</td>
+              {% if content.id in user.cart_contentsQuantity %}
+              <!-- If it exists, fill the quantity column with the corresponding value -->
+              <td>{{ user.cart_contentsQuantity[content.id] }}</td>
+              {% else %}
+              <!-- If it doesn't exist, show a placeholder or default value -->
+              <td>1</td>
+              {% endif %}
+              <td>${{ content.Price}}</td>
+              <td>
+                $ {{ getTotal(content.Price,
+                user.cart_contentsQuantity[content.id]) }}
+              </td>
+            </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
       <!-- Footer with Total Value -->
       <div class="footer">
-        <p>Total: $1000</p>
+        <p>Total: <b>$0</b></p>
       </div>
       <a href="#" id="buy_now_btn" class="btn btn-primary"
-        ><button>Buy Now</button></a
+        ><button id="payment">Proced To Payment</button></a
       >
     </div>
+    <script>
+      // This function calculates the total price
+      function calculateTotal() {
+        var total = 0;
+        // Get all the rows in the table
+        var rows = document.querySelectorAll("table tbody tr");
+        for (var i = 0; i < rows.length; i++) {
+          // Get the price and quantity for each row
+          var price = parseFloat(
+            rows[i].querySelectorAll("td")[7].innerText.replace("$", "")
+          );
+          var quantity = parseInt(rows[i].querySelectorAll("td")[6].innerText);
+          // Add the product of price and quantity to the total
+          total += price * quantity;
+        }
+        // Update the total in the footer
+        document.querySelector(".footer p b").innerText =
+          "$" + total.toFixed(2);
+      }
+      // Call the function when the page loads
+      window.onload = calculateTotal;
+    </script>
+
     <script src="https://js.stripe.com/v3/"></script>
     <script src="../static/scripts/payment.js"></script>
   </body>

@@ -20,8 +20,6 @@ import pytz
 from builtins import set as built_in_set
 
 
-
-
 app = Flask(__name__)
 app.jinja_env.globals.update(datetime=datetime)
 app.config['STRIPE_PUBLIC_KEY'] = 'pk_test_51OwhfcRtCndOdsDR7LrgHrEyoGEhYXuVQzWYP3lahOGuO3lzWmvGm2F0YBZ2WONysCOPpVhWmva2dh1hvFPk0dJR00lI9qvCXD'
@@ -32,24 +30,32 @@ stripe.api_key = app.config['STRIPE_SECRET_KEY']
 # Add the built-in set function to the Jinja environment globals
 app.jinja_env.globals.update(set=built_in_set)
 
-@app.route('/stripe_pay')
+
+@app.route('/stripe_pay', methods=['POST'])
 def stripe_pay():
+    # Assuming payment_cart is passed in the request body as JSON
+    payment_cart = request.json
+
+    line_items = []
+    for item in payment_cart:
+        line_item = {
+            'price': item['price'],
+            'quantity': int(item['quantity']),  # Convert quantity to integer
+        }
+        line_items.append(line_item)
 
     session = stripe.checkout.Session.create(
         payment_method_types=['card'],
-        line_items=[{
-            'price': 'price_1OwuGPRtCndOdsDRIzMEEh1k',
-            'quantity': 4,
-        }],
+        line_items=line_items,
         mode='payment',
         success_url=url_for('index', _external=True) +
         '?session_id={CHECKOUT_SESSION_ID}',
         cancel_url=url_for('index', _external=True),
     )
-    return {
+    return jsonify({
         'checkout_session_id': session['id'],
         'checkout_public_key': app.config['STRIPE_PUBLIC_KEY']
-    }
+    })
 
 
 @app.route('/stripe_webhook', methods=['POST'])
@@ -89,21 +95,31 @@ def stripe_webhook():
     return {}
 
 
-@app.route('/generate_stripe_id', strict_slashes=False)
-def GenerateStripeId():
+@app.route('/generate_stripe_id/<name>/<P_price>/<description>', strict_slashes=False)
+def GenerateStripeId(name, P_price, description):
+    unit_amount_cents = int(float(P_price) * 100)
     product = stripe.Product.create(
-        name='Brown Paint',
-        description='Good paint',
+        name=name,
+        description=description,
         active=True
     )
 
     # Create a price for the product
     price = stripe.Price.create(
         product=product.id,
-        unit_amount=4306,
+        unit_amount=unit_amount_cents,
         currency='usd'
     )
     return jsonify({"price_id": price.id})
+
+
+@app.route('/getStripeId/<product_id>', strict_slashes=False)
+def getStripeId(product_id):
+    stripeId = storage.getStripId(Product, product_id)
+    if stripeId:
+        return jsonify({"id": stripeId})
+    print('Not found')
+    abort(401)
 
 
 # Custom function to extract unique categories
@@ -133,6 +149,13 @@ def CartProductQuantity(user_id, product_id):
 app.jinja_env.globals.update(CartProductQuantity=CartProductQuantity)
 
 
+def getTotal(price, quantity):
+    return int(price) * int(quantity)
+
+
+app.jinja_env.globals.update(getTotal=getTotal)
+
+
 @app.route('/paintersPage/<painter_id>', strict_slashes=False)
 def paintersPage(painter_id):
     painter = storage.get(Painter, painter_id)
@@ -147,8 +170,12 @@ def payment(user_id):
     user = storage.get(User, user_id)
     if not user:
         abort(404)
+    cartContent = []
+    for product in user.cart_contents:
+        fullProduct = storage.get(Product, product)
+        cartContent.append(fullProduct)
     products = storage.all(Product).values()
-    return render_template('payment.html', user=user, products=products)
+    return render_template('payment.html', user=user, products=products, cartContent=cartContent)
 
 
 @app.teardown_appcontext

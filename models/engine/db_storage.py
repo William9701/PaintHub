@@ -123,6 +123,15 @@ class DBStorage:
 
         return None
 
+    def getStripId(self, cls, product_id):
+        if cls not in classes.values():
+            return None
+        all_cls = models.storage.all(cls)
+        for value in all_cls.values():
+            if value.id == product_id:
+                return value.stripeId
+        return None
+
     def add_user(self, email: str, hashed_password: str, first_name: str, last_name: str) -> User:
         """This is the add user method"""
 

@@ -1,7 +1,15 @@
 const button = document.querySelector("#buy_now_btn");
+var user_id = document.body.getAttribute("data-user-id");
+var payment_cart = [];
 
 button.addEventListener("click", (event) => {
-  fetch("/stripe_pay")
+  fetch("/stripe_pay", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payment_cart),
+  })
     .then((result) => {
       return result.json();
     })
@@ -9,9 +17,6 @@ button.addEventListener("click", (event) => {
       var stripe = Stripe(data.checkout_public_key);
       stripe
         .redirectToCheckout({
-          // Make the id field from the Checkout Session creation API response
-          // available to this file, so you can provide it as parameter here
-          // instead of the {{CHECKOUT_SESSION_ID}} placeholder.
           sessionId: data.checkout_session_id,
         })
         .then(function (result) {
@@ -22,3 +27,17 @@ button.addEventListener("click", (event) => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", async function () {
+  const response = await fetch(`http://127.0.0.1:5001/api/v1/users/${user_id}`);
+  const user = await response.json();
+  for (var key in user.cart_contentsQuantity) {
+    var value = user.cart_contentsQuantity[key];
+    const reply = await fetch(`/getStripeId/${key}`);
+    const stripeId = await reply.json();
+    var data = {
+      price: stripeId.id,
+      quantity: value,
+    };
+    payment_cart.push(data);
+  }
+});

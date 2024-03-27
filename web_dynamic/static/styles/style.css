@@ -372,6 +372,7 @@ section .main .button:hover i{
     width: 150px;
     margin: 15px 0;
     transition: 0.3s;
+    height: 150px;
 }
 
 .box .card:hover .image img{
