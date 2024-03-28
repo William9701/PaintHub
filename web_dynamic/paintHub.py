@@ -279,6 +279,14 @@ def login():
     return render_template('userLogin.html')
 
 
+@app.route('/UserProfile/<user_id>', strict_slashes=False)
+def UserProfile(user_id):
+    user = storage.get(User, user_id)
+    if not user:
+        abort(401)
+    return render_template('profile.html', user=user)
+
+
 @app.route('/loginUser/<string:user_id>', strict_slashes=False)
 def loginUser(user_id):
     user = storage.get(User, user_id)
@@ -332,7 +340,7 @@ def thankyou(user_id):
     user.cart_contents = []
     user.cart_contentsQuantity = {}
     storage.save()
-    return render_template('thankyou.html')
+    return render_template('thankyou.html', user=user)
 
 
 if __name__ == "__main__":

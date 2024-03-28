@@ -2,6 +2,7 @@ const button = document.querySelector("#buy_now_btn");
 var user_id = document.body.getAttribute("data-user-id");
 var payment_cart = [];
 var delivery_cost = 50;
+var total = 0;
 
 button.addEventListener("click", (event) => {
   fetch(`/stripe_pay/${user_id}`, {
@@ -47,21 +48,22 @@ button.addEventListener("click", (event) => {
             .then((nuser) => {
               console.log(nuser);
             });
-          var data = {
+          var file = {
             delivery_charge: delivery_cost,
+            total: total,
+            status: "Pending",
           };
           fetch(`http://127.0.0.1:5001/api/v1/invoicep/${invoice.id}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(file),
           })
             .then((response) => response.json())
             .then((nuser) => {
               console.log(nuser);
             });
-          
         })
         .catch((error) => console.error("Error:", error));
     });
@@ -143,7 +145,7 @@ document.getElementById("sub-btn").addEventListener("click", function () {
           "delivery_charge"
         ).textContent = `$${delivery_cost}.00`;
 
-        var total = parseInt(subtotal) + delivery_cost;
+        total = parseInt(subtotal) + delivery_cost;
         document.getElementById("total_due").textContent = `$${total}.00`;
 
         fetch(`/update_price/${Delivery_id}/${delivery_cost}`)
