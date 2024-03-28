@@ -110,6 +110,23 @@ class DBStorage:
 
         return None
 
+    def getInvoice(self, cls, user_id):
+        """
+        Returns the object based on the class name and its user_id, or
+        None if not found
+        """
+        if cls not in classes.values():
+            return None
+
+        invoice = []
+
+        all_cls = models.storage.all(cls)
+        for value in all_cls.values():
+            if value.user_id == user_id:
+                invoice.append(value.id)
+
+        return invoice
+
     def getMedia(self, cls, id):
         """
         Returns the object based on the class name and its ID, or
@@ -121,6 +138,21 @@ class DBStorage:
         all_cls = models.storage.all(cls)
         for value in all_cls.values():
             if value.painters_id == id:
+                return value
+
+        return None
+
+    def getProduct(self, cls, stripeId):
+        """
+        Returns the object based on the class name and its ID, or
+        None if not found
+        """
+        if cls not in classes.values():
+            return None
+
+        all_cls = models.storage.all(cls)
+        for value in all_cls.values():
+            if value.stripeId == stripeId:
                 return value
 
         return None

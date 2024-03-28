@@ -175,46 +175,64 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="payment_history">
-                            <h2>Payment History</h2>
-
+							<h2>Payment History</h2>
 							<table>
-							  <tr>
-								<th>Date</th>
-								<th>Invoice ID</th>
-								<th>Total Amount Paid</th>
-								<th>Payment Status</th>
-								<th></th>
-							  </tr>
-							  <!-- Repeat this block for each item -->
-							  <tr>
-								<td>2024-03-27</td>
-								<td>123456</td>
-								<td>$100.00</td>
-								<td>Successful  <i style="color: green" class="fa-solid fa-check-circle"></i
-									></td>
-								<td><button onclick="toggleDetails('details1')">⯆</button></td>
-							  </tr>
-							  <tr id="details1" class="hidden">
-								<td colspan="4">
-								  <table>
-									<tr>
-									  <th>Product Image</th>
-									  <th>Product Name</th>
-									  <th>Quantity</th>
-									  <th>Price</th>
-									</tr>
-									<!-- Repeat this block for each product in the item -->
-									<tr>
-									  <td><img src="product.jpg" alt="Product" width="50" height="50"></td>
-									  <td>Product 1</td>
-									  <td>1</td>
-									  <td>$100.00</td>
-									</tr>
-								  </table>
-								</td>
-							  </tr>
+								<tr>
+									<th>Date</th>
+									<th>Invoice ID</th>
+									<th>Total Amount Paid</th>
+									<th>Payment Status</th>
+									<th></th>
+								</tr>
+								{% for invoice in M_invoice %}
+								<tr>
+									<td>{{ invoice.created_at }}</td>
+									<td>{{ invoice.id }}</td>
+									<td>${{ invoice.total }}</td>
+									<td>Successful <i style="color: green" class="fa-solid fa-check-circle"></i></td>
+									<td><button onclick="toggleDetails('details{{ loop.index }}')">⯆</button></td>
+								</tr>
+								<tr id="details{{ loop.index }}" class="tag hidden">
+									<td colspan="5">
+										<table>
+											<tr>
+												<th>Product Image</th>
+												<th>Product Name</th>
+												<th>Quantity</th>
+												<th>Price</th>
+											</tr>
+											<!-- Loop over each product in the productCart -->
+											{% for product in invoice.productCart[0] %}
+											
+											{% set name = productName(product.price) %}
+											{% if name is not none %}
+											<tr>
+												<td><img src="{{ productImg(product.price) }}" alt="Product" width="50" height="50"></td>
+												<td>{{ name }}</td>
+												<td>{{ product.quantity }}</td>
+												<td>${{ productPrice(product.price, product.quantity) }}</td>
+											</tr>
+											{% endif %}
+											{% endfor %}
+											
+											<tr>
+												<td></td>
+												<td>Delivery_cost</td>
+												<td></td>
+												<td>${{ invoice.delivery_charge }}</td>
+											</tr>
+											<tr>
+												<td></td>
+												<td>Total</td>
+												<td></td>
+												<td>${{ invoice.total }}</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								{% endfor %}
 							</table>
-                        </div>
+						</div>
                         <div class="tab-pane fade" id="account-notifications">
                             <div class="card-body pb-2">
                                 <h6 class="mb-4">Activity</h6>

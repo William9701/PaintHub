@@ -5,6 +5,7 @@ import uuid
 from flask import flash, abort, redirect, url_for
 import subprocess
 from models import storage
+from models.invoice import Invoice
 from models.painterMedia import PaintersMedia
 from models.user import User
 from models.admin import Admin
@@ -154,6 +155,39 @@ def get_unique_categories(products):
 app.jinja_env.globals.update(get_unique_categories=get_unique_categories)
 
 
+def productName(stripeId):
+    """ return pruduct name of the stripeId passed"""
+    product = storage.getProduct(Product, stripeId)
+    if product:
+        return product.Name
+    return None
+
+
+app.jinja_env.globals.update(productName=productName)
+
+
+def productImg(stripeId):
+    """ return pruduct img of the stripeId passed"""
+    product = storage.getProduct(Product, stripeId)
+    if product:
+        return product.ProductImage
+    return None
+
+
+app.jinja_env.globals.update(productImg=productImg)
+
+
+def productPrice(stripeId, quantity):
+    """ return pruduct img of the stripeId passed"""
+    product = storage.getProduct(Product, stripeId)
+    nQuantity = int(quantity)
+    if product:
+        return int(product.Price) * nQuantity
+    return None
+
+
+app.jinja_env.globals.update(productPrice=productPrice)
+
 @app.route('/get_product_quantity/<user_id>/<product_id>', strict_slashes=False)
 def CartProductQuantity(user_id, product_id):
     user = storage.get(User, user_id)
@@ -284,7 +318,13 @@ def UserProfile(user_id):
     user = storage.get(User, user_id)
     if not user:
         abort(401)
-    return render_template('profile.html', user=user)
+    M_invoice = []
+    invoices = storage.getInvoice(Invoice, user_id)
+    for invoice in invoices:
+        n_invoice = storage.get(Invoice, invoice)
+        M_invoice.append(n_invoice)
+    print(M_invoice)
+    return render_template('profile.html', user=user, M_invoice=M_invoice)
 
 
 @app.route('/loginUser/<string:user_id>', strict_slashes=False)
