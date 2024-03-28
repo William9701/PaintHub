@@ -89,3 +89,22 @@ links.forEach((link) => {
     }
   });
 });
+
+const hireButton = document.getElementById("hire");
+const popupForm = document.getElementById("popup-form");
+const submitButton = document.getElementById("submit-button");
+const loadingMessage = document.getElementById("loading-message");
+
+hireButton.addEventListener("click", () => {
+  popupForm.style.display = "block";
+});
+
+submitButton.addEventListener("click", () => {
+  // Simulate loading
+  loadingMessage.style.display = "block";
+  setTimeout(() => {
+    // Redirect to checkout page (not implemented)
+    // For now, just hide the popup
+    popupForm.style.display = "none";
+  }, 20000); // 2 seconds
+});

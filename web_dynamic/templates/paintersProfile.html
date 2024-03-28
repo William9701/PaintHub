@@ -92,8 +92,22 @@
               <li><a href="#">Videos</a></li>
               <li><a href="#">Comments</a></li>
             </ul>
-            <button>Hire</button>
+            <button id="hire">Hire</button>
           </nav>
+
+          <div class="popup" id="popup-form">
+            <h2>Enter Wall Measurements</h2>
+            <form id="measurement-form">
+                <label for="wall-length">Wall Length (in meters):</label>
+                <input type="number" id="wall-length" required>
+                <br>
+                <label for="wall-height">Wall Height (in meters):</label>
+                <input type="number" id="wall-height" required>
+                <br>
+                <button id="submit-button">Submit</button>
+            </form>
+            <div class="loading" id="loading-message">Hiring...</div>
+        </div>
 
           <div class="photos">
             {% for photo in paintersMedia.photos %}

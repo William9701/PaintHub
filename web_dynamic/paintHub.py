@@ -188,6 +188,7 @@ def productPrice(stripeId, quantity):
 
 app.jinja_env.globals.update(productPrice=productPrice)
 
+
 @app.route('/get_product_quantity/<user_id>/<product_id>', strict_slashes=False)
 def CartProductQuantity(user_id, product_id):
     user = storage.get(User, user_id)
@@ -263,7 +264,7 @@ def painterReg():
 def index():
     products = storage.all(Product).values()
     painters = storage.all(Painter).values()
-    return render_template('index.html', products=products, painters=painters)
+    return render_template('home.html', products=products, painters=painters)
 
 
 @app.route('/upload_video', methods=['POST'], strict_slashes=False)

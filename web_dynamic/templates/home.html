@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Touch</title>
+    <link rel="stylesheet" href="../static/styles/style.css" />
+    <link rel="shortcut icon" href="../static/images/logo.png" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+      integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+    />
+  </head>
+  <body>
+    <section>
+      <nav>
+        <div class="logo">
+          <h1>Sweet <span>Touch</span></h1>
+        </div>
+
+        <ul>
+          <li><a href="#Home">Home</a></li>
+          <li><a href="#Servises">Services</a></li>
+          <li><a href="#Products">Products</a></li>
+          <li><a href="#design">Design</a></li>
+          <li><a href="#about">Painters</a></li>
+          <li><a href="#Review">Review</a></li>
+        </ul>
+
+        <div class="icons">
+          <a href="/login"><i class="fa-solid fa-heart"></i></a>
+
+          <a href="/login">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </a>
+
+          <span id="cart-count" style="display: none"></span>
+          <div id="cart" style="display: none; transform: translateX(0px)">
+            <table>
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td id="total" colspan="2"></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+            </table>
+            <a href="#"><button>Proceed to Payment</button></a>
+          </div>
+
+          <a href="/login"><i class="fa-solid fa-user"></i></a>
+        </div>
+      </nav>
+
+      <div class="main" id="Home">
+        <div class="main_content">
+          <div class="main_text">
+            <h1>Sweet Touch<br /><span>Home of Colors</span></h1>
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged.
+            </p>
+          </div>
+          <div class="main_image">
+            <!-- <img
+              src="../static/images/generate_a_pic__e5abbe16-dc92-4a03-ac8f-ee4c12c4676d-removebg-preview.png"
+            /> -->
+          </div>
+        </div>
+        <div class="social_icon">
+          <i class="fa-brands fa-facebook-f"></i>
+          <i class="fa-brands fa-twitter"></i>
+          <i class="fa-brands fa-instagram"></i>
+          <i class="fa-brands fa-linkedin-in"></i>
+        </div>
+        <div class="button">
+          <a href="#Products">SHOP NOW</a>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+        <div class="button">
+          <a href="#about">Request a painter</a>
+          <i class="fa-solid fa-paint-brush"></i>
+        </div>
+      </div>
+    </section>
+
+    <!--Services-->
+
+    <div class="services" id="Servises">
+      <h1>our<span>services</span></h1>
+
+      <div class="services_cards">
+        <div class="services_box">
+          <i class="fa-solid fa-truck-fast"></i>
+
+          <h3>Fast Delivery</h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+        </div>
+
+        <div class="services_box">
+          <i class="fa-solid fa-rotate-left"></i>
+          <h3>10 Days Replacement</h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
+          />
+
+          <h3>We apply Wallpaper</h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
+          />
+
+          <h3>We apply Wallpaper</h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
+          />
+
+          <h3>We apply Wallpaper</h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
+          />
+
+          <h3>We apply Wallpaper</h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (3).jpg"
+          />
+          <!-- <i class="fa-solid fa-headset"></i> -->
+          <h3>We Paint</h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+        </div>
+      </div>
+    </div>
+
+    <!--Products-->
+
+    <div class="products" id="Products">
+      <h1>Products</h1>
+
+      <div class="container">
+        <form action="" class="search-bar">
+          <input type="text" placeholder="Search by Color" name="search-bar" />
+          <img
+            src="../static/images/filter.png"
+            alt="Filter"
+            id="filterImage"
+            style="cursor: pointer"
+          />
+          <select
+            name="filter"
+            id="filterSelect"
+            style="font-size: medium; margin-left: 110px; display: none"
+          >
+            <option value="">--Choose a Search filter--</option>
+            <option value="Search by Location">Search by Location</option>
+            <option value="Search by Rating">Search by Rating</option>
+            <option value="Search by Specialization">
+              Search by Specialization
+            </option>
+          </select>
+          <button type="submit">
+            <img src="../static/images/magnifying-glass-search.png" alt="" />
+          </button>
+        </form>
+      </div>
+
+      <div class="box" id="productContainer">
+        {% for product in products %}
+        <div class="card">
+          <div class="small_card">
+            <i class="fa-solid fa-heart"></i>
+            <i class="fa-solid fa-share"></i>
+          </div>
+
+          <div class="image">
+            <img src="{{ product.ProductImage }}" alt="{{ product.id }}" />
+          </div>
+
+          <div class="products_text">
+            <h2>{{ product.Name }}</h2>
+            <p>Category: {{ product.Category }}</p>
+            <p>Color: {{ product.Color }}</p>
+            <p>Material: {{ product.Material }}</p>
+            <p>Brand: {{ product.Brand }}</p>
+
+            <h3>${{ product.Price }}</h3>
+            <a href="/login" class="btn">Add To Cart</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- know your paint-->
+
+    <div class="know_box" id="design">
+      <h1>Know Your<span>Design</span></h1>
+      <div class="paint-wall">
+        <div class="paint-select">
+          <div class="product-select" id="ps">
+            <!-- <label for="product">Choose a product:</label> -->
+            <select
+              name="product"
+              id="design-select"
+              style="font-size: medium; margin-left: 110px"
+            >
+              <option value="">--Please choose a design--</option>
+              {% set unique_categories = set() %} {% for product in products %}
+              {% set _ = unique_categories.add(product['Category']) %} {% endfor
+              %} {% for category in unique_categories %}
+              <option value="{{ category }}">{{ category }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% for product in products %}
+          <div class="colors">
+            <img
+              onclick="wallPaint('{{ product.ColorImage }}', '{{ product.id }}')"
+              style="width: 100%; border-radius: 30px"
+              src="{{ product.ColorImage }}"
+              name="{{ product.id }}"
+            />
+          </div>
+          {% endfor %}
+        </div>
+        <div class="wall-display">
+          <div class="measure">
+            <p style="font-weight: bolder; margin-left: 40px">
+              Get Your Quotaions Right
+            </p>
+            <div class="product-select">
+              <!-- <label for="product">Choose a product:</label> -->
+              <select name="product" id="design-select">
+                <option value="">--Please choose a design--</option>
+                <option value="product1">Product 1</option>
+                <option value="product2">Product 2</option>
+                <option value="product3">Product 3</option>
+              </select>
+            </div>
+            <div class="feet-input">
+              <p style="width: 80px">Enter wall Height(feet)</p>
+              <input class="form" type="number" placeholder="Height (feet)" />
+            </div>
+            <div class="feet-input-width">
+              <p style="width: 80px">Enter wall Width(feet)</p>
+              <input class="form" type="number" placeholder="Width (feet)" />
+            </div>
+            <button class="btn-2" type="submit">Submit</button>
+            <img
+              src="./../static/images/lady-painter-measure-removebg-preview.png"
+              style="width: 200px; margin-left: 120px; margin-top: -10px"
+            />
+            <img
+              src="./../static/images/man-painter-measure-removebg-preview.png"
+              style="width: 250px; margin-top: -70px"
+            />
+
+            <p style="font-weight: 750; margin-top: -20px; z-index: 1">
+              You will need 50 Buckets of paint
+            </p>
+            <div class="paint-desc">
+              <h3 id="paint-name">Paint Name: <span id="p-name"></span></h3>
+              <p id="paint-comapany">Compainies: <span id="p-brands"></span></p>
+            </div>
+          </div>
+          <img
+            src="./../static/images/paint-tools.png"
+            class="paint-tools"
+            alt=""
+          />
+          <img
+            src="./../static/images/paint-tools-2.png"
+            class="paint-tools"
+            id="t2"
+          />
+
+          <div>
+            <img
+              id="wall-painter"
+              src="./../static/images/wall_painter.png"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Painters-->
+
+    <div class="workmen" id="about">
+      <h1>Our<span> WorkMen</span></h1>
+
+      <div class="container">
+        <form action="" class="search-bar">
+          <input
+            style="padding: 24px 10px"
+            type="text"
+            placeholder="Search by Location"
+            name="search-bar"
+          />
+          <img
+            src="../static/images/nearby.png"
+            alt="nearby"
+            id="nearby"
+            style="cursor: pointer; width: 40px; margin-right: 15px"
+          />
+          <img
+            src="../static/images/filter.png"
+            alt="Filter"
+            id="filterImage"
+            style="cursor: pointer; width: 40px; margin-right: 15px"
+          />
+          <select
+            name="filter"
+            id="filterSelect"
+            style="font-size: medium; margin-left: 110px; display: none"
+          >
+            <option value="">--Choose a Search filter--</option>
+            <option value="Search by Color">Search by Color</option>
+            <option value="Search by Brand">Search by Brand</option>
+            <option value="Search by Category">Search by Category</option>
+            <option value="Search by Material">Search by Material</option>
+          </select>
+          <button type="submit">
+            <img src="../static/images/magnifying-glass-search.png" alt="" />
+          </button>
+        </form>
+      </div>
+
+      <div class="box" id="productContainer">
+        {% for painter in painters %}
+        <div class="card">
+          <div class="small_card">
+            <i class="fa-solid fa-heart"></i>
+            <i class="fa-solid fa-share"></i>
+          </div>
+
+          <div class="image">
+            <img src="{{ painter.profile_image }}" />
+          </div>
+
+          <div class="products_text">
+            <h2>{{ painter.first_name }} {{ painter.last_name }}</h2>
+            <p>
+              Location: <span>{{ painter.city }}, {{ painter.state }}</span>
+            </p>
+            <p>
+              Specialties: <span>Painting, Screeding, Stuccos, Wallpaper</span>
+            </p>
+            <p>
+              Current Status:
+              <span
+                >Available
+                <i style="color: green" class="fa-solid fa-check-circle"></i
+              ></span>
+            </p>
+            <p>
+              Customer's Rating: <i class="fa-solid fa-star"></i
+              ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+              ><i class="fa-solid fa-star"></i>
+            </p>
+            <a href="#" class="btn">Hire</a>
+            <a href="/paintersProfile/{{ painter.id }}" class="btn"
+              >View Profile</a
+            >
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- <a href="#products" class="about_btn">Shop Now</a> -->
+
+      <script>
+        function functio(small) {
+          var full = document.getElementById("imagebox");
+          full.src = small.src;
+        }
+        function large(small) {
+          var full = document.getElementById("imagebox-2");
+          full.src = small.src;
+        }
+      </script>
+    </div>
+
+    <!--Review-->
+
+    <div class="review" id="Review">
+      <h1>Customer's<span>review</span></h1>
+
+      <div class="review_box">
+        <div class="review_card">
+          <div class="card_top">
+            <div class="profile">
+              <div class="profile_image">
+                <img src="../static/images/girl_dp1.jpg" />
+              </div>
+
+              <div class="name">
+                <strong>Ranidi Lochana</strong>
+
+                <div class="like">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
+              amet nesciunt voluptatem cum architecto ipsum vero nulla
+              voluptatibus dolorum modi assumenda eum? Aliquid inventore velit
+              ipsa repellat numquam atque dolores!
+            </p>
+          </div>
+        </div>
+
+        <div class="review_card">
+          <div class="card_top">
+            <div class="profile">
+              <div class="profile_image">
+                <img src="../static/images/man_dp1.jpg" />
+              </div>
+
+              <div class="name">
+                <strong>Sayuru Tharanga</strong>
+
+                <div class="like">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star-half-stroke"></i>
+                  <i class="fa-regular fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
+              amet nesciunt voluptatem cum architecto ipsum vero nulla
+              voluptatibus dolorum modi assumenda eum? Aliquid inventore velit
+              ipsa repellat numquam atque dolores!
+            </p>
+          </div>
+        </div>
+
+        <div class="review_card">
+          <div class="card_top">
+            <div class="profile">
+              <div class="profile_image">
+                <img src="../static/images/man_dp2.jpg" />
+              </div>
+
+              <div class="name">
+                <strong>Senuda Dilwan</strong>
+
+                <div class="like">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star-half-stroke"></i>
+                  <i class="fa-regular fa-star"></i>
+                  <i class="fa-regular fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
+              amet nesciunt voluptatem cum architecto ipsum vero nulla
+              voluptatibus dolorum modi assumenda eum? Aliquid inventore velit
+              ipsa repellat numquam atque dolores!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="review_box">
+        <div class="review_card">
+          <div class="card_top">
+            <div class="profile">
+              <div class="profile_image">
+                <img src="../static/images/gir_dp3.jpg" />
+              </div>
+
+              <div class="name">
+                <strong>Kaveesha Vidurangi</strong>
+
+                <div class="like">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star-half-stroke"></i>
+                  <i class="fa-regular fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
+              amet nesciunt voluptatem cum architecto ipsum vero nulla
+              voluptatibus dolorum modi assumenda eum? Aliquid inventore velit
+              ipsa repellat numquam atque dolores!
+            </p>
+          </div>
+        </div>
+
+        <div class="review_card">
+          <div class="card_top">
+            <div class="profile">
+              <div class="profile_image">
+                <img src="../static/images/gir_dp2.jpg" />
+              </div>
+
+              <div class="name">
+                <strong>John Deo</strong>
+
+                <div class="like">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
+              amet nesciunt voluptatem cum architecto ipsum vero nulla
+              voluptatibus dolorum modi assumenda eum? Aliquid inventore velit
+              ipsa repellat numquam atque dolores!
+            </p>
+          </div>
+        </div>
+
+        <div class="review_card">
+          <div class="card_top">
+            <div class="profile">
+              <div class="profile_image">
+                <img src="../static/images/man_dp3.jpg" />
+              </div>
+
+              <div class="name">
+                <strong>Charith Aruna</strong>
+
+                <div class="like">
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star"></i>
+                  <i class="fa-solid fa-star-half-stroke"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="comment">
+            <p>
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
+              amet nesciunt voluptatem cum architecto ipsum vero nulla
+              voluptatibus dolorum modi assumenda eum? Aliquid inventore velit
+              ipsa repellat numquam atque dolores!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Footer-->
+
+    <footer>
+      <div class="footer_main">
+        <div class="tag">
+          <h1>Contact</h1>
+          <a href="#"><i class="fa-solid fa-house"></i>123/Colombo/Sri Lanka</a>
+          <a href="#"><i class="fa-solid fa-phone"></i>+94 12 345 6789</a>
+          <a href="#"><i class="fa-solid fa-envelope"></i>contact@gmail.com</a>
+        </div>
+
+        <div class="tag">
+          <h1>Career</h1>
+          <a href="/painterReg" class="center">Work With Us</a>
+        </div>
+
+        <div class="tag">
+          <h1>Our Stores</h1>
+          <a href="#" class="center">Sri Lanka</a>
+          <a href="#" class="center">USA</a>
+          <a href="#" class="center">India</a>
+          <a href="#" class="center">Japan</a>
+        </div>
+
+        <div class="tag">
+          <h1>Follw Us</h1>
+          <div class="social_link">
+            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+          </div>
+        </div>
+
+        <div class="tag">
+          <h1>Newsletter</h1>
+          <div class="search_bar">
+            <input type="text" placeholder="You email id here" />
+            <button type="submit">Subscribe</button>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../static/scripts/index.js"></script>
+  </body>
+</html>

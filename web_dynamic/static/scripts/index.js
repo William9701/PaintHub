@@ -224,38 +224,43 @@ document.getElementById("filterSelect").addEventListener("change", function () {
   selectTag.style.fontSize = "22px";
   selectTag.style.color = "rgb(29, 28, 26)";
 
-  var value, value1, value2, value3;
+  // Fetch products from the API
+  fetch("http://127.0.0.1:5001/api/v1/products")
+    .then((response) => response.json())
+    .then((data) => {
+      // Extract unique categories, materials, and brands from the products
+      var categories = [...new Set(data.map((product) => product.Category))];
+      var materials = [...new Set(data.map((product) => product.Material))];
+      var brands = [...new Set(data.map((product) => product.Brand))];
 
-  if (this.value === "Search by Color") {
-    searchBar.style.display = "";
-  } else if (this.value === "Search by Category") {
-    searchBar.style.display = "none";
-    value = "Category";
-    value1 = "Paint";
-    value2 = "Wallpaper";
-    value3 = "";
-    this.form.insertBefore(selectTag, searchBar.nextSibling);
-  } else if (this.value === "Search by Brand") {
-    searchBar.style.display = "none";
-    value = "Brand";
-    value1 = "Dulux";
-    value2 = "Comus";
-    value3 = "Timeless";
-    this.form.insertBefore(selectTag, searchBar.nextSibling);
-  } else if (this.value === "Search by Material") {
-    searchBar.style.display = "none";
-    value = "Material";
-    value1 = "Satin";
-    value2 = "Catin";
-    value3 = "oil";
-    this.form.insertBefore(selectTag, searchBar.nextSibling);
-  }
+      var value, options;
 
-  // Add options to the select tag as per your requirement
-  selectTag.innerHTML = `<option value="">--Choose a ${value}--</option>
-                             <option value="${value1}">${value1}</option>
-                             <option value="${value2}">${value2}</option>
-                             <option value="${value3}">${value3}</option>`;
+      if (this.value === "Search by Color") {
+        searchBar.style.display = "";
+      } else if (this.value === "Search by Category") {
+        searchBar.style.display = "none";
+        value = "Category";
+        options = categories;
+      } else if (this.value === "Search by Brand") {
+        searchBar.style.display = "none";
+        value = "Brand";
+        options = brands;
+      } else if (this.value === "Search by Material") {
+        searchBar.style.display = "none";
+        value = "Material";
+        options = materials;
+      }
+
+      // Add options to the select tag dynamically
+      selectTag.innerHTML = `<option value="">--Choose a ${value}--</option>`;
+      options.forEach((option) => {
+        selectTag.innerHTML += `<option value="${option}">${option}</option>`;
+      });
+
+      // Insert the dynamically created select tag into the form
+      this.form.insertBefore(selectTag, searchBar.nextSibling);
+    })
+    .catch((error) => console.error("Error fetching products:", error));
 });
 
 document
@@ -326,7 +331,7 @@ function createProductCards(products) {
 
     const imageDiv = document.createElement("div");
     imageDiv.classList.add("image");
-    imageDiv.innerHTML = `<img src="${product.ProductImage}.png" />`;
+    imageDiv.innerHTML = `<img src="${product.ProductImage}" />`;
 
     const productsTextDiv = document.createElement("div");
     productsTextDiv.classList.add("products_text");

@@ -197,7 +197,9 @@ async function createproduct() {
   document.getElementById("product-list").innerHTML = "";
   try {
     for (const product of products) {
-      const price_id_response = await fetch(`/generate_stripe_id/${product.Name}/${product.Price}/${product.Description}`);
+      const price_id_response = await fetch(
+        `/generate_stripe_id/${product.Name}/${product.Price}/${product.Description}`
+      );
       const price_id = await price_id_response.json();
 
       var imgsrc = product["ProductImage"];
@@ -213,6 +215,7 @@ async function createproduct() {
       const reply = await postData(product);
       console.log(reply);
     }
+    products = [];
 
     // Show alert message after the delay
     alert("Upload Successful");
