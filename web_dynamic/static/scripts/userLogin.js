@@ -14,7 +14,9 @@ document
         if (xhr.status === 200) {
           var user = JSON.parse(xhr.responseText);
           console.log(user);
-          window.location.href = `/loginUser/${user.user_id}`;
+           // Set cookie with user ID
+           document.cookie = "user_id=" + user.user_id + "; path=/";
+           window.location.href = "/";
         } else if (xhr.status === 401) {
           // Error response
           showToast("Wrong Login details");

@@ -461,3 +461,200 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+document.getElementById("sub").addEventListener("click", function (event) {
+  event.preventDefault();
+  var height = parseFloat(document.getElementById("height").value); // Parse float to handle decimal values
+  var width = parseFloat(document.getElementById("width").value); // Parse float to handle decimal values
+  var material = document.getElementById("material").value; // Get the selected material
+
+  // Calculate the area of the wall
+  var area = height * width;
+
+  document.getElementById("height").value = "";
+  document.getElementById("width").value = "";
+
+  // Define liters per square meter based on the material
+  var litersPerSquareMeter;
+  switch (material) {
+    case "Satin":
+      litersPerSquareMeter = 0.5; // Define the liters per square meter for Satin
+      break;
+    case "Gloss":
+      litersPerSquareMeter = 0.6; // Define the liters per square meter for Gloss
+      break;
+    case "Elusion":
+      litersPerSquareMeter = 0.7; // Define the liters per square meter for Elusion
+      break;
+    case "Tescote":
+      litersPerSquareMeter = 0.8; // Define the liters per square meter for Tescote
+      break;
+    case "Paper":
+      litersPerSquareMeter = 0.4; // Define the liters per square meter for Paper
+      break;
+    default:
+      // Default value if material is not recognized
+      litersPerSquareMeter = 0.0; // Define a default value
+      break;
+  }
+
+  // Calculate the total liters needed based on the area and liters per square meter
+  var litersNeeded = area * litersPerSquareMeter;
+
+  document.getElementById(
+    "quotation"
+  ).textContent = `You will need ${litersNeeded} Liters of paint`;
+  document.getElementById("quotation").style.display = "flex";
+
+  // Display the result or do further processing
+  console.log("Liters needed:", litersNeeded);
+});
+
+var images = [
+  { src: "../static/images/painters.jpeg", text: "We do outdoor Painting" }, // Image 1
+  {
+    src: "../static/images/indoor-painter.jpeg",
+    text: "And also indoor Painting",
+  }, // Image 2
+];
+var index = 0;
+setInterval(function () {
+  var img = document.getElementById("dynamicImage");
+  var p = document.getElementById("dynamicText");
+  img.classList.add("hide"); // Add the hide class to fade out the image
+  setTimeout(function () {
+    // Change the image and text after the fade out effect
+    img.src = images[index].src;
+    p.textContent = images[index].text;
+    img.classList.remove("hide"); // Remove the hide class to fade in the new image
+    index = (index + 1) % images.length; // Loop back to the first image
+  }, 400); // Wait for the fade out transition to complete
+}, 10000); // Change image and text every 10 seconds
+
+var ProdImages = [
+  {
+    src: "../static/images/1st-home-color.jpeg",
+    text: "Beautiful Home Paint Colors",
+  },
+  {
+    src: "../static/images/2nd-home-color.jpeg",
+    text: "Beautiful Home Paint Colors",
+  },
+  {
+    src: "../static/images/1st-3d-wallpaper.jpeg",
+    text: "Beautiful 3D-Wallpaper Designs",
+  },
+  {
+    src: "../static/images/2nd-3d-wallpaper.jpeg",
+    text: "Beautiful Wallpaper Designs",
+  },
+  {
+    src: "../static/images/1st-wallart.jpeg",
+    text: "Breath-taking Wall-Arts ",
+  },
+  {
+    src: "../static/images/2nd-wallart.jpeg",
+    text: "Breath-taking Wall-Arts",
+  },
+  {
+    src: "../static/images/3d-wallprint.jpeg",
+    text: "Beautiful 3D-Wall-Prints",
+  },
+  {
+    src: "../static/images/finished-panel1.jpeg",
+    text: "Amazing 3D-Wall-Panels",
+  },
+  {
+    src: "../static/images/finsihed-panel5.jpeg",
+    text: "Amazing 3D-Wall-Panels",
+  },
+  {
+    src: "../static/images/finished-panel2.jpeg",
+    text: "Amazing 3D-Wall-Panels",
+  },
+];
+var Pindex = 0;
+setInterval(function () {
+  var Simg = document.getElementById("SellImage");
+  var Sp = document.getElementById("SellText");
+  Simg.classList.add("hide"); // Add the hide class to fade out the image
+  setTimeout(function () {
+    // Change the image and text after the fade out effect
+    Simg.src = ProdImages[Pindex].src;
+    Sp.textContent = ProdImages[Pindex].text;
+    Simg.classList.remove("hide"); // Remove the hide class to fade in the new image
+    Pindex = (Pindex + 1) % ProdImages.length; // Loop back to the first image
+  }, 400); // Wait for the fade out transition to complete
+}, 7000); // Change image and text every 7 seconds
+
+var WallpaperImages = [
+  {
+    src: "../static/images/wallpaper4.jpeg",
+    text: "With a good Touch of Beauty",
+  },
+  {
+    src: "../static/images/wallpaper1.jpeg",
+    text: "With the Right smothening Tools",
+  },
+  {
+    src: "../static/images/wallpaper2.jpeg",
+    text: "With the Right smothening Tools",
+  },
+  {
+    src: "../static/images/wallpaper3.jpeg",
+    text: "With the Right cutting Tools",
+  },
+  {
+    src: "../static/images/wallpaper5.jpeg",
+    text: "Perfect Lining",
+  },
+];
+var Windex = 0;
+setInterval(function () {
+  var Simg = document.getElementById("wallpaperImage");
+  var Sp = document.getElementById("wallpaperText");
+  Simg.classList.add("hide"); // Add the hide class to fade out the image
+  setTimeout(function () {
+    // Change the image and text after the fade out effect
+    Simg.src = WallpaperImages[Windex].src;
+    Sp.textContent = WallpaperImages[Windex].text;
+    Simg.classList.remove("hide"); // Remove the hide class to fade in the new image
+    Windex = (Windex + 1) % WallpaperImages.length; // Loop back to the first image
+  }, 400); // Wait for the fade out transition to complete
+}, 8000); // Change image and text every 8 seconds
+
+var WallpanelImages = [
+  {
+    src: "../static/images/wallpanel3.jpeg",
+    text: "Perfection with every tile",
+  },
+  {
+    src: "../static/images/wallpanel5.jpeg",
+    text: "Perfection with every tile",
+  },
+  {
+    src: "../static/images/wallpanel4.jpeg",
+    text: "Perfection with every tile",
+  },
+  {
+    src: "../static/images/wallpanel1.jpeg",
+    text: "Perfection with every tile",
+  },
+  {
+    src: "../static/images/wallpanel2.jpeg",
+    text: "Perfection with every tile",
+  },
+];
+var Wpindex = 0;
+setInterval(function () {
+  var Simg = document.getElementById("wallpanelImage");
+  var Sp = document.getElementById("wallpanelText");
+  Simg.classList.add("hide"); // Add the hide class to fade out the image
+  setTimeout(function () {
+    // Change the image and text after the fade out effect
+    Simg.src = WallpanelImages[Wpindex].src;
+    Sp.textContent = WallpanelImages[Wpindex].text;
+    Simg.classList.remove("hide"); // Remove the hide class to fade in the new image
+    Wpindex = (Wpindex + 1) % WallpanelImages.length; // Loop back to the first image
+  }, 400); // Wait for the fade out transition to complete
+}, 6000); // Change image and text every 6 seconds

@@ -37,10 +37,16 @@
 
         <div class="icons">
           <i class="fa-solid fa-heart"></i>
+          {% if user %}
           <i
             class="fa-solid fa-cart-shopping"
             onclick="displayCart('{{ user.id }}')"
           ></i>
+          {% else %}
+          <a href="/login">
+            <i class="fa-solid fa-cart-shopping"></i>
+          </a>
+          {% endif %}
 
           <span id="cart-count" style="display: none"></span>
           <div id="cart" style="display: none; transform: translateX(0px)">
@@ -60,14 +66,23 @@
                 </tr>
               </tfoot>
             </table>
+
+            {% if user %}
             <a href="/payment/{{ user.id }}"
               ><button>Proceed to Payment</button></a
             >
+            {% else %}
+            <a href="/login"><button>Proceed to Payment</button></a>
+            {% endif %}
           </div>
 
+          {% if user %}
           <a href="/UserProfile/{{ user.id }}"
             ><i class="fa-solid fa-user"></i
           ></a>
+          {% else %}
+          <a href="/login"><i class="fa-solid fa-user"></i></a>
+          {% endif %}
         </div>
       </nav>
 
@@ -114,6 +129,59 @@
 
       <div class="services_cards">
         <div class="services_box">
+          <img
+            style="transition: opacity 1s"
+            id="SellImage"
+            class="fade-in-out"
+            src="../static/images/1st-home-color.jpeg"
+          />
+          <h3>We Sell Beautiful Wall-Decor</h3>
+          <p id="SellText">Beautiful Home Paint Colors</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            style="transition: opacity 1s"
+            id="dynamicImage"
+            class="fade-in-out"
+            src="../static/images/painters.jpeg"
+          />
+          <h3>We Paint</h3>
+          <p id="dynamicText">We do outdoor Painting</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            style="transition: opacity 1s"
+            id="wallpaperImage"
+            class="fade-in-out"
+            src="../static/images/wallpaper4.jpeg"
+          />
+
+          <h3>We Professionaly Install Wallpaper</h3>
+          <p id="wallpaperText">With a good Touch of Beauty</p>
+        </div>
+
+        <div class="services_box">
+          <img
+            style="transition: opacity 1s"
+            id="wallpanelImage"
+            class="fade-in-out"
+            src="../static/images/wallpanel3.jpeg"
+          />
+
+          <h3>We Professionaly install Wallpanels</h3>
+          <p id="wallpanelText">Feel that Design.</p>
+        </div>
+
+        <div class="services_box">
+          <img src="../static/images/we-screed.jpeg" />
+
+          <h3>We screed Walls</h3>
+          <p>We make your walls Extremely Smooth</p>
+        </div>
+
+        <div class="services_box">
           <i class="fa-solid fa-truck-fast"></i>
 
           <h3>Fast Delivery</h3>
@@ -123,51 +191,6 @@
         <div class="services_box">
           <i class="fa-solid fa-rotate-left"></i>
           <h3>10 Days Replacement</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-        </div>
-
-        <div class="services_box">
-          <img
-            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
-          />
-
-          <h3>We apply Wallpaper</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-        </div>
-
-        <div class="services_box">
-          <img
-            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
-          />
-
-          <h3>We apply Wallpaper</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-        </div>
-
-        <div class="services_box">
-          <img
-            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
-          />
-
-          <h3>We apply Wallpaper</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-        </div>
-
-        <div class="services_box">
-          <img
-            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (4).jpg"
-          />
-
-          <h3>We apply Wallpaper</h3>
-          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
-        </div>
-
-        <div class="services_box">
-          <img
-            src="../static/images/generate-a-picture-of-a-blackman-painter-applying-upscaled (3).jpg"
-          />
-          <!-- <i class="fa-solid fa-headset"></i> -->
-          <h3>We Paint</h3>
           <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
         </div>
       </div>
@@ -224,12 +247,16 @@
             <p>Brand: {{ product.Brand }}</p>
 
             <h3>${{ product.Price }}</h3>
+            {%if user %}
             <a
               href="#"
               class="btn"
               onclick="addToCart('{{ product.id }}', '{{ user.id if user else None }}')"
               >Add To Cart</a
             >
+            {% else %}
+            <a href="/login" class="btn">Add To Cart</a>
+            {% endif %}
           </div>
         </div>
         {% endfor %}
@@ -277,20 +304,41 @@
               <!-- <label for="product">Choose a product:</label> -->
               <select name="product" id="design-select">
                 <option value="">--Please choose a design--</option>
-                <option value="product1">Product 1</option>
-                <option value="product2">Product 2</option>
-                <option value="product3">Product 3</option>
+                {% set unique_categories = set() %} {% for product in products
+                %} {% set _ = unique_categories.add(product['Material']) %} {%
+                endfor %} {% for category in unique_categories %}
+                <option id="material" value="{{ category }}">
+                  {{ category }}
+                </option>
+                {% endfor %}
               </select>
             </div>
             <div class="feet-input">
               <p style="width: 80px">Enter wall Height(feet)</p>
-              <input class="form" type="number" placeholder="Height (feet)" />
+              <input
+                id="height"
+                class="form"
+                type="number"
+                placeholder="Height (feet)"
+              />
             </div>
             <div class="feet-input-width">
               <p style="width: 80px">Enter wall Width(feet)</p>
-              <input class="form" type="number" placeholder="Width (feet)" />
+              <input
+                id="width"
+                class="form"
+                type="number"
+                placeholder="Width (feet)"
+              />
             </div>
-            <button class="btn-2" type="submit">Submit</button>
+            <button
+              style="cursor: pointer"
+              id="sub"
+              class="btn-2"
+              type="submit"
+            >
+              Submit
+            </button>
             <img
               src="./../static/images/lady-painter-measure-removebg-preview.png"
               style="width: 200px; margin-left: 120px; margin-top: -10px"
@@ -300,9 +348,20 @@
               style="width: 250px; margin-top: -70px"
             />
 
-            <p style="font-weight: 750; margin-top: -20px; z-index: 1">
-              You will need 50 Buckets of paint
-            </p>
+            <p
+              id="quotation"
+              style="
+                font-weight: 750;
+                margin-top: -29px;
+                z-index: 1;
+                border: 3px solid;
+                width: 279px;
+                height: 30px;
+                display: none;
+                align-items: center;
+                background: white;
+              "
+            ></p>
             <div class="paint-desc">
               <h3 id="paint-name">Paint Name: <span id="p-name"></span></h3>
               <p id="paint-comapany">Compainies: <span id="p-brands"></span></p>

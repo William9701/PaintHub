@@ -152,9 +152,25 @@ section .main .main_content .main_image img{
     left: 20px;
     top: 130px;
 }
+.services_box{
+    width: 600px;
+}
+.fade-in-out {
+    opacity: 1;
+}
+  
+.fade-in-out.hide {
+    opacity: 0;
+}
+  
 .services_box img{
     width: 400px;
     margin: 10px 10px auto;
+    height: 400px;
+    border: 2px solid yellowgreen;
+    border-radius: 30px;
+    box-shadow: 0 0 8px #6c14d0;
+    transition: 0.5s;
 }
 
 section .main .social_icon{
@@ -374,6 +390,7 @@ section .main .button:hover i{
     transition: 0.3s;
     height: 150px;
 }
+
 
 .box .card:hover .image img{
     transform: scale(1.1);
@@ -845,7 +862,7 @@ section .main .button:hover i{
 /*Services*/
 
 .services{
-    width: 85%;
+    width: 95%;
     margin: 0 auto;
     text-align: center;
     padding: 80px 0 10px 0;
@@ -879,6 +896,7 @@ section .main .button:hover i{
     color: orange;
     margin: 20px 0;
     cursor: pointer;
+    width: 300px;
 }
 
 .services .services_box h3{
@@ -1164,3 +1182,4 @@ footer .footer_main .tag .search_bar button{
     color: white;
     cursor: pointer;
 }
+

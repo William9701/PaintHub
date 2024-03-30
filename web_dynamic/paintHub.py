@@ -260,13 +260,6 @@ def painterReg():
     return render_template('painterReg.html')
 
 
-@app.route('/', strict_slashes=False)
-def index():
-    products = storage.all(Product).values()
-    painters = storage.all(Painter).values()
-    return render_template('home.html', products=products, painters=painters)
-
-
 @app.route('/upload_video', methods=['POST'], strict_slashes=False)
 def upload_file():
     file = request.files['file']
@@ -328,13 +321,14 @@ def UserProfile(user_id):
     return render_template('profile.html', user=user, M_invoice=M_invoice)
 
 
-@app.route('/loginUser/<string:user_id>', strict_slashes=False)
-def loginUser(user_id):
+@app.route('/', strict_slashes=False)
+def index():
+    user_id = request.cookies.get('user_id')
     user = storage.get(User, user_id)
     products = storage.all(Product).values()
     painters = storage.all(Painter).values()
     if not user:
-        abort(401)
+        return render_template('index.html', products=products, painters=painters)
     return render_template('index.html', user=user, products=products, painters=painters)
 
 
