@@ -13,6 +13,7 @@ from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
 from models.invoice import Invoice
 from dotenv import load_dotenv
+from models.comment import Comment
 
 load_dotenv()
 
@@ -22,7 +23,8 @@ classes = {
     "Admin": Admin,
     "Painter": Painter,
     "PaintersMedia": PaintersMedia,
-    "Invoice": Invoice
+    "Invoice": Invoice,
+    "Comment": Comment
 }
 
 

@@ -10,7 +10,7 @@ from flasgger.utils import swag_from
 
 @app_views.route('/comments/', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/comment/comment_by_content.yml', methods=['GET'])
-def get_comments(content_id):
+def get_comments():
     """
     Retrieves the list of all comment objects
     of a specific content, or a specific comment
@@ -50,10 +50,10 @@ def delete_comment(comment_id):
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/contents/<user_id>/<content_id>/comment', methods=['POST'],
+@app_views.route('/comment', methods=['POST'],
                  strict_slashes=False)
 @swag_from('documentation/comment/post_comment.yml', methods=['POST'])
-def post_comment(content_id, user_id):
+def post_comment():
     """
     Creates a comment
     """

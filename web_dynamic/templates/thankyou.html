@@ -1,56 +1,99 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Thank You Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #444;
-        }
-        p {
-            color: #666;
-        }
-        .comment {
-            width: 60%;
-            height: 100px;
-            margin: 20px auto;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-        }
-        .button {
-            color: #fff;
-            background-color: #3498db;
-            border: none;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+      .container {
+        width: 80%;
+        margin: auto;
+        text-align: center;
+        padding: 50px;
+      }
+      h1 {
+        color: #444;
+      }
+      p {
+        color: #666;
+      }
+      .comment {
+        width: 60%;
+        height: 100px;
+        margin: 20px auto;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+      .button {
+        color: #fff;
+        background-color: #3498db;
+        border: none;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body data-user-id="{{ user.id }}">
     <div class="container">
-        <h1>Thank You!</h1>
-        <p>Your payment was successful.</p>
-        <textarea class="comment" placeholder="Leave a comment..."></textarea>
-        <br>
-        <a href="/loginUser/{{ user.id}}" class="button">Go Back Home</a>
+      <h1>Thank You!</h1>
+      <p>Your payment was successful.</p>
+      <textarea class="comment" placeholder="Leave a comment..."></textarea>
+      <br />
+      <a href="/" class="button">Go Back Home</a>
     </div>
-</body>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var user_id = document.body.getAttribute("data-user-id");
+        document
+          .querySelector(".comment")
+          .addEventListener("keypress", function (event) {
+            // Check if the Enter key is pressed (key code 13) and there is no Shift key (optional)
+            if (event.keyCode === 13 && !event.shiftKey) {
+              event.preventDefault(); // Prevent the default behavior of the Enter key
+
+              // Get the comment from the textarea
+              var comment = this.value;
+              var data = {
+                text: comment,
+                user_id: user_id,
+              };
+
+              // Send a POST request to the comments API
+              fetch("http://127.0.0.1:5001/api/v1/comment", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              })
+                .then((response) => {
+                  if (response.ok) {
+                    // If the POST request is successful, redirect to the home page
+                    window.location.href = "/";
+                  } else {
+                    // Handle other status codes (e.g., 401 Unauthorized)
+                    console.error("Error:", response.status);
+                  }
+                })
+                .catch((error) => {
+                  // Handle fetch error
+                  console.error("Error:", error);
+                });
+            }
+          });
+      });
+    </script>
+  </body>
 </html>

@@ -10,6 +10,7 @@ from models.user import User
 from models.product import Product
 from models.admin import Admin
 from models.painterMedia import PaintersMedia
+from models.comment import Comment
 
 
 classes = {
@@ -18,8 +19,8 @@ classes = {
     "Admin": Admin,
     "Painter": Painter,
     "PaintersMedia": PaintersMedia,
-    "Invoice": Invoice
-
+    "Invoice": Invoice,
+    "Comment": Comment
 }
 
 

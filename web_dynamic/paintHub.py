@@ -5,6 +5,7 @@ import uuid
 from flask import flash, abort, redirect, url_for, make_response
 import subprocess
 from models import storage
+from models.comment import Comment
 from models.invoice import Invoice
 from models.painterMedia import PaintersMedia
 from models.user import User
@@ -229,17 +230,20 @@ def paintersPage():
     abort(404)
 
 
-@app.route('/payment/<user_id>', strict_slashes=False)
-def payment(user_id):
-    user = storage.get(User, user_id)
-    if not user:
-        abort(404)
-    cartContent = []
-    for product in user.cart_contents:
-        fullProduct = storage.get(Product, product)
-        cartContent.append(fullProduct)
-    products = storage.all(Product).values()
-    return render_template('payment.html', user=user, products=products, cartContent=cartContent)
+@app.route('/payment', strict_slashes=False)
+def payment():
+    session_id = request.cookies.get('session_id')
+    print(session_id)
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        cartContent = []
+        for product in user.cart_contents:
+            fullProduct = storage.get(Product, product)
+            cartContent.append(fullProduct)
+        products = storage.all(Product).values()
+        return render_template('payment.html', user=user, products=products, cartContent=cartContent)
+
+    abort(404)
 
 
 @app.teardown_appcontext
@@ -416,12 +420,13 @@ app.jinja_env.filters['format_time_diff'] = format_time_diff
 def index():
     products = storage.all(Product).values()
     painters = storage.all(Painter).values()
+    comments = storage.all(Comment).values()
     session_id = request.cookies.get('session_id')
     if session_id:
         user = AUTH.get_user_from_session_id(session_id)
-        return render_template('index.html', user=user, products=products, painters=painters)
+        return render_template('index.html', user=user, products=products, painters=painters, comments=comments)
 
-    return render_template('index.html', products=products, painters=painters)
+    return render_template('index.html', products=products, painters=painters, comments=comments)
 
 
 @app.route('/sessions', methods=['POST'], strict_slashes=False)
