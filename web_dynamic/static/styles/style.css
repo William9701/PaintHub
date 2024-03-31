@@ -172,6 +172,27 @@ section .main .main_content .main_image img{
     box-shadow: 0 0 8px #6c14d0;
     transition: 0.5s;
 }
+.paint-box{
+    width: 705px;
+    height: 470px;
+    border: 2px solid;
+    position: absolute;
+    top: 9px;
+    right: 16px;
+    border-radius: 30px;
+    box-shadow: 0 0 8px #6c14d0;
+    transition: 1s;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.painter-image {
+    transition: opacity 0.5s ease;
+}
+
+.painter-image.hidden {
+    opacity: 0;
+}
 
 section .main .social_icon{
     position: absolute;
@@ -677,7 +698,7 @@ section .main .button:hover i{
     margin-left: 25px;
     width: 400px;
     position: absolute;
-    margin-top: -25px;
+    margin-top: -5px;
 }
 .btn:hover{
     cursor: pointer;
@@ -760,6 +781,40 @@ section .main .button:hover i{
 #design-select{
     cursor: pointer;
     box-shadow: 0 0 8px #6c14d0;
+}
+
+.quatation-board{
+    width: 250px;
+    height: 64px;
+    border: 2px solid red;
+    box-shadow: 0 0 8px #6c14d0;
+    position: absolute;
+    bottom: 50px;
+    background: transparent;
+    backdrop-filter: blur(4px) saturate(180%);
+    left: 20px;
+    z-index: 1;
+    border-radius: 20px;
+    display: none;
+    align-items: center;
+}
+#quotation{
+    font-weight: 600;
+    font-size: 16px;
+    padding-left: 15px;
+}
+.highlight {
+	border: 2px solid red;
+}
+#height::placeholder {
+    color: #999;
+    font-style: italic;
+    font-size: 15px;
+}
+#width::placeholder {
+    color: #999;
+    font-style: italic;
+    font-size: 15px;
 }
 /*Review*/
 

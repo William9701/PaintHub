@@ -4,7 +4,7 @@
 from models.engine.auth import Auth
 from flask import Flask, jsonify, request, make_response, abort, \
     redirect, url_for
-from sqlalchemy.orm.exc import NoResultFound
+
 from api.v1.views import app_views
 from flasgger.utils import swag_from
 from models import storage
@@ -109,82 +109,7 @@ def addProductQuantity(user_id, product_id, quantity):
     return make_response(jsonify(user.to_dict()), 200)
 
 
-@app_views.route('/sessions', methods=['POST'], strict_slashes=False)
-def login():
-    """login route"""
-    try:
-        data = request.json
-        email = data.get('email')
-        password = data.get('password')
 
-        if AUTH.valid_login(email, password):
-            session_id = AUTH.create_session(email)
-            user = AUTH.get_user_from_session_id(session_id)
-
-            # Set the session ID as a cookie in the response
-            response = make_response(
-                jsonify({"email": email, "user_id": user.id}))
-            response.set_cookie("session_id", session_id)
-
-            return response
-
-        # Incorrect login information
-        return abort(401)
-
-    except NoResultFound:
-        # User not found
-        return jsonify({"message": "User not found"}), 401
-
-
-@app_views.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout():
-    """ logout route"""
-    session_id = request.cookies.get('session_id')
-    if session_id:
-        user = AUTH.get_user_from_session_id(session_id)
-        if user:
-            AUTH.destroy_session(user.id)
-            return redirect(url_for('index'))
-    abort(403)
-
-
-@app_views.route('/profile', methods=['GET'], strict_slashes=False)
-def profile():
-    """Profile route"""
-    session_id = request.cookies.get('session_id')
-    if session_id:
-        user = AUTH.get_user_from_session_id(session_id)
-        if user:
-            return jsonify({"email": user.email}), 200
-    abort(403)
-
-
-@app_views.route('/reset_password', methods=['POST'], strict_slashes=False)
-def get_reset_password_token():
-    """get reset password token"""
-    email = request.form.get('email')
-    if email:
-        try:
-            reset_token = AUTH.get_reset_password_token(email)
-            return (
-                jsonify({"email": email, "reset_token": reset_token}), 200)
-        except ValueError:
-            abort(403)
-
-
-@app_views.route('/reset_password', methods=['PUT'], strict_slashes=False)
-def update_password():
-    """update password"""
-    email = request.form.get('email')
-    reset_token = request.form.get('reset_token')
-    new_password = request.form.get('new_password')
-    if email and reset_token and new_password:
-        try:
-            AUTH.update_password(reset_token, new_password)
-            return (jsonify({"email": email,
-                             "message": "Password updated"}), 200)
-        except Exception:
-            abort(403)
 
 
 @app_views.route('/users', methods=['GET'], strict_slashes=False)

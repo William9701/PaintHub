@@ -353,22 +353,18 @@ function createProductCards(products) {
 }
 
 function wallPaint(src, product_id) {
-  document.querySelector("#wall-painter").style.backgroundImage =
+  document.querySelector(".paint-box").style.backgroundImage =
     "url(" + src + ")";
   fetch(`http://127.0.0.1:5001/api/v1/products/${product_id}`)
     .then((request) => request.json())
     .then((product) => {
-      if (product.Category === "Wallpaper") {
-        document
-          .querySelector("#wall-painter")
-          .setAttribute(
-            "src",
-            "./../static/images/blackman-painter-applying-wallpaper.png"
-          );
+      if (product.Category.toLowerCase() === "wallpaper") {
+        document.querySelector("#painter-man").classList.add("hidden");
+        document.querySelector("#painter-woman").classList.remove("hidden");
+        document.querySelector("#painter-woman").style.display = "block";
       } else {
-        document
-          .querySelector("#wall-painter")
-          .setAttribute("src", "./../static/images/wall_painter.png");
+        document.querySelector("#painter-man").classList.remove("hidden");
+        document.querySelector("#painter-woman").classList.add("hidden");
       }
       document.querySelector("#p-name").textContent = product.Name;
       document.querySelector("#p-brands").textContent = product.Brand;
@@ -380,7 +376,7 @@ window.onload = function () {
   var src = document
     .querySelector(".colors img:first-child")
     .getAttribute("src");
-  document.querySelector("#wall-painter").style.backgroundImage =
+  document.querySelector(".paint-box").style.backgroundImage =
     "url(" + src + ")";
   var product_id = document
     .querySelector(".colors img:first-child")
@@ -399,115 +395,118 @@ document.addEventListener("DOMContentLoaded", function () {
   const designSelect = document.getElementById("design-select");
   designSelect.addEventListener("change", function () {
     const selectedCategory = designSelect.value;
-    fetch(`http://127.0.0.1:5001/api/v1/products`)
-      .then((response) => response.json())
-      .then((products) => {
-        const filteredProducts = products.filter(
-          (product) => product.Category === selectedCategory
-        );
-        displayFilteredProducts(filteredProducts);
-      })
-      .catch((error) => console.error("Error fetching products:", error));
+    if (selectedCategory === "All") {
+      // If "All" is selected, fetch all products
+      fetch(`http://127.0.0.1:5001/api/v1/products`)
+        .then((response) => response.json())
+        .then((products) => {
+          displayFilteredProducts(products);
+        })
+        .catch((error) => console.error("Error fetching products:", error));
+    } else {
+      // Fetch products based on the selected category
+      fetch(`http://127.0.0.1:5001/api/v1/products`)
+        .then((response) => response.json())
+        .then((products) => {
+          const filteredProducts = products.filter(
+            (product) => product.Category === selectedCategory
+          );
+          displayFilteredProducts(filteredProducts);
+        })
+        .catch((error) => console.error("Error fetching products:", error));
+    }
   });
-
-  function displayFilteredProducts(filteredProducts) {
-    const paintSelectContainer = document.querySelector(".paint-select");
-    paintSelectContainer.innerHTML = ""; // Clear previous products
-
-    // Create the product select div
-    const productSelectDiv = document.createElement("div");
-    productSelectDiv.classList.add("product-select");
-    productSelectDiv.id = "ps";
-
-    // Create the select element
-    const selectElement = document.createElement("select");
-    selectElement.name = "product";
-    selectElement.id = "design-select";
-    selectElement.style.fontSize = "medium";
-    selectElement.style.marginLeft = "110px";
-
-    // Create the default option
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "--Please choose a design--";
-    selectElement.appendChild(defaultOption);
-
-    // Append the select element to the product select div
-    productSelectDiv.appendChild(selectElement);
-
-    // Append the product select div to the paint select container
-    paintSelectContainer.appendChild(productSelectDiv);
-
-    filteredProducts.forEach((product) => {
-      // Create a new container for each color
-      const colorContainer = document.createElement("div");
-      colorContainer.classList.add("colors");
-
-      // Create the image element
-      const img = document.createElement("img");
-      img.style.width = "100%";
-      img.style.borderRadius = "30px";
-      img.src = product.ColorImage;
-      img.name = product.id;
-      img.onclick = function () {
-        wallPaint(product.ColorImage, product.id);
-      };
-
-      // Append the image to the color container
-      colorContainer.appendChild(img);
-
-      // Append the color container to the paint select container
-      paintSelectContainer.appendChild(colorContainer);
-    });
-  }
 });
+
+function displayFilteredProducts(filteredProducts) {
+  const paintSelectContainer = document.querySelector(".paint-select");
+  paintSelectContainer.innerHTML = ""; // Clear previous products
+
+  filteredProducts.forEach((product) => {
+    // Create a new container for each color
+    const colorContainer = document.createElement("div");
+    colorContainer.classList.add("colors");
+
+    // Create the image element
+    const img = document.createElement("img");
+    img.style.width = "100%";
+    img.style.borderRadius = "30px";
+    img.src = product.ColorImage;
+    img.name = product.id;
+    img.onclick = function () {
+      wallPaint(product.ColorImage, product.id);
+    };
+
+    // Append the image to the color container
+    colorContainer.appendChild(img);
+
+    // Append the color container to the paint select container
+    paintSelectContainer.appendChild(colorContainer);
+  });
+}
 
 document.getElementById("sub").addEventListener("click", function (event) {
   event.preventDefault();
-  var height = parseFloat(document.getElementById("height").value); // Parse float to handle decimal values
-  var width = parseFloat(document.getElementById("width").value); // Parse float to handle decimal values
-  var material = document.getElementById("material").value; // Get the selected material
 
-  // Calculate the area of the wall
-  var area = height * width;
+  var inputs = document.querySelectorAll(".form");
+  var allInputsNotEmpty = true; // Flag to track if all inputs are not empty
 
-  document.getElementById("height").value = "";
-  document.getElementById("width").value = "";
+  // Check if any input is empty
+  inputs.forEach(function (input) {
+    if (input.value.trim() === "") {
+      input.classList.add("highlight");
+      allInputsNotEmpty = false;
+    } else {
+      input.classList.remove("highlight");
+    }
+  });
 
-  // Define liters per square meter based on the material
-  var litersPerSquareMeter;
-  switch (material) {
-    case "Satin":
-      litersPerSquareMeter = 0.5; // Define the liters per square meter for Satin
-      break;
-    case "Gloss":
-      litersPerSquareMeter = 0.6; // Define the liters per square meter for Gloss
-      break;
-    case "Elusion":
-      litersPerSquareMeter = 0.7; // Define the liters per square meter for Elusion
-      break;
-    case "Tescote":
-      litersPerSquareMeter = 0.8; // Define the liters per square meter for Tescote
-      break;
-    case "Paper":
-      litersPerSquareMeter = 0.4; // Define the liters per square meter for Paper
-      break;
-    default:
-      // Default value if material is not recognized
-      litersPerSquareMeter = 0.0; // Define a default value
-      break;
+  if (allInputsNotEmpty) {
+    var height = parseFloat(document.getElementById("height").value); // Parse float to handle decimal values
+    var width = parseFloat(document.getElementById("width").value); // Parse float to handle decimal values
+    var material = document.getElementById("material").value; // Get the selected material
+
+    // Calculate the area of the wall
+    var area = height * width;
+
+    document.getElementById("height").value = "";
+    document.getElementById("width").value = "";
+
+    // Define liters per square meter based on the material
+    var litersPerSquareMeter;
+    switch (material) {
+      case "Satin":
+        litersPerSquareMeter = 0.5; // Define the liters per square meter for Satin
+        break;
+      case "Gloss":
+        litersPerSquareMeter = 0.6; // Define the liters per square meter for Gloss
+        break;
+      case "Elusion":
+        litersPerSquareMeter = 0.7; // Define the liters per square meter for Elusion
+        break;
+      case "Tescote":
+        litersPerSquareMeter = 0.8; // Define the liters per square meter for Tescote
+        break;
+      case "Paper":
+        litersPerSquareMeter = 0.4; // Define the liters per square meter for Paper
+        break;
+      default:
+        // Default value if material is not recognized
+        litersPerSquareMeter = 0.0; // Define a default value
+        break;
+    }
+
+    // Calculate the total liters needed based on the area and liters per square meter
+    var litersNeeded = area * litersPerSquareMeter;
+
+    document.getElementById(
+      "quotation"
+    ).textContent = `You will need ${litersNeeded} Liters of paint`;
+    document.getElementById("quotBod").style.display = "flex";
+
+    // Display the result or do further processing
+    console.log("Liters needed:", litersNeeded);
   }
-
-  // Calculate the total liters needed based on the area and liters per square meter
-  var litersNeeded = area * litersPerSquareMeter;
-
-  document.getElementById(
-    "quotation"
-  ).textContent = `You will need ${litersNeeded} Liters of paint`;
-  document.getElementById("quotation").style.display = "flex";
-
-  // Display the result or do further processing
-  console.log("Liters needed:", litersNeeded);
 });
 
 var images = [

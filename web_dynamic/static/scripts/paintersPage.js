@@ -162,6 +162,7 @@ document.getElementById("fileinput").addEventListener("change", function (e) {
 
         // Set the src of the img element to the file path
         document.getElementById("avatar").src = filePath;
+        document.getElementById("profImg").src = filePath;
 
         // Prepare the data for the PUT request
         var userData = {
@@ -229,11 +230,7 @@ function uploadFile(e, route) {
       fetch(`/check/${painters_id}`)
         .then((request) => request.json())
         .then((response) => {
-          console.log(typeof response.reply);
-          console.log(response, painters_id);
           if (response.reply === false) {
-            console.log("i am here after the false statment");
-
             fetch("http://127.0.0.1:5001/api/v1/paintersMedia", {
               method: "POST",
               headers: {
@@ -254,7 +251,11 @@ function uploadFile(e, route) {
                       },
                       body: JSON.stringify({ video: data.file_url }),
                     }
-                  );
+                  )
+                    .then((response) => response.json())
+                    .then((media) => {
+                      updatePage(media);
+                    });
                 } else if (route === "/upload_photo") {
                   fetch(
                     `http://127.0.0.1:5001/api/v1/paintersMedias/${painters_id}/photos`,
@@ -265,7 +266,11 @@ function uploadFile(e, route) {
                       },
                       body: JSON.stringify({ photos: data.file_url }),
                     }
-                  );
+                  )
+                    .then((response) => response.json())
+                    .then((media) => {
+                      updatePage(media);
+                    });
                 }
               });
           } else if (response.reply === true) {
@@ -279,7 +284,11 @@ function uploadFile(e, route) {
                   },
                   body: JSON.stringify({ video: data.file_url }),
                 }
-              );
+              )
+                .then((response) => response.json())
+                .then((media) => {
+                  updatePage(media);
+                });
             } else if (route === "/upload_photo") {
               fetch(
                 `http://127.0.0.1:5001/api/v1/paintersMedias/${painters_id}/photos`,
@@ -290,7 +299,11 @@ function uploadFile(e, route) {
                   },
                   body: JSON.stringify({ photos: data.file_url }),
                 }
-              );
+              )
+                .then((response) => response.json())
+                .then((media) => {
+                  updatePage(media);
+                });
             }
           }
         });
@@ -298,6 +311,43 @@ function uploadFile(e, route) {
     .catch((error) => {
       console.error(error);
     });
+}
+
+function updatePage(media) {
+  // Get the divs
+  var photoDiv = document.getElementById("photodiv");
+  var videoDiv = document.getElementById("videosdiv");
+
+  // Clear the divs
+  photoDiv.innerHTML = "";
+  videoDiv.innerHTML = "";
+
+  // Add the photos
+  for (var i = 0; i < media.photos.length; i++) {
+    var photo = media.photos[i];
+    var photoHTML = `
+      <div class="block-box">
+        <img src="${photo}" alt="Photo" style="width: 320px; height: 200px" />
+        <span id="close-span" style="cursor: pointer; position: relative" class="material-icons-sharp" onclick="deleteMediaP('${painters_id}', '${photo}')">close</span>
+      </div>
+    `;
+    photoDiv.innerHTML += photoHTML;
+  }
+
+  // Add the videos
+  for (var i = 0; i < media.video.length; i++) {
+    var video = media.video[i];
+    var videoHTML = `
+      <div class="vid-box">
+        <video width="320" height="240" controls>
+          <source src="${video}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <span id="close-span" style="cursor: pointer; position: relative" class="material-icons-sharp" onclick="deleteMediaV('${painters_id}', '${video}')">close</span>
+      </div>
+    `;
+    videoDiv.innerHTML += videoHTML;
+  }
 }
 
 function deleteMediaP(painter_id, src) {
@@ -315,6 +365,7 @@ function deleteMediaP(painter_id, src) {
     .then((response) => response.json())
     .then((reply) => {
       console.log(reply);
+      updatePage(reply);
     });
 }
 
@@ -333,5 +384,6 @@ function deleteMediaV(painter_id, src) {
     .then((response) => response.json())
     .then((reply) => {
       console.log(reply);
+      updatePage(reply);
     });
 }

@@ -2,7 +2,7 @@ from flask import redirect, url_for, session
 from flask import request, jsonify
 import os
 import uuid
-from flask import flash, abort, redirect, url_for
+from flask import flash, abort, redirect, url_for, make_response
 import subprocess
 from models import storage
 from models.invoice import Invoice
@@ -21,6 +21,10 @@ import pytz
 from builtins import set as built_in_set
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
+from models.engine.auth import Auth
+from sqlalchemy.orm.exc import NoResultFound
+
+AUTH = Auth()
 
 
 app = Flask(__name__)
@@ -213,13 +217,16 @@ def getTotal(price, quantity):
 app.jinja_env.globals.update(getTotal=getTotal)
 
 
-@app.route('/paintersPage/<painter_id>', strict_slashes=False)
-def paintersPage(painter_id):
-    painter = storage.get(Painter, painter_id)
-    if not painter:
-        abort(404)
-    paintersMedia = storage.getMedia(PaintersMedia, painter_id)
-    return render_template('paintersPage.html', painter=painter, paintersMedia=paintersMedia)
+@app.route('/paintersPage', strict_slashes=False)
+def paintersPage():
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        painter = AUTH.get_painter_from_session_id(session_id)
+        paintersMedia = storage.getMedia(PaintersMedia, painter.id)
+        now = datetime.now()
+        return render_template('paintersPage.html', painter=painter, paintersMedia=paintersMedia, now=now)
+
+    abort(404)
 
 
 @app.route('/payment/<user_id>', strict_slashes=False)
@@ -252,7 +259,8 @@ def paintersProfile(painters_id):
     if not painter:
         abort(404)
     paintersMedia = storage.getMedia(PaintersMedia, painters_id)
-    return render_template('paintersProfile.html', painter=painter, paintersMedia=paintersMedia)
+    now = datetime.now()
+    return render_template('paintersProfile.html', painter=painter, paintersMedia=paintersMedia, now=now)
 
 
 @app.route('/painterReg', strict_slashes=False)
@@ -303,33 +311,22 @@ def regUser():
 
 
 @app.route('/login', strict_slashes=False)
-def login():
+def loginPage():
     return render_template('userLogin.html')
 
 
-@app.route('/UserProfile/<user_id>', strict_slashes=False)
-def UserProfile(user_id):
-    user = storage.get(User, user_id)
+@app.route('/UserProfile/<session_id>', strict_slashes=False)
+def UserProfile(session_id):
+    user = AUTH.get_user_from_session_id(session_id)
     if not user:
         abort(401)
     M_invoice = []
-    invoices = storage.getInvoice(Invoice, user_id)
+    invoices = storage.getInvoice(Invoice, user.id)
     for invoice in invoices:
         n_invoice = storage.get(Invoice, invoice)
         M_invoice.append(n_invoice)
     print(M_invoice)
     return render_template('profile.html', user=user, M_invoice=M_invoice)
-
-
-@app.route('/', strict_slashes=False)
-def index():
-    user_id = request.cookies.get('user_id')
-    user = storage.get(User, user_id)
-    products = storage.all(Product).values()
-    painters = storage.all(Painter).values()
-    if not user:
-        return render_template('index.html', products=products, painters=painters)
-    return render_template('index.html', user=user, products=products, painters=painters)
 
 
 def get_coordinates(city):
@@ -376,6 +373,209 @@ def thankyou(user_id):
     user.cart_contentsQuantity = {}
     storage.save()
     return render_template('thankyou.html', user=user)
+
+
+def format_time_diff(created_at, now):
+    # Ensure both times are in the same timezone
+    now = now.replace(tzinfo=pytz.UTC)
+    created_at = created_at.replace(tzinfo=pytz.UTC)
+
+    time_diff = now - created_at
+
+    # Subtract 1 hour from the time difference
+    time_diff -= timedelta(hours=1)
+
+    if time_diff.total_seconds() < 60:
+        return "Now"
+    elif time_diff.total_seconds() < 3600:
+        minutes = int(time_diff.total_seconds() / 60)
+        return f"{minutes} minute ago" if minutes == 1 else f"{minutes} minutes ago"
+    elif time_diff.total_seconds() < 86400:
+        hours = int(time_diff.total_seconds() / 3600)
+        return f"{hours} hour ago" if hours == 1 else f"{hours} hours ago"
+    elif time_diff.total_seconds() < 172800:
+        return "Yesterday"
+    elif time_diff.total_seconds() < 604800:
+        days = int(time_diff.total_seconds() / 86400)
+        return f"{days} day ago" if days == 1 else f"{days} days ago"
+    elif time_diff.total_seconds() < 2419200:
+        weeks = int(time_diff.total_seconds() / 604800)
+        return f"{weeks} week ago" if weeks == 1 else f"{weeks} weeks ago"
+    elif time_diff.total_seconds() < 29030400:
+        months = int(time_diff.total_seconds() / 2419200)
+        return f"{months} month ago" if months == 1 else f"{months} months ago"
+    else:
+        years = int(time_diff.total_seconds() / 29030400)
+        return f"{years} year ago" if years == 1 else f"{years} years ago"
+
+
+app.jinja_env.filters['format_time_diff'] = format_time_diff
+
+
+@app.route('/', strict_slashes=False)
+def index():
+    products = storage.all(Product).values()
+    painters = storage.all(Painter).values()
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        return render_template('index.html', user=user, products=products, painters=painters)
+
+    return render_template('index.html', products=products, painters=painters)
+
+
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
+def login():
+    """login route"""
+
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+
+        if AUTH.valid_login(email, password):
+            session_id = AUTH.create_session(email)
+            user = AUTH.get_user_from_session_id(session_id)
+
+            # Set the session ID as a cookie in the response
+            response = make_response(
+                jsonify({"email": email, "user_id": user.id}))
+            response.set_cookie("session_id", session_id)
+
+            return jsonify({"session_id": session_id})
+
+        # Incorrect login information
+        return abort(401)
+
+    except NoResultFound:
+        # User not found
+        return jsonify({"message": "User not found"}), 401
+
+
+@app.route('/logout/<session_id>', strict_slashes=False)
+def logout(session_id):
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        if user:
+            AUTH.destroy_session(user.id)
+            return redirect(url_for('index'))
+    abort(403)
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def profile():
+    """Profile route"""
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        if user:
+            return jsonify({"email": user.email}), 200
+    abort(403)
+
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def get_reset_password_token():
+    """get reset password token"""
+    email = request.form.get('email')
+    if email:
+        try:
+            reset_token = AUTH.get_reset_password_token(email)
+            return (
+                jsonify({"email": email, "reset_token": reset_token}), 200)
+        except ValueError:
+            abort(403)
+
+
+@app.route('/reset_password', methods=['PUT'], strict_slashes=False)
+def update_password():
+    """update password"""
+    email = request.form.get('email')
+    reset_token = request.form.get('reset_token')
+    new_password = request.form.get('new_password')
+    if email and reset_token and new_password:
+        try:
+            AUTH.update_password(reset_token, new_password)
+            return (jsonify({"email": email,
+                             "message": "Password updated"}), 200)
+        except Exception:
+            abort(403)
+
+
+@app.route('/painter_sessions', methods=['POST'], strict_slashes=False)
+def login_p():
+    """login route"""
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
+
+        if AUTH.valid_login_p(email, password):
+            session_id = AUTH.create_session_p(email)
+            painter = AUTH.get_painter_from_session_id(session_id)
+
+            # Set the session ID as a cookie in the response
+            response = make_response(
+                jsonify({"email": email, "painter_id": painter.id}))
+            response.set_cookie("session_id", session_id)
+
+            return jsonify({"session_id": session_id})
+
+        # Incorrect login information
+        return abort(401)
+
+    except NoResultFound:
+        # painter not found
+        return jsonify({"message": "painter not found"}), 401
+
+
+@app.route('/painter_logout/<session_id>', strict_slashes=False)
+def logout_p(session_id):
+    """ logout route"""
+    if session_id:
+        painter = AUTH.get_painter_from_session_id(session_id)
+        if painter:
+            AUTH.destroy_session_p(painter.id)
+            return redirect(url_for('painterReg'))
+    abort(403)
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def profile_p():
+    """Profile route"""
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        painter = AUTH.get_painter_from_session_id(session_id)
+        if painter:
+            return jsonify({"email": painter.email}), 200
+    abort(403)
+
+
+@app.route('/reset_password', methods=['POST'], strict_slashes=False)
+def get_reset_password_token_p():
+    """get reset password token"""
+    email = request.form.get('email')
+    if email:
+        try:
+            reset_token = AUTH.get_reset_password_token_p(email)
+            return (
+                jsonify({"email": email, "reset_token": reset_token}), 200)
+        except ValueError:
+            abort(403)
+
+
+@app.route('/reset_password', methods=['PUT'], strict_slashes=False)
+def update_password_p():
+    """update password"""
+    email = request.form.get('email')
+    reset_token = request.form.get('reset_token')
+    new_password = request.form.get('new_password')
+    if email and reset_token and new_password:
+        try:
+            AUTH.update_password_p(reset_token, new_password)
+            return (jsonify({"email": email,
+                             "message": "Password updated"}), 200)
+        except Exception:
+            abort(403)
 
 
 if __name__ == "__main__":

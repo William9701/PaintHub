@@ -10,3 +10,4 @@ from api.v1.views.admins import *
 from api.v1.views.painters import *
 from api.v1.views.paintersMedia import *
 from api.v1.views.invoice import *
+from api.v1.views.comments import *

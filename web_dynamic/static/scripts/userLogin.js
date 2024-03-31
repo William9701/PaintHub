@@ -1,34 +1,45 @@
 document
   .getElementById("signupForm")
-  .addEventListener("submit", function (event) {
+  .addEventListener("submit", async function (event) {
     event.preventDefault();
 
     var email = document.querySelector('input[name="email"]').value;
     var password = document.querySelector('input[name="password"]').value;
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:5001/api/v1/sessions", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          var user = JSON.parse(xhr.responseText);
-          console.log(user);
-           // Set cookie with user ID
-           document.cookie = "user_id=" + user.user_id + "; path=/";
-           window.location.href = "/";
-        } else if (xhr.status === 401) {
-          // Error response
-          showToast("Wrong Login details");
-        }
-      }
-    };
-    xhr.send(
-      JSON.stringify({
-        email: email,
-        password: password,
+    try {
+      fetch("/sessions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
       })
-    );
+        .then((response) => {
+          if (response.ok) {
+            // If the response status is in the range 200-299
+            // Set the session ID as a cookie for the homepage
+            return response.json(); // Parse JSON response
+          } else {
+            // Handle other status codes (e.g., 401 Unauthorized)
+            showToast("Wrong Login details");
+          }
+        })
+        .then((data) => {
+          // Assuming the server returns session_id in the response
+          if (data && data.session_id) {
+            document.cookie = `session_id=${data.session_id}`; // Set the session ID as a cookie
+            window.location.href = "/"; // Redirect to the homepage
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error); // Handle fetch error
+        });
+    } catch (error) {
+      console.error("Error:", error); // Handle other errors
+    }
   });
 
 function showToast(message) {

@@ -51,7 +51,7 @@
       <div class="cols__container">
         <div class="left__col">
           <div class="img__container">
-            <img src="{{ painter.profile_image }}" alt="{{ painter.first_name }} {{ painter.last_name }}" />
+            <img id="profImg" src="{{ painter.profile_image }}" alt="{{ painter.first_name }} {{ painter.last_name }}" />
             <span></span>
           </div>
           <h2>{{ painter.first_name }} {{ painter.last_name }}</h2>
@@ -82,7 +82,9 @@
               <li><i class="fab fa-twitter"></i></li>
               <i class="fab fa-pinterest"></i>
               <i class="fab fa-facebook"></i>
-              <i class="fab fa-dribbble"></i>
+              <a style="color: black;" href="/painter_logout/{{ painter.session_id }}">
+                <i class="fas fa-sign-out-alt"></i>
+              </a>
             </ul>
           </div>
         </div>

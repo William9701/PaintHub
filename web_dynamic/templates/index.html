@@ -42,6 +42,7 @@
             class="fa-solid fa-cart-shopping"
             onclick="displayCart('{{ user.id }}')"
           ></i>
+          
           {% else %}
           <a href="/login">
             <i class="fa-solid fa-cart-shopping"></i>
@@ -77,9 +78,12 @@
           </div>
 
           {% if user %}
-          <a href="/UserProfile/{{ user.id }}"
+          <a style="color: black;" href="/UserProfile/{{ user.session_id }}"
             ><i class="fa-solid fa-user"></i
           ></a>
+          <a style="color: black;" href="/logout/{{ user.session_id }}">
+            <i class="fas fa-sign-out-alt"></i>
+          </a>
           {% else %}
           <a href="/login"><i class="fa-solid fa-user"></i></a>
           {% endif %}
@@ -268,22 +272,24 @@
     <div class="know_box" id="design">
       <h1>Know Your<span>Design</span></h1>
       <div class="paint-wall">
+        <div class="product-select" id="ps">
+          <!-- <label for="product">Choose a product:</label> -->
+          <select
+            name="product"
+            id="design-select"
+            style="font-size: medium; margin-left: 110px"
+          >
+            <option value="">--Please choose a design--</option>
+            <option value="All">All</option>
+            {% set unique_categories = set() %} {% for product in products %}
+            {% set _ = unique_categories.add(product['Category']) %} {% endfor
+            %} {% for category in unique_categories %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+          </select>
+        </div>
         <div class="paint-select">
-          <div class="product-select" id="ps">
-            <!-- <label for="product">Choose a product:</label> -->
-            <select
-              name="product"
-              id="design-select"
-              style="font-size: medium; margin-left: 110px"
-            >
-              <option value="">--Please choose a design--</option>
-              {% set unique_categories = set() %} {% for product in products %}
-              {% set _ = unique_categories.add(product['Category']) %} {% endfor
-              %} {% for category in unique_categories %}
-              <option value="{{ category }}">{{ category }}</option>
-              {% endfor %}
-            </select>
-          </div>
+          
           {% for product in products %}
           <div class="colors">
             <img
@@ -320,6 +326,8 @@
                 class="form"
                 type="number"
                 placeholder="Height (feet)"
+                style="padding-left: 10px;
+                font-size: 20px;"
               />
             </div>
             <div class="feet-input-width">
@@ -329,6 +337,8 @@
                 class="form"
                 type="number"
                 placeholder="Width (feet)"
+                style="padding-left: 10px;
+                font-size: 20px;"
               />
             </div>
             <button
@@ -348,20 +358,11 @@
               style="width: 250px; margin-top: -70px"
             />
 
-            <p
-              id="quotation"
-              style="
-                font-weight: 750;
-                margin-top: -29px;
-                z-index: 1;
-                border: 3px solid;
-                width: 279px;
-                height: 30px;
-                display: none;
-                align-items: center;
-                background: white;
-              "
-            ></p>
+            <div id="quotBod" class="quatation-board">
+              <p
+              id="quotation">You will need 40ltrs od Satin </p>
+            </div>
+            
             <div class="paint-desc">
               <h3 id="paint-name">Paint Name: <span id="p-name"></span></h3>
               <p id="paint-comapany">Compainies: <span id="p-brands"></span></p>
@@ -379,11 +380,22 @@
           />
 
           <div>
-            <img
-              id="wall-painter"
-              src="./../static/images/wall_painter.png"
-              alt=""
-            />
+            
+            <div
+              class="paint-box"
+            >
+          <img class="painter-image" id="painter-man" style="width: 550px;
+          position: absolute;
+          top: 90px;
+          right: 0;
+"  src="../static/images/wall-painter2.png" alt="">
+          <img class="painter-image" id="painter-woman" style="width: 300px;
+          position: absolute;
+          top: 90px;
+          right: 400px;
+          display: none;
+          border-radius: 30px;" src="../static/images/lady-wall-paper2.png" alt=""></div>
+          </div>
           </div>
         </div>
       </div>
