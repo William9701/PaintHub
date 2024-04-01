@@ -11,6 +11,8 @@ from models.product import Product
 from models.admin import Admin
 from models.painterMedia import PaintersMedia
 from models.comment import Comment
+from models.request import Request
+from models.notification import Notification
 
 
 classes = {
@@ -20,7 +22,9 @@ classes = {
     "Painter": Painter,
     "PaintersMedia": PaintersMedia,
     "Invoice": Invoice,
-    "Comment": Comment
+    "Comment": Comment,
+    "Request": Request,
+    "Notification": Notification
 }
 
 

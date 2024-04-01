@@ -14,6 +14,8 @@ from sqlalchemy.orm.exc import NoResultFound
 from models.invoice import Invoice
 from dotenv import load_dotenv
 from models.comment import Comment
+from models.request import Request
+from models.notification import Notification
 
 load_dotenv()
 
@@ -24,7 +26,9 @@ classes = {
     "Painter": Painter,
     "PaintersMedia": PaintersMedia,
     "Invoice": Invoice,
-    "Comment": Comment
+    "Comment": Comment,
+    "Request": Request,
+    "Notification": Notification
 }
 
 

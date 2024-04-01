@@ -218,6 +218,27 @@ def getTotal(price, quantity):
 app.jinja_env.globals.update(getTotal=getTotal)
 
 
+def getUserName(user_id):
+    user = storage.get(User, user_id)
+    if not user:
+        return None
+    Name = f'{user.first_name} {user.last_name}'
+    return Name
+
+
+app.jinja_env.globals.update(getUserName=getUserName)
+
+
+def getUserImage(user_id):
+    user = storage.get(User, user_id)
+    if not user:
+        return None
+    return user.Image
+
+
+app.jinja_env.globals.update(getUserImage=getUserImage)
+
+
 @app.route('/paintersPage', strict_slashes=False)
 def paintersPage():
     session_id = request.cookies.get('session_id')
@@ -264,6 +285,10 @@ def paintersProfile(painters_id):
         abort(404)
     paintersMedia = storage.getMedia(PaintersMedia, painters_id)
     now = datetime.now()
+    session_id = request.cookies.get('session_id')
+    if session_id:
+        user = AUTH.get_user_from_session_id(session_id)
+        return render_template('paintersProfile.html', painter=painter, paintersMedia=paintersMedia, now=now, user=user)
     return render_template('paintersProfile.html', painter=painter, paintersMedia=paintersMedia, now=now)
 
 

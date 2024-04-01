@@ -509,11 +509,11 @@
           <div class="card_top">
             <div class="profile">
               <div class="profile_image">
-                <img src="../static/images/gir_dp3.jpg" />
+                <img src="{{ getUserImage(comment.user_id) }}" />
               </div>
 
               <div class="name">
-                <strong>Kaveesha Vidurangi</strong>
+                <strong>{{ getUserName(comment.user_id) }}</strong>
 
                 <div class="like">
                   <i class="fa-solid fa-star"></i>
@@ -527,10 +527,7 @@
           </div>
           <div class="comment">
             <p>
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis,
-              amet nesciunt voluptatem cum architecto ipsum vero nulla
-              voluptatibus dolorum modi assumenda eum? Aliquid inventore velit
-              ipsa repellat numquam atque dolores!
+              {{ comment.text }}
             </p>
           </div>
         </div>

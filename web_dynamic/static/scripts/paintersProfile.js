@@ -92,19 +92,45 @@ links.forEach((link) => {
 
 const hireButton = document.getElementById("hire");
 const popupForm = document.getElementById("popup-form");
+const popmsg = document.getElementById("popmsg");
 const submitButton = document.getElementById("submit-button");
 const loadingMessage = document.getElementById("loading-message");
+const popmsg2 = document.getElementById("popmsg2");
+const loadingMessage2 = document.getElementById("loading-message2");
 
 hireButton.addEventListener("click", () => {
   popupForm.style.display = "block";
 });
 
-submitButton.addEventListener("click", () => {
-  // Simulate loading
-  loadingMessage.style.display = "block";
-  setTimeout(() => {
-    // Redirect to checkout page (not implemented)
-    // For now, just hide the popup
-    popupForm.style.display = "none";
-  }, 20000); // 2 seconds
-});
+function hire(painter_id, user_id, event) {
+  event.preventDefault();
+  // Hide the popup form
+  popupForm.style.display = "none";
+
+  // Show the initial message
+  popmsg.style.display = "block";
+  loadingMessage.textContent = "Just taking a short while. Please wait...";
+
+  var wall_lenght = document.getElementById("wall-length").value;
+  var wall_width = document.getElementById("wall-height").value;
+  var job_type = document.getElementById("job-type").value;
+
+  var data = {
+    JobLenght: wall_lenght,
+    JobWidth: wall_width,
+    JobType: job_type,
+    painters_id: painter_id,
+    user_id: user_id,
+  };
+  fetch("http://127.0.0.1:5001/api/v1/requests", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((request) => request.json())
+    .then((reply) => {
+      loadingMessage.textContent = "Request Sent... You'll be notified shortly";
+    });
+}

@@ -11,3 +11,5 @@ from api.v1.views.painters import *
 from api.v1.views.paintersMedia import *
 from api.v1.views.invoice import *
 from api.v1.views.comments import *
+from api.v1.views.notifications import *
+from api.v1.views.requests import *
