@@ -69,7 +69,7 @@
             </table>
 
             {% if user %}
-            <a href="/payment"
+            <a href="/payment/{{ user.session_id }}"
               ><button>Proceed to Payment</button></a
             >
             {% else %}

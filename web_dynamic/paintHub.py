@@ -8,6 +8,7 @@ from models import storage
 from models.comment import Comment
 from models.invoice import Invoice
 from models.painterMedia import PaintersMedia
+from models.request import Request
 from models.user import User
 from models.admin import Admin
 from models.painter import Painter
@@ -229,6 +230,17 @@ def getUserName(user_id):
 app.jinja_env.globals.update(getUserName=getUserName)
 
 
+def getPainterName(painter_id):
+    user = storage.get(Painter, painter_id)
+    if not user:
+        return None
+    Name = f'{user.first_name} {user.last_name}'
+    return Name
+
+
+app.jinja_env.globals.update(getPainterName=getPainterName)
+
+
 def getUserImage(user_id):
     user = storage.get(User, user_id)
     if not user:
@@ -251,10 +263,8 @@ def paintersPage():
     abort(404)
 
 
-@app.route('/payment', strict_slashes=False)
-def payment():
-    session_id = request.cookies.get('session_id')
-    print(session_id)
+@app.route('/payment/<session_id>', strict_slashes=False)
+def payment(session_id):
     if session_id:
         user = AUTH.get_user_from_session_id(session_id)
         cartContent = []
@@ -331,7 +341,13 @@ def upload_file_photo():
 
 @app.route('/admin', strict_slashes=False)
 def admin():
-    return render_template('admin.html')
+    requests = storage.all(Request).values()
+    users = storage.all(User).values()
+    invoices = storage.all(Invoice).values()
+    painters = storage.all(Painter).values()
+    products = storage.all(Product).values()
+    paintersMedia = storage.all(PaintersMedia).values()
+    return render_template('admin.html', requests=requests, users=users, invoices=invoices, painters=painters, products=products, paintersMedia=paintersMedia)
 
 
 @app.route('/regUser', strict_slashes=False)

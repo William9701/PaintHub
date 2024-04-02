@@ -207,7 +207,7 @@
 											{% set name = productName(product.price) %}
 											{% if name is not none %}
 											<tr>
-												<td><img src="{{ productImg(product.price) }}" alt="Product" width="50" height="50"></td>
+												<td><img src="{{ productImg(product.price) }}" alt="Product" style="width: 50px; height: 50px;"></td>
 												<td>{{ name }}</td>
 												<td>{{ product.quantity }}</td>
 												<td>${{ productPrice(product.price, product.quantity) }}</td>

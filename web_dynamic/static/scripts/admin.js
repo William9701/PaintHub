@@ -224,8 +224,77 @@ async function createproduct() {
   }
 }
 
-// function showToast(message) {
-//   var toast = document.querySelector(".toast");
-//   toast.querySelector(".toast-body").textContent = message;
-//   $(toast).toast("show");
-// }
+let alertSound;
+
+// Function to check for updates in the number of requests
+function checkForUpdates() {
+  console.log("update called");
+  fetch("http://127.0.0.1:5001/api/v1/requests")
+    .then((response) => response.json())
+    .then((data) => {
+      const currentNumberOfRequests = data.length;
+      const previousNumberOfRequests =
+        parseInt(localStorage.getItem("previousNumberOfRequests")) || 0;
+
+      if (currentNumberOfRequests > previousNumberOfRequests) {
+        if (alertSound) {
+          console.log(alertSound);
+          alertSound.currentTime = 0; // Reset audio to start
+          alertSound.play();
+        }
+      }
+
+      localStorage.setItem("previousNumberOfRequests", currentNumberOfRequests);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+// Function to initialize the alert sound
+function initializeAlertSound() {
+  alertSound = new Audio("../static/audio/mixkit-elevator-tone-2863.wav");
+  // You may also set other properties of the audio element here, if needed
+}
+
+// Check for updates every 5 seconds
+setInterval(checkForUpdates, 5000);
+
+// Initialize the alert sound
+document.addEventListener("DOMContentLoaded", initializeAlertSound);
+
+function toggleDetails(detailsId) {
+  var details = document.getElementById(detailsId);
+  if (details.classList.contains("hidden")) {
+    // If hidden, remove the 'hidden' class to display the details
+    details.classList.remove("hidden");
+    details.style.display = "table-row"; // Display the details as table row
+  } else {
+    // If not hidden, add the 'hidden' class to hide the details
+    details.classList.add("hidden");
+    details.style.display = "none"; // Hide the details
+  }
+}
+
+function DeleteProduct(productId) {
+  fetch(`http://127.0.0.1:5001/api/v1/products/${productId}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to delete product");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // Product successfully deleted, remove the corresponding row from the table
+      const rowToRemove = document.getElementById(`product-${productId}`);
+      if (rowToRemove) {
+        rowToRemove.remove();
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      // Handle error, display error message, etc.
+    });
+}

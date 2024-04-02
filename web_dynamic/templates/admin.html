@@ -55,7 +55,8 @@
           </a>
           <a href="#" onclick="toggleContent('reports', this)">
             <span class="material-icons-sharp">report_gmailerrorred</span>
-            <h3>Reports</h3>
+            <h3>Requests</h3>
+            <span class="message-count">1</span>
           </a>
           <a href="#" onclick="toggleContent('settings', this)">
             <span class="material-icons-sharp">settings</span>
@@ -141,8 +142,8 @@
           <table>
             <thead>
               <tr>
+                <th>Product Image</th>
                 <th>Product Name</th>
-                <th>Product Number</th>
                 <th>Payment</th>
                 <th>Status</th>
                 <th></th>
@@ -200,18 +201,20 @@
                 <th>Customers Name</th>
                 <th>Customers ID</th>
                 <th>Registerd Date</th>
-                <th>Status</th>
+                <th>Last Login</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
+              {% for user in users %}
               <tr>
-                <td>Foldable Mini Drone</td>
-                <td>85631</td>
-                <td>Due</td>
-                <td class="warning">Pending</td>
+                <td>{{ getUserName(user.id) }}</td>
+                <td>{{ user.id }}</td>
+                <td>{{ user.created_at }}</td>
+                <td class="warning">{{ user.last_login_at }}</td>
                 <td class="primary">Details</td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
           <a href="#">Show All</a>
@@ -223,27 +226,76 @@
         <h1>Orders</h1>
 
         <div class="recent-orders">
-          <h2>Recent Orders</h2>
-          <table>
-            <thead>
+          <div style="width: 100%" class="tab-pane fade" id="payment_history">
+            <table>
               <tr>
-                <th>Product Name</th>
-                <th>Product Number</th>
-                <th>Payment</th>
-                <th>Status</th>
+                <th>Date</th>
+                <th>Invoice ID</th>
+                <th>Total Amount Paid</th>
+                <th>Payment Status</th>
                 <th></th>
               </tr>
-            </thead>
-            <tbody>
+              {% for invoice in invoices %}
               <tr>
-                <td>Foldable Mini Drone</td>
-                <td>85631</td>
-                <td>Due</td>
-                <td class="warning">Pending</td>
-                <td class="primary">Details</td>
+                <td>{{ invoice.created_at }}</td>
+                <td>{{ invoice.id }}</td>
+                <td>${{ invoice.total }}</td>
+                <td>
+                  Successful
+                  <i style="color: green" class="fa-solid fa-check-circle"></i>
+                </td>
+                <td>
+                  <button onclick="toggleDetails('details{{ loop.index }}')">
+                    ⯆
+                  </button>
+                </td>
               </tr>
-            </tbody>
-          </table>
+              <tr id="details{{ loop.index }}" class="tag hidden">
+                <td colspan="5">
+                  <table>
+                    <tr>
+                      <th>Product Image</th>
+                      <th>Product Name</th>
+                      <th>Quantity</th>
+                      <th>Price</th>
+                    </tr>
+                    <!-- Loop over each product in the productCart -->
+                    {% for product in invoice.productCart[0] %} {% set name =
+                    productName(product.price) %} {% if name is not none %}
+                    <tr>
+                      <td>
+                        <img
+                          src="{{ productImg(product.price) }}"
+                          alt="Product"
+                          style="width: 50px"
+                        />
+                      </td>
+                      <td>{{ name }}</td>
+                      <td>{{ product.quantity }}</td>
+                      <td>
+                        ${{ productPrice(product.price, product.quantity) }}
+                      </td>
+                    </tr>
+                    {% endif %} {% endfor %}
+
+                    <tr>
+                      <td></td>
+                      <td>Delivery_cost</td>
+                      <td></td>
+                      <td>${{ invoice.delivery_charge }}</td>
+                    </tr>
+                    <tr>
+                      <td></td>
+                      <td>Total</td>
+                      <td></td>
+                      <td>${{ invoice.total }}</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
           <a href="#">Show All</a>
         </div>
       </main>
@@ -263,13 +315,15 @@
               </tr>
             </thead>
             <tbody>
+              {% for painter in painters %}
               <tr>
-                <td>Yahoo Painter</td>
-                <td>85631</td>
-                <td>Due</td>
+                <td>{{ getPainterName(painter.id) }}</td>
+                <td>{{ painter.id }}</td>
+                <td>{{ painter.created_at }}</td>
                 <td class="warning">Pending</td>
                 <td class="primary">Details</td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
           <a href="#">Show All</a>
@@ -306,26 +360,43 @@
       <!------------------- END OF messages MAIN ----------------->
 
       <main id="products" class="content" style="display: none">
-        <h1>Custormers</h1>
+        <h1>Products</h1>
         <div class="recent-orders">
           <table>
             <thead>
               <tr>
-                <th>Customers Name</th>
-                <th>Customers ID</th>
+                <th>Product Image</th>
+                <th>Product Name</th>
+                <th>Product ID</th>
                 <th>Registerd Date</th>
-                <th>Status</th>
-                <th></th>
+                <th>Product Size</th>
+                <th>Available Quantity</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Foldable Mini Drone</td>
-                <td>85631</td>
-                <td>Due</td>
-                <td class="warning">Pending</td>
-                <td class="primary">Details</td>
+              {% for product in products %}
+              <tr id="product-{{ product.id }}">
+                <td>
+                  <img
+                    style="width: 50px"
+                    src="{{ product.ProductImage }}"
+                    alt=""
+                  />
+                </td>
+                <td>{{ product.Name }}</td>
+                <td>{{ product.id }}</td>
+                <td>{{ product.created_at }}</td>
+                <td>{{ product.Size }}</td>
+                <td>{{ product.QuantityAvailable }}</td>
+                <td
+                  onclick="DeleteProduct('{{ product.id}}')"
+                  style="cursor: pointer"
+                  class="primary"
+                >
+                  Delete
+                </td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
           <a href="#">Show All</a>
@@ -335,25 +406,28 @@
 
       <main id="reports" class="content" style="display: none">
         <h1>Custormers</h1>
+
         <div class="recent-orders">
           <table>
             <thead>
               <tr>
                 <th>Customers Name</th>
-                <th>Customers ID</th>
+                <th>Painter Name</th>
                 <th>Registerd Date</th>
                 <th>Status</th>
                 <th></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="req-body">
+              {% for request in requests %}
               <tr>
-                <td>Foldable Mini Drone</td>
-                <td>85631</td>
-                <td>Due</td>
+                <td>{{ getUserName(request.user_id) }}</td>
+                <td>{{ getPainterName(request.painters_id) }}</td>
+                <td>{{ request.created_at }}</td>
                 <td class="warning">Pending</td>
                 <td class="primary">Details</td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
           <a href="#">Show All</a>
@@ -368,7 +442,7 @@
             <thead>
               <tr>
                 <th>Customers Name</th>
-                <th>Customers ID</th>
+                <th>Painters Name</th>
                 <th>Registerd Date</th>
                 <th>Status</th>
                 <th></th>
