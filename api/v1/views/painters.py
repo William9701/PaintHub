@@ -15,25 +15,30 @@ AUTH = Auth()
 
 @app_views.route('/painters', methods=['POST'], strict_slashes=False)
 def painters():
-    """reg painter"""
+    """Register painter"""
     try:
         data = request.json
+        print("Received data:", data)  # Print received data for debugging
         email = data.get('email')
         password = data.get('password')
         first_name = data.get('first_name')
         last_name = data.get('last_name')
         state = data.get('state')
         city = data.get('city')
+        account_status = data.get('account_status')
 
         if not email or not password:
             return jsonify({"message": "Missing email or password"}), 400
 
+        print("Attempting to register painter...")  # Print debug message
         AUTH.register_painter(email, password, first_name,
-                              last_name, state, city)
-        return jsonify({"email": email, "message": "painter created"})
+                              last_name, state, city, account_status)
+        print("Painter registered successfully!")  # Print debug message
+        return jsonify({"email": email, "message": "Painter created"})
 
-    except ValueError:
-        return jsonify({"message": "email already registered"}), 400
+    except Exception as e:
+        print("Error occurred:", e)  # Print error message for debugging
+        return jsonify({"message": "An error occurred"}), 400
 
 
 @app_views.route('/painters/<painter_id>', methods=['PUT'], strict_slashes=False)
@@ -58,9 +63,6 @@ def put_painter(painter_id):
             setattr(painter, key, value)
     storage.save()
     return make_response(jsonify(painter.to_dict()), 200)
-
-
-
 
 
 @app_views.route('/painters', methods=['GET'], strict_slashes=False)

@@ -115,6 +115,7 @@ function createProductCart(product, user_id) {
 
       // Create a new table row for each product
       const newRow = document.createElement("tr");
+      newRow.setAttribute("id", `product-${product.id}`);
 
       // Set the inner HTML of the new row
       newRow.innerHTML = `
@@ -171,21 +172,27 @@ function RemoveFromCart(user_id, product_id) {
       fetch(`http://127.0.0.1:5001/api/v1/users/${user_id}`)
         .then((response) => response.json())
         .then((user) => {
-          const cartContents = user.cart_contents;
-          const cart = document.getElementById("cart");
-          const tableBody = cart.querySelector("tbody");
-          tableBody.innerHTML = "";
-          let totalPrice = 0; // Initialize total price variable
+          const rowToRemove = document.getElementById(`product-${product_id}`);
+          if (rowToRemove) {
+            rowToRemove.remove();
+          }
 
+          const cartContents = user.cart_contents;
+          // const cart = document.getElementById("cart");
+          // const tableBody = cart.querySelector("tbody");
+          // tableBody.innerHTML = "";
+          let totalPrice = 0; // Initialize total price variable
           cartContents.forEach((product_id) => {
             fetch(`http://127.0.0.1:5001/api/v1/products/${product_id}`)
               .then((response) => response.json())
               .then((product) => {
-                createProductCart(product, user_id);
+                // createProductCart(product, user_id);
                 totalPrice += parseInt(product.Price); // Add product price to total price
                 updateTotal(totalPrice); // Update total display
               });
           });
+          document.getElementById("cart-count").textContent =
+            user.cart_contents.length;
         });
     })
     .catch((error) => console.error("Error:", error));
@@ -249,6 +256,8 @@ document.getElementById("filterSelect").addEventListener("change", function () {
         searchBar.style.display = "none";
         value = "Material";
         options = materials;
+      } else if (this.value === "ALL") {
+        searchBar.style.display = "";
       }
 
       // Add options to the select tag dynamically
@@ -272,7 +281,7 @@ document
     var selectTag = document.querySelector('select[name="search-bar"]');
     var filter = document.querySelector('select[name="filter"]');
 
-    if (searchBar.style.display !== "none") {
+    if (filter.value === "" && searchBar.style.display !== "none") {
       console.log("Search input value:", searchBar.value);
       fetch(`http://127.0.0.1:5001/api/v1/product/Color/${searchBar.value}`)
         .then((response) => response.json())
@@ -281,6 +290,13 @@ document
         })
         .catch((error) => console.error("Error:", error));
       searchBar.value = ""; // Clear the input field
+    } else if (filter.value === "ALL") {
+      fetch(`http://127.0.0.1:5001/api/v1/products`)
+        .then((response) => response.json())
+        .then((data) => {
+          createProductCards(data);
+        })
+        .catch((error) => console.error("Error:", error));
     } else if (selectTag) {
       if (filter.value === "Search by Brand") {
         fetch(`http://127.0.0.1:5001/api/v1/product/Brand/${selectTag.value}`)
@@ -312,6 +328,14 @@ document
     }
   });
 
+var user_id;
+
+if (document.body.hasAttribute("data-user-id")) {
+  user_id = document.body.getAttribute("data-user-id");
+} else {
+  user_id = null;
+}
+
 function createProductCards(products) {
   const boxDiv = document.querySelector(".box"); // Assuming you have an existing .box element
 
@@ -336,14 +360,20 @@ function createProductCards(products) {
     const productsTextDiv = document.createElement("div");
     productsTextDiv.classList.add("products_text");
     productsTextDiv.innerHTML = `
-            <h2>${product.Name}</h2>
-            <p>Category: ${product.Category}</p>
-            <p>Color: ${product.Color}</p>
-            <p>Material: ${product.Material}</p>
-            <p>Brand: ${product.Brand}</p>
-            <h3>$${product.Price}</h3>
-            <a href="" class="btn">Add To Cart</a>
-        `;
+    <div class="products_text">
+        <h2>${product.Name}</h2>
+        <p>Category: ${product.Category}</p>
+        <p>Color: ${product.Color}</p>
+        <p>Material: ${product.Material}</p>
+        <p>Brand: ${product.Brand}</p>
+        <h3>$${product.Price}</h3>
+        ${
+          user_id !== null
+            ? `<a href="#" class="btn" onclick="addToCart('${product.id}', '${user_id}')">Add To Cart</a>`
+            : `<a href="/login" class="btn">Add To Cart</a>`
+        }
+    </div>
+`;
 
     cardDiv.appendChild(smallCardDiv);
     cardDiv.appendChild(imageDiv);

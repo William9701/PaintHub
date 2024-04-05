@@ -70,9 +70,24 @@
             width: 900px;
             height: 480px;
             top: 20px;
-            background: red;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
           "
-        ></div>
+        >
+          <img src="" alt="" />
+          <h1>Welcome to Our Painting Community!</h1>
+          <p style="color: blueviolet; font-size: 20px">
+            If you're new here, we're thrilled to have you. This platform is
+            designed to bring together painters from all walks of life. Register
+            now to join us and start sharing your art with the world.
+          </p>
+          <p style="color: blueviolet; font-size: 20px">
+            If you've already registered, we're glad to see you again! We can't
+            wait to see what you'll create next.
+          </p>
+        </div>
       </div>
       <div class="left">
         <form
@@ -258,6 +273,7 @@
           <div class="user">
             <i class="fa-solid fa-envelope"></i>
             <input
+            id="RegEmail"
               type="text"
               name="email"
               placeholder="email"
@@ -313,6 +329,7 @@
           <div class="password">
             <i class="fa-solid fa-lock"></i>
             <input
+            id="RegPassword"
               type="password"
               required
               name="password"
@@ -325,6 +342,7 @@
           <div class="password">
             <i class="fa-solid fa-lock"></i>
             <input
+            id="RegPasswordConfirm"
               type="password"
               name="confirm_password"
               placeholder="Confirm Password"

@@ -320,8 +320,15 @@
                 <td>{{ getPainterName(painter.id) }}</td>
                 <td>{{ painter.id }}</td>
                 <td>{{ painter.created_at }}</td>
-                <td class="warning">Pending</td>
-                <td class="primary">Details</td>
+                <td
+                  class="{% if painter.account_status == 'Pending' %}warning{% else %}primary{% endif %}"
+                >
+                  {{ painter.account_status }}
+                </td>
+
+                <td style="cursor: pointer" class="primary">
+                  <a href="/accessPainter/{{ painter.id }}">Details</a>
+                </td>
               </tr>
               {% endfor %}
             </tbody>

@@ -144,6 +144,8 @@ section .main .main_content .main_text p{
     position: relative;
     top: 85px;
     left: 5%;
+    font-size: 18px;
+    color: floralwhite;
 }
 
 section .main .main_content .main_image img{
@@ -820,7 +822,7 @@ section .main .button:hover i{
 
 .review{
     width: 100%;
-    height: 100vh;
+    height: 70vh;
     padding-top: 80px;
 }
 

@@ -19,7 +19,7 @@
       href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
     />
   </head>
-  <body>
+  <body {% if user %} data-user-id="{{ user.id }}" {% endif %}>
     <section>
       <nav>
         <div class="logo">
@@ -69,7 +69,7 @@
             </table>
 
             {% if user %}
-            <a href="/payment/{{ user.session_id }}"
+            <a href="/payment"
               ><button>Proceed to Payment</button></a
             >
             {% else %}
@@ -95,12 +95,15 @@
           <div class="main_text">
             <h1>Sweet Touch<br /><span>Home of Colors</span></h1>
             <p>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book. It has
-              survived not only five centuries, but also the leap into
-              electronic typesetting, remaining essentially unchanged.
+              "Welcome to Sweet Touch  your ultimate destination for transforming your walls into works of art!
+  
+  At Sweet Touch, we specialize in offering a curated selection of wall paints, wallpapers, wall panels, and captivating wall art designs to elevate the ambiance of your space. Whether you're seeking a modern minimalist look or a bold and vibrant statement, our collection has something to suit every taste and style.
+  
+  But that's not all  we go beyond simply providing products. With our expert team of painters available for hire, we offer comprehensive painting services to bring your vision to life. Our skilled professionals ensure flawless execution, turning your walls into masterpieces you'll love.
+  
+  Looking for inspiration or assistance with your project? Our platform also offers a complimentary quotation service, connecting you with the right resources to make your dream space a reality.
+  
+  Experience the Sweet Touch difference and let us help you transform your space into a haven of beauty and creativity. Welcome to Sweet Touch where walls become wonders!"
             </p>
           </div>
           <div class="main_image">
@@ -220,6 +223,7 @@
             style="font-size: medium; margin-left: 110px; display: none"
           >
             <option value="">--Choose a Search filter--</option>
+            <option value="ALL">ALL</option>
             <option value="Search by Color">Search by Color</option>
             <option value="Search by Brand">Search by Brand</option>
             <option value="Search by Category">Search by Category</option>
@@ -255,7 +259,7 @@
             <a
               href="#"
               class="btn"
-              onclick="addToCart('{{ product.id }}', '{{ user.id if user else None }}')"
+              onclick="addToCart('{{ product.id }}', '{{ user.id }}')"
               >Add To Cart</a
             >
             {% else %}
@@ -444,7 +448,7 @@
       </div>
 
       <div class="box" id="productContainer">
-        {% for painter in painters %}
+        {% for painter in painters %} {%if painter.account_status == "Verified"%}
         <div class="card">
           <div class="small_card">
             <i class="fa-solid fa-heart"></i>
@@ -481,7 +485,7 @@
             >
           </div>
         </div>
-        {% endfor %}
+        {% endif %}{% endfor %}
       </div>
 
       <!-- <a href="#products" class="about_btn">Shop Now</a> -->

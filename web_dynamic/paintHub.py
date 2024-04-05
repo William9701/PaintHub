@@ -263,16 +263,21 @@ def paintersPage():
     abort(404)
 
 
-@app.route('/payment/<session_id>', strict_slashes=False)
-def payment(session_id):
+@app.route('/payment', strict_slashes=False)
+def payment():
+    session_id = request.cookies.get('session_id')
     if session_id:
-        user = AUTH.get_user_from_session_id(session_id)
+        user1 = AUTH.get_user_from_session_id(session_id)
+        user = storage.get(User, user1.id)
         cartContent = []
         for product in user.cart_contents:
             fullProduct = storage.get(Product, product)
             cartContent.append(fullProduct)
         products = storage.all(Product).values()
-        return render_template('payment.html', user=user, products=products, cartContent=cartContent)
+        now = datetime.now()
+        print(cartContent)
+        print(session_id, user)
+        return render_template('payment.html', user=user, products=products, cartContent=cartContent, now=now)
 
     abort(404)
 
@@ -281,6 +286,16 @@ def payment(session_id):
 def close_db(error):
     """ Remove the current SQLAlchemy Session """
     storage.close()
+
+
+@app.route("/accessPainter/<painters_id>", strict_slashes=False)
+def accessPainter(painters_id):
+    painter = storage.get(Painter, painters_id)
+    if not painter:
+        abort(404)
+    paintersMedia = storage.getMedia(PaintersMedia, painters_id)
+    now = datetime.now()
+    return render_template('acessPainter.html', painter=painter, paintersMedia=paintersMedia, now=now)
 
 
 @app.route('/painterLogin', strict_slashes=False)

@@ -220,11 +220,11 @@ class DBStorage:
         # Commit changes to the database
         self._session.commit()
 
-    def add_painter(self, email: str, hashed_password: str, first_name: str, last_name: str, state: str, city: str) -> Painter:
+    def add_painter(self, email: str, hashed_password: str, first_name: str, last_name: str, state: str, city: str, account_status: str) -> Painter:
         """This is the add painter method"""
 
         new_painter = Painter(email=email, hashed_password=hashed_password,
-                              first_name=first_name, last_name=last_name, state=state, city=city)
+                              first_name=first_name, last_name=last_name, state=state, city=city, account_status=account_status)
         print(new_painter.id)
         self._session.add(new_painter)
         self._session.flush()  # flush the changes to the database

@@ -50,7 +50,8 @@ class Auth:
         """Validates login details."""
         try:
             existing_user = self._db.find_user_by(email=email)
-            hashed_password_bytes = existing_user.hashed_password.encode('utf-8')
+            hashed_password_bytes = existing_user.hashed_password.encode(
+                'utf-8')
 
             if bcrypt.checkpw(password.encode('utf-8'),
                               hashed_password_bytes):
@@ -105,12 +106,13 @@ class Auth:
                                  reset_token=None)
         except NoResultFound:
             raise ValueError('user not found')
-        
-    def register_painter(self, email: str, password: str, first_name: str, last_name: str, state: str, city: str) -> Painter:
+
+    def register_painter(self, email: str, password: str, first_name: str, last_name: str, state: str, city: str, account_status: str) -> Painter:
         """register a painter"""
         try:
             existing_painter = self._db.find_painter_by(email=email)
-            raise ValueError(f"painter {existing_painter.email} already exists.")
+            raise ValueError(
+                f"painter {existing_painter.email} already exists.")
         except NoResultFound:
             # If NoResultFound is raised, it means the painter doesn't exist,
             # so proceed with registration.
@@ -118,13 +120,14 @@ class Auth:
         if isinstance(password, str):
             password = _hash_password(password)
 
-        return self._db.add_painter(email=email, hashed_password=password, first_name=first_name, last_name=last_name, state=state, city=city)
-    
+        return self._db.add_painter(email=email, hashed_password=password, first_name=first_name, last_name=last_name, state=state, city=city, account_status=account_status)
+
     def valid_login_p(self, email: str, password: str) -> bool:
         """Validates login details."""
         try:
             existing_painter = self._db.find_painter_by(email=email)
-            hashed_password_bytes = existing_painter.hashed_password.encode('utf-8')
+            hashed_password_bytes = existing_painter.hashed_password.encode(
+                'utf-8')
 
             if bcrypt.checkpw(password.encode('utf-8'),
                               hashed_password_bytes):
@@ -143,7 +146,7 @@ class Auth:
             return session_uuid
         except NoResultFound:
             return None
-        
+
     def destroy_session_p(self, painter_id: int) -> None:
         """destroys a session"""
         try:
@@ -151,7 +154,8 @@ class Auth:
         except NoResultFound:
             return None
 
-    def get_painter_from_session_id(self, session_id: str) -> Painter or None:  # type: ignore
+    # type: ignore
+    def get_painter_from_session_id(self, session_id: str) -> Painter or None:
         """this method  takes a single session_id string argument and
         returns the corresponding painter or None"""
         try:
@@ -176,10 +180,10 @@ class Auth:
             painter = self._db.find_painter_by(reset_token=reset_token)
             hashed_pwd = _hash_password(password)
             self._db.update_painter(painter.id, hashed_password=hashed_pwd,
-                                 reset_token=None)
+                                    reset_token=None)
         except NoResultFound:
             raise ValueError('painter not found')
-        
+
     def register_admin(self, email: str, password: str, first_name: str, last_name: str) -> Admin:
         """register a admin"""
         try:
@@ -193,12 +197,13 @@ class Auth:
             password = _hash_password(password)
 
         return self._db.add_admin(email=email, hashed_password=password, first_name=first_name, last_name=last_name)
-    
+
     def valid_login_a(self, email: str, password: str) -> bool:
         """Validates login details."""
         try:
             existing_admin = self._db.find_admin_by(email=email)
-            hashed_password_bytes = existing_admin.hashed_password.encode('utf-8')
+            hashed_password_bytes = existing_admin.hashed_password.encode(
+                'utf-8')
 
             if bcrypt.checkpw(password.encode('utf-8'),
                               hashed_password_bytes):
@@ -217,7 +222,7 @@ class Auth:
             return session_uuid
         except NoResultFound:
             return None
-        
+
     def destroy_session_a(self, admin_id: int) -> None:
         """destroys a session"""
         try:
@@ -250,7 +255,6 @@ class Auth:
             admin = self._db.find_admin_by(reset_token=reset_token)
             hashed_pwd = _hash_password(password)
             self._db.update_admin(admin.id, hashed_password=hashed_pwd,
-                                 reset_token=None)
+                                  reset_token=None)
         except NoResultFound:
             raise ValueError('admin not found')
-

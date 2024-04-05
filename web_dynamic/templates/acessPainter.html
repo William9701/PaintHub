@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sweet Touch</title>
+    <link rel="shortcut icon" href="../static/images/logo.png" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
+    <!-- CSS -->
+    <link rel="stylesheet" href="../static/styles/paintersProfile.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+    />
+    <link rel="stylesheet" href="../static/styles/prof_style.css" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .comment-box {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+      }
+      .comment-user {
+        font-weight: bold;
+        color: #333;
+      }
+      .comment-date {
+        font-size: 0.8em;
+        color: #777;
+      }
+      .comment-text {
+        margin-top: 10px;
+        color: #555;
+      }
+    </style>
+  </head>
+
+  <body {% if user %} data-user-id="{{ user.id }}" {% endif %}>
+    <div class="header__wrapper">
+      <header></header>
+      <div class="cols__container">
+        <div class="left__col">
+          <div class="img__container">
+            <img src="{{ painter.profile_image }}" alt="Anna Smith" />
+            <span></span>
+          </div>
+          <h2>{{ painter.first_name }} {{ painter.last_name }}</h2>
+          <p>interor Decorator</p>
+          <p>{{ painter.email }}</p>
+
+          <ul class="about">
+            <li><span>200,543</span>Jobs</li>
+            <li>
+              <span
+                ><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i
+                ><i class="fa-solid fa-star"></i
+                ><i class="fa-solid fa-star"></i></span
+              >Average Rating
+            </li>
+          </ul>
+
+          <div class="content">
+            <p>
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam
+              erat volutpat. Morbi imperdiet, mauris ac auctor dictum, nisl
+              ligula egestas nulla.
+            </p>
+
+            <ul>
+              <li><i class="fab fa-twitter"></i></li>
+              <i class="fab fa-pinterest"></i>
+              <i class="fab fa-facebook"></i>
+              <i class="fab fa-dribbble"></i>
+            </ul>
+          </div>
+        </div>
+        <div class="right__col">
+          <nav>
+            <ul>
+              <li><a href="#">Photos</a></li>
+              <li><a href="#">Videos</a></li>
+              <li><a href="#">Comments</a></li>
+            </ul>
+            <button style="display: none" id="hire">Hire</button>
+            <button
+              onclick="verify('{{painter.id}}', event)"
+              style="color: green"
+              id="verify"
+            >
+              Verify
+            </button>
+          </nav>
+
+          <div class="popup" id="popup-form">
+            <h2>Enter Wall Measurements</h2>
+            <form id="measurement-form">
+              <label for="wall-length">Wall Length (in meters):</label>
+              <input type="number" id="wall-length" required />
+              <br />
+              <label for="wall-height">Wall Height (in meters):</label>
+              <input type="number" id="wall-height" required />
+              <br />
+              <label for="job-type">Job type (Indoor/Outdoor):</label>
+              <select id="job-type" required>
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+              </select>
+              <br />
+              {% if user %}
+              <button
+                onclick="hire('{{ painter.id}}', '{{user.id}}', event)"
+                id="submit-button"
+              >
+                Submit
+              </button>
+              {% else %}
+              <a href="/login">
+                <button id="submit-button">Submit</button>
+              </a>
+              {% endif %}
+            </form>
+          </div>
+          <div class="popMsg" id="popmsg">
+            <div class="loading" id="loading-message">
+              Checking Painter status
+            </div>
+          </div>
+
+          <div class="photos">
+            {% for photo in paintersMedia.photos %}
+            <img
+              src="{{ photo }}"
+              alt="Photo"
+              style="width: 320px; height: 200px"
+            />
+            {% endfor %}
+          </div>
+          <div class="videos" style="display: none">
+            {% for video in paintersMedia.video %}
+            <video width="320" height="240" controls>
+              <source src="{{ video }}" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            {% endfor %}
+          </div>
+
+          <div class="comments" style="display: none">
+            <!-- Your comments -->
+            <div id="cbox" class="comment-box">
+              <div id="cbox1" class="comment-user">User Name</div>
+              <div id="cbox2" class="comment-date">2024-03-24</div>
+              <div id="cbox3" class="comment-text">This is a user comment.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function verify(painter_id, event) {
+        event.preventDefault();
+        var data = {
+			account_status: 'Verified',
+        };
+        fetch(`http://127.0.0.1:5001/api/v1/painters/${painter_id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((request) => request.json())
+          .then((reply) => {
+			alert('Painter Verified')
+            console.log(reply);
+          });
+      }
+    </script>
+    <script src="../static/scripts/paintersProfile.js"></script>
+  </body>
+</html>

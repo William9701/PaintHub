@@ -994,11 +994,9 @@ document
 
     var firstName = document.querySelector('input[name="first_name"]').value;
     var lastName = document.querySelector('input[name="last_name"]').value;
-    var email = document.querySelector('input[name="email"]').value;
-    var password = document.querySelector('input[name="password"]').value;
-    var confirmPassword = document.querySelector(
-      'input[name="confirm_password"]'
-    ).value;
+    var email = document.getElementById("RegEmail").value;
+    var password = document.getElementById("RegPassword").value;
+    var confirmPassword = document.getElementById("RegPasswordConfirm").value;
     var state = document.querySelector('select[name="state"]').value;
     var city = document.querySelector('select[name="city"]').value;
 
@@ -1008,31 +1006,35 @@ document
       return;
     }
 
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:5001/api/v1/painters", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          showToast("Sign-up Succesfull");
-          // Redirect to login page
-        //   window.location.href = "http://localhost:5000/painterLogin";
-        } else if (xhr.status === 460) {
-          // Error response
-          showToast("Email already exist");
-        }
-      }
-    };
-    xhr.send(
-      JSON.stringify({
+    fetch("http://localhost:5001/api/v1/painters", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         first_name: firstName,
         last_name: lastName,
         email: email,
         password: password,
         state: state,
         city: city,
+        account_status: "Pending",
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          showToast("Sign-up Successful");
+          // Redirect to login page
+          // window.location.href = "http://localhost:5000/painterLogin";
+        } else if (response.status === 460) {
+          showToast("Email already exists");
+        } else {
+          throw new Error("Network response was not ok");
+        }
       })
-    );
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   });
 
 function showToast(message) {
