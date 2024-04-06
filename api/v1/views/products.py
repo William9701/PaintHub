@@ -29,11 +29,28 @@ def get_products_with_info(product_info, searchValue):
     all_products = storage.all(Product).values()
     list_products = []
     for product in all_products:
-         if getattr(product, product_info, None) == searchValue:
+        if getattr(product, product_info, None) == searchValue:
             list_products.append(product.to_dict())
 
     return jsonify(list_products)
 
+
+@app_views.route('/getProduct', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/product_info/get_product.yml', methods=['POST'])
+def get_products_with_srcinfo():
+    if not request.get_json():
+        abort(400, description="Not a JSON")
+
+    data = request.get_json()
+    print(data)
+    Imagesrc = data['src']
+    Imagesrc = Imagesrc.replace("http://127.0.0.1:5000", "..")
+    print(Imagesrc)
+    all_products = storage.all(Product).values()
+    for product in all_products:
+        if product.ProductImage == Imagesrc:
+            return jsonify(product.to_dict())
+    abort(400)
 
 
 @app_views.route('/products/<product_id>', methods=['GET'], strict_slashes=False)

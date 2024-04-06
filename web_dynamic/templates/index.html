@@ -70,7 +70,9 @@
 
             {% if user %}
             <a href="/payment"
-              ><button>Proceed to Payment</button></a
+              ><button style="cursor: pointer; height: 30px;
+              margin-top: 10px;
+              background: coral;">Proceed to Payment</button></a
             >
             {% else %}
             <a href="/login"><button>Proceed to Payment</button></a>
@@ -244,7 +246,7 @@
           </div>
 
           <div class="image">
-            <img src="{{ product.ProductImage }}" alt="{{ product.id }}" />
+            <img style="cursor: pointer;" src="{{ product.ProductImage }}" alt="{{ product.id }}" />
           </div>
 
           <div class="products_text">

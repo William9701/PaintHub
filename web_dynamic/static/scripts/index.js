@@ -47,52 +47,45 @@ function addToCart(product_id, user_id) {
   }
 }
 
-function displayCart(user_id) {
+async function displayCart(user_id) {
   var cart = document.getElementById("cart");
+  // Update cart display
+  if (cart.style.display === "none") {
+    cart.style.display = "block";
+    cart.style.transform = "translateX(0)";
+    const response = await fetch(
+      `http://127.0.0.1:5001/api/v1/users/${user_id}`
+    );
+    const user = await response.json();
+    const cartContents = user.cart_contents;
+    const tableBody = cart.querySelector("tbody");
+    tableBody.innerHTML = "";
+    let totalPrice = 0; // Initialize total price variable
 
-  fetch(`http://127.0.0.1:5001/api/v1/users/${user_id}`)
-    .then((response) => response.json())
-    .then((user) => {
-      const cartContents = user.cart_contents;
-      const cart = document.getElementById("cart");
-      const tableBody = cart.querySelector("tbody");
-      tableBody.innerHTML = "";
-      let totalPrice = 0; // Initialize total price variable
+    for (const product_id of cartContents) {
+      const productResponse = await fetch(
+        `http://127.0.0.1:5001/api/v1/products/${product_id}`
+      );
+      const product = await productResponse.json();
+      createProductCart(product, user_id);
 
-      cartContents.forEach((product_id) => {
-        fetch(`http://127.0.0.1:5001/api/v1/products/${product_id}`)
-          .then((response) => response.json())
-          .then((product) => {
-            createProductCart(product, user_id);
+      let quantity;
+      // Fetch the quantity for the product asynchronously
+      const quantityResponse = await fetch(
+        `/get_product_quantity/${user_id}/${product.id}`
+      );
+      const data = await quantityResponse.json();
+      quantity = data.quantity;
 
-            // Fetch the quantity for the product asynchronously
-            fetch(`/get_product_quantity/${user_id}/${product.id}`)
-              .then((response) => response.json())
-              .then((data) => {
-                // If quantity is not null, set it as the value for the quantity input field
-                // If quantity is null, default it to 1
-                const quantity = data.quantity !== null ? data.quantity : 1;
-                document.getElementById(`quantity-${product.id}`).value =
-                  quantity;
-              })
-              .catch((error) => console.error("Error:", error));
-            totalPrice += product.Price;
-            console.log(totalPrice);
-            console.log("i am here in totakl price");
-            updateTotal(totalPrice); // Update total display
-          });
-      });
+      // document.getElementById(`quantity-${product.id}`).value = quantity;
+      totalPrice += product.Price * quantity;
 
-      // Update cart display
-      if (cart.style.display === "none") {
-        cart.style.display = "block";
-        cart.style.transform = "translateX(0)";
-      } else {
-        cart.style.display = "none";
-        cart.style.transform = "translateX(100%)";
-      }
-    })
-    .catch((error) => console.error("Error:", error));
+      updateTotal(totalPrice); // Update total display
+    }
+  } else {
+    cart.style.display = "none";
+    cart.style.transform = "translateX(100%)";
+  }
 }
 
 function createProductCart(product, user_id) {
@@ -355,7 +348,7 @@ function createProductCards(products) {
 
     const imageDiv = document.createElement("div");
     imageDiv.classList.add("image");
-    imageDiv.innerHTML = `<img src="${product.ProductImage}" />`;
+    imageDiv.innerHTML = `<img style="cursor: pointer;" src="${product.ProductImage}" />`;
 
     const productsTextDiv = document.createElement("div");
     productsTextDiv.classList.add("products_text");
@@ -687,3 +680,67 @@ setInterval(function () {
     Wpindex = (Wpindex + 1) % WallpanelImages.length; // Loop back to the first image
   }, 400); // Wait for the fade out transition to complete
 }, 6000); // Change image and text every 6 seconds
+
+// Get all product Images
+const fimages = document.querySelectorAll(".image img");
+
+// Create a modal
+const modal = document.createElement("div");
+modal.style.display = "none";
+modal.style.position = "fixed";
+modal.style.top = "0";
+modal.style.right = "0";
+modal.style.bottom = "0";
+modal.style.left = "0";
+modal.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+modal.style.zIndex = "1000";
+modal.style.padding = "50px";
+modal.style.boxSizing = "border-box";
+modal.style.overflow = "auto";
+
+// Create an image element for the modal
+const modalImage = document.createElement("img");
+modalImage.style.width = "100%";
+modalImage.style.height = "auto";
+modalImage.style.maxWidth = "800px";
+modalImage.style.margin = "0 auto";
+modalImage.style.display = "block";
+
+// Add the image element to the modal
+modal.appendChild(modalImage);
+
+// Add the modal to the body
+document.body.appendChild(modal);
+
+// Add a click event listener to each image
+fimages.forEach((image) => {
+  image.addEventListener("click", (event) => {
+    // Prevent the default action
+    event.preventDefault();
+
+    // Get the source of the clicked image
+    const src = event.target.src;
+
+    fetch(`http://127.0.0.1:5001/api/v1/getProduct`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ src: src }),
+    })
+      .then((request) => request.json())
+      .then((product) => {
+        modalImage.src = product.ColorImage;
+
+        // Show the modal
+        modal.style.display = "block";
+      })
+      .catch((error) => console.error("error:", error));
+  });
+});
+
+// Add a click event listener to the modal
+modal.addEventListener("click", () => {
+  // Hide the modal
+  modal.style.display = "none";
+});
