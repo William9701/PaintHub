@@ -14,6 +14,7 @@ class Invoice(Basemodels, Base):
         delivery_charge = Column(Integer)
         total = Column(Integer)
         status = Column(String(250))
+        email = Column(String(255))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

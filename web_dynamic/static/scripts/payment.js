@@ -3,6 +3,7 @@ var user_id = document.body.getAttribute("data-user-id");
 var payment_cart = [];
 var delivery_cost = 50;
 var total = 0;
+var email;
 
 button.addEventListener("click", (event) => {
   fetch(`/stripe_pay/${user_id}`, {
@@ -52,6 +53,7 @@ button.addEventListener("click", (event) => {
             delivery_charge: delivery_cost,
             total: total,
             status: "Pending",
+            email: email,
           };
           fetch(`http://127.0.0.1:5001/api/v1/invoicep/${invoice.id}`, {
             method: "PUT",
@@ -63,6 +65,20 @@ button.addEventListener("click", (event) => {
             .then((response) => response.json())
             .then((nuser) => {
               console.log(nuser);
+            });
+          var id = {
+            purchase_history: invoice.id,
+          };
+          fetch(`http://127.0.0.1:5001/api/v1/users/${user_id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(id),
+          })
+            .then((response) => response.json())
+            .then((newuser) => {
+              console.log(newuser);
             });
         })
         .catch((error) => console.error("Error:", error));
@@ -106,6 +122,9 @@ function calculateTotal() {
 // Call the function when the page loads
 window.onload = calculateTotal;
 
+// Initialize previousDeliveryId variable
+var previousDeliveryId = null;
+
 document.getElementById("sub-btn").addEventListener("click", function () {
   var inputs = document.querySelectorAll(".user input");
   var allInputsNotEmpty = true; // Flag to track if all inputs are not empty
@@ -126,6 +145,7 @@ document.getElementById("sub-btn").addEventListener("click", function () {
     var streetInput = document.getElementById("street").value;
     var cityInput = document.getElementById("city").value;
     var stateInput = document.getElementById("state").value;
+    email = document.getElementById("email").value;
     var pincodeInput = document.getElementById("pincode").value;
     var landmarkInput = document.getElementById("landmark").value;
     var phoneNumberInput = document.getElementById("Phonenumber").value;
@@ -156,7 +176,24 @@ document.getElementById("sub-btn").addEventListener("click", function () {
               price: reply.newPrice,
               quantity: "1",
             };
+
+            // Check if there is a previously added item
+            if (previousDeliveryId) {
+              // Remove the previously added item from the cart
+              const existingIndex = payment_cart.findIndex(
+                (item) => item.price === previousDeliveryId
+              );
+              if (existingIndex !== -1) {
+                payment_cart.splice(existingIndex, 1);
+              }
+            }
+
+            // Add the new item to the cart
             payment_cart.push(data);
+
+            // Update previousDeliveryId with the current delivery ID
+            previousDeliveryId = reply.newPrice;
+
             button.style.display = "block";
             // Clear input fields after form submission
             inputs.forEach(function (input) {

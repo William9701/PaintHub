@@ -25,6 +25,12 @@ from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 from models.engine.auth import Auth
 from sqlalchemy.orm.exc import NoResultFound
+from email.message import EmailMessage
+from email.mime.text import MIMEText
+import imghdr
+import ssl
+import smtplib
+
 
 AUTH = Auth()
 
@@ -385,7 +391,7 @@ def UserProfile(session_id):
     for invoice in invoices:
         n_invoice = storage.get(Invoice, invoice)
         M_invoice.append(n_invoice)
-    print(M_invoice)
+    M_invoice = sorted(M_invoice, key=lambda x: x.created_at, reverse=True)
     return render_template('profile.html', user=user, M_invoice=M_invoice)
 
 
@@ -429,10 +435,65 @@ def calculate_delivery_cost(distance):
 @app.route('/thankyou/<user_id>', strict_slashes=False)
 def thankyou(user_id):
     user = storage.get(User, user_id)
+    # Assuming user.purchase_history is a list
+    last_invoice_id = user.purchase_history[-1]
+
+    invoice = storage.get(Invoice, last_invoice_id)
+    invoice.status = 'Successful'
+
+    sendemail(invoice.email, user.cart_contentsQuantity,
+              invoice.delivery_charge, invoice.total)
     user.cart_contents = []
     user.cart_contentsQuantity = {}
     storage.save()
     return render_template('thankyou.html', user=user)
+
+
+def sendemail(email, cart_contentsQuantity, deliveryAmount, Total):
+    email_sender = "williamobi818@gmail.com"
+    email_password = 'xppc dzoh mzvf ojqg'
+    email_reciver = f'{email}'
+    cart_contents = []
+    subject = "SUb-Testing"
+
+    for key, value in cart_contentsQuantity.items():
+        product = storage.get(Product, key)
+        cart_contents.append(
+            {"product_name": product.Name, "quantity": value,
+                "price": int(product.Price) * int(value)}
+        )
+
+    # Create the HTML for the cart table
+    cart_html = "<table>"
+    for item in cart_contents:
+        cart_html += f"<tr><td>{item['product_name']}</td><td>{item['quantity']}</td><td>${item['price']}</td></tr>"
+    cart_html += "</table>"
+
+    # Add the company logo
+    logo_path = "company_logo.png"  # Replace with your actual logo file path
+    with open(logo_path, 'rb') as img:
+        logo_data = img.read()
+        logo_type = imghdr.what(img.name)
+        logo_name = img.name
+
+    em = EmailMessage()
+
+    em['From'] = email_sender
+    em['To'] = email_reciver
+    em['Subject'] = subject
+    em.add_attachment(logo_data, maintype='image',
+                      subtype=logo_type, cid=logo_name)
+
+    body = f'<img src="cid:{logo_name}" alt="Company Logo" style="width: 50px; height: 50px;"><br>{cart_html}'
+    # Create a MIMEText object for the HTML content
+    html_part = MIMEText(body, 'html')
+    em.attach(html_part)  # Attach the HTML content to the email message
+
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+        smtp.login(email_sender, email_password)
+        smtp.send_message(em)
 
 
 def format_time_diff(created_at, now):

@@ -156,7 +156,6 @@ function updateSubtotal(inputField, price, product_id, user_id) {
     });
 }
 
-// REWRITE THIS FUNCTION
 function RemoveFromCart(user_id, product_id) {
   fetch(`http://127.0.0.1:5001/api/v1/users/${user_id}/${product_id}`)
     .then((request) => request.json())
@@ -171,15 +170,20 @@ function RemoveFromCart(user_id, product_id) {
           }
 
           const cartContents = user.cart_contents;
-          // const cart = document.getElementById("cart");
-          // const tableBody = cart.querySelector("tbody");
-          // tableBody.innerHTML = "";
+
+          if (cartContents.length === 0) {
+            updateTotal(0);
+            var cart = document.getElementById("cart");
+            cart.style.display = "none";
+            cart.style.transform = "translateX(100%)";
+            document.getElementById("cart-count").style.display = "none";
+          }
+
           let totalPrice = 0; // Initialize total price variable
           cartContents.forEach((product_id) => {
             fetch(`http://127.0.0.1:5001/api/v1/products/${product_id}`)
               .then((response) => response.json())
               .then((product) => {
-                // createProductCart(product, user_id);
                 totalPrice += parseInt(product.Price); // Add product price to total price
                 updateTotal(totalPrice); // Update total display
               });
@@ -515,7 +519,7 @@ document.getElementById("sub").addEventListener("click", function (event) {
         break;
       default:
         // Default value if material is not recognized
-        litersPerSquareMeter = 0.0; // Define a default value
+        litersPerSquareMeter = 0.2; // Define a default value
         break;
     }
 
