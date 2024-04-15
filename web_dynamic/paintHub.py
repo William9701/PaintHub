@@ -450,33 +450,75 @@ def thankyou(user_id):
 
 
 def sendemail(email, cart_contentsQuantity, deliveryAmount, Total):
+    em = EmailMessage()
     email_sender = "williamobi818@gmail.com"
     email_password = 'xppc dzoh mzvf ojqg'
     email_reciver = f'{email}'
-    cart_contents = []
-    subject = "SUb-Testing"
+    subject = "SWeet Touch"
+
+    cart_html = """
+    <table style="width: 100%; border-collapse: collapse;">
+      <tr>
+        <td colspan="4" style="padding: 10px; text-align: center;">
+          Thank you for your purchase!
+        </td>
+      </tr>
+      <tr>
+        <th>Product Image</th>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    """
 
     for key, value in cart_contentsQuantity.items():
         product = storage.get(Product, key)
-        cart_contents.append(
-            {"product_name": product.Name, "quantity": value,
-                "price": int(product.Price) * int(value)}
-        )
+        jd = product.ProductImage.replace(
+            '../static/PaintersMedia/Images/', '')
+        current_directory = os.path.dirname(__file__)
 
-    # Create the HTML for the cart table
-    cart_html = "<table>"
-    for item in cart_contents:
-        cart_html += f"<tr><td>{item['product_name']}</td><td>{item['quantity']}</td><td>${item['price']}</td></tr>"
-    cart_html += "</table>"
+        # Construct the path to the file in the static folder
+        file_path = os.path.join(
+            current_directory, 'static', 'PaintersMedia', 'Images', jd)
 
-    # Add the company logo
-    logo_path = "company_logo.png"  # Replace with your actual logo file path
+        with open(file_path, 'rb') as img:
+            product_image_data = img.read()
+            product_image_type = imghdr.what(img.name)
+            product_image_name = f"product_image_{img.name}"
+
+        # Attach the product image to the email
+        em.add_attachment(product_image_data, maintype='image',
+                          subtype=product_image_type, cid=product_image_name)
+
+        # Embed image in HTML
+        product_image = f"<img src='cid:{product_image_name}' style='max-width: 40px; max-height: 40px;'>"
+
+        cart_html += f"""
+        <tr>
+          <td>{product_image}</td>
+          <td>{product.Name}</td>
+          <td>{value}</td>
+          <td>${int(product.Price) * int(value)}</td>
+        </tr>
+        """
+
+    cart_html += f"""
+    <tr>
+      <td colspan="3" style="text-align: right; padding: 10px;">Delivery Amount:</td>
+      <td>${deliveryAmount}</td>
+    </tr>
+    <tr>
+      <td colspan="3" style="text-align: right; padding: 10px;">Total:</td>
+      <td>${Total}</td>
+    </tr>
+     </table>
+    """
+
+    logo_path = "company_logo.png"
     with open(logo_path, 'rb') as img:
         logo_data = img.read()
         logo_type = imghdr.what(img.name)
         logo_name = img.name
-
-    em = EmailMessage()
 
     em['From'] = email_sender
     em['To'] = email_reciver

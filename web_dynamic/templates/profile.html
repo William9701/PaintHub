@@ -189,7 +189,13 @@
 									<td>{{ invoice.created_at }}</td>
 									<td>{{ invoice.id }}</td>
 									<td>${{ invoice.total }}</td>
-									<td>Successful <i style="color: green" class="fa-solid fa-check-circle"></i></td>
+									{% if invoice.status == "Successful" %}
+                                    <td>{{ invoice.status }} <i style="color: green" class="fa-solid fa-check-circle"></i></td>
+                                    {% elif invoice.status == "Pending" %}
+                                    <td>{{ invoice.status }} <i style="color: orange" class="fa-solid fa-hourglass"></i></td>
+                                    {% else %}
+                                    <td>{{ invoice.status }}</td>
+                                    {% endif %}
 									<td><button onclick="toggleDetails('details{{ loop.index }}')">⯆</button></td>
 								</tr>
 								<tr id="details{{ loop.index }}" class="tag hidden">
